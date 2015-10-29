@@ -168,7 +168,7 @@ void Client::getPackets()
 			// This tells the client they have connected
 			//printf("ID_CONNECTION_REQUEST_ACCEPTED to %s with GUID %s\n", mpPacket->systemAddress.ToString(true), mpPacket->guid.ToString());
 			//printf("My external address is %s\n", mpClient->GetExternalID(mpPacket->systemAddress).ToString(true));
-			setConnected(true);
+			//setConnected(true);
 			break;
 		case ID_CONNECTED_PING:
 			break;
@@ -180,6 +180,7 @@ void Client::getPackets()
 		{
 			//set as first connected or second connected.
 			setFirstConnected(true);
+			setConnected(true);
 			std::cout << "first" << std::endl;
 			break;
 		}
@@ -187,6 +188,7 @@ void Client::getPackets()
 		{
 			//set as first connected or second connected.
 			setFirstConnected(false);
+			setConnected(true);
 			std::cout << "second" << std::endl;
 			break;
 		}
