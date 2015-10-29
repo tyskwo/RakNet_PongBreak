@@ -55,10 +55,10 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectY.y += 20;
 
 		rect.setPosition(rectY);
-		mpClient->sendShapePacket(rect.x, rect.y);
+		mpClient->sendShapePacket(rectY.x, rectY.y);
 
 		sf::Vector2f otherPosition = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
-		otherR.setPosition(otherPosition);
+		otherRect.setPosition(otherPosition);
 
 
 
@@ -75,7 +75,7 @@ int main()
 		window.clear(sf::Color::Black);
 
 		window.draw(rect);
-		window.draw(circleOther);
+		window.draw(otherRect);
 
 		// draw everything here...
 		// window.draw(...);
