@@ -25,6 +25,9 @@ int main()
 	Client* mpClient = new Client(char_type, ipAddress.c_str(), "200");
 
 
+	while (!mpClient->getConnected()) {}
+
+
 	sf::RectangleShape rect(sf::Vector2f(20, 100));
 	sf::RectangleShape otherRect(sf::Vector2f(20, 100));
 

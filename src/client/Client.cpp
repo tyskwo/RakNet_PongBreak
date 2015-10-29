@@ -166,6 +166,7 @@ void Client::getPackets()
 			// This tells the client they have connected
 			//printf("ID_CONNECTION_REQUEST_ACCEPTED to %s with GUID %s\n", mpPacket->systemAddress.ToString(true), mpPacket->guid.ToString());
 			//printf("My external address is %s\n", mpClient->GetExternalID(mpPacket->systemAddress).ToString(true));
+			setConnected(true);
 			break;
 		case ID_CONNECTED_PING:
 			break;
