@@ -28,7 +28,6 @@ int main()
 	sf::RectangleShape rect(sf::Vector2f(20, 100));
 	sf::RectangleShape otherRect(sf::Vector2f(20, 100));
 
-
 	if (mpClient->getFirstConnected())
 	{
 		rect.setFillColor(sf::Color(200, 10, 10));
@@ -44,19 +43,22 @@ int main()
 		otherRect.setFillColor(sf::Color(200, 10, 10));
 	}
 
+	sf::Vector2f rectY = rect.getPosition();
+
+
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
 		mpClient->update();
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rect.getPosition().y >= 20) rect.getPosition().y -= 20;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rect.getPosition().y <= 600 - rect.getSize().y - 20) rect.getPosition().y += 20;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectY.y -= 20;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectY.y += 20;
 
-		rect.setPosition(rect.getPosition().x, rect.getPosition().y);
-		mpClient->sendShapePacket(rect.getPosition().x, rect.getPosition().y);
+		rect.setPosition(rectY);
+		mpClient->sendShapePacket(rect.x, rect.y);
 
 		sf::Vector2f otherPosition = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
-		otherRect.setPosition(otherPosition);
+		otherR.setPosition(otherPosition);
 
 
 
@@ -73,7 +75,7 @@ int main()
 		window.clear(sf::Color::Black);
 
 		window.draw(rect);
-		window.draw(otherRect);
+		window.draw(circleOther);
 
 		// draw everything here...
 		// window.draw(...);
