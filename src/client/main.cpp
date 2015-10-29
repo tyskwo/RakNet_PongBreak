@@ -18,12 +18,19 @@ int main()
 	converter << randPortNumber;
 	std::string temp_str = converter.str();
 	char* char_type = (char*)temp_str.c_str();
-	Client* mpClient = new Client(char_type, "localhost", "200");
+
+	std::string ipAddress = "";
+	std::cout << "Input server IP or \"localhost\": ";
+	std::cin >> ipAddress;
+	Client* mpClient = new Client(char_type, ipAddress.c_str(), "200");
 
 
-	sf::CircleShape circle(50);
+	sf::RectangleShape rect(sf::Vector2f(20, 100));
+	rect.setPosition(sf::Vector2f(100.0f, 0.0f));
+	sf::Vector2f rectY = rect.getPosition();
+
 	// set the shape color to green
-	circle.setFillColor(sf::Color(100, 250, 50));
+	rect.setFillColor(sf::Color(100, 250, 50));
 
 	sf::CircleShape circleOther(50);
 	// set the shape color to green
@@ -36,16 +43,18 @@ int main()
 
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
-		if (mousePos.x > 800 - circle.getRadius() * 2)	mousePos.x = 800 - circle.getRadius() * 2;
+		/*if (mousePos.x > 800 - rect.getRadius() * 2)	mousePos.x = 800 - circle.getRadius() * 2;
 		if (mousePos.y > 600 - circle.getRadius() * 2)	mousePos.y = 600 - circle.getRadius() * 2;
 		if (mousePos.x <   0)							mousePos.x =   0;
-		if (mousePos.y <   0)							mousePos.y =   0;
+		if (mousePos.y <   0)							mousePos.y =   0;*/
 
-		circle.setPosition(sf::Vector2f(mousePos));
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectY.y -= 20;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectY.y += 20;
+
+		rect.setPosition(rectY);
 		mpClient->sendShapePacket(mousePos.x, mousePos.y);
 		sf::Vector2f otherPosition = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		circleOther.setPosition(otherPosition);
-
 
 
 
@@ -61,7 +70,7 @@ int main()
 		// clear the window with black color
 		window.clear(sf::Color::Black);
 
-		window.draw(circle);
+		window.draw(rect);
 		window.draw(circleOther);
 
 		// draw everything here...

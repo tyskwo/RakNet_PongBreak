@@ -28,8 +28,8 @@ public:
 
 	float otherShapeX, otherShapeY;
 
-	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; }
-	inline bool getFirstConnected()			     { return mWasFirstConnected; }
+	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; };
+	inline bool getFirstConnected()			     { return mWasFirstConnected; };
 
 
 private:

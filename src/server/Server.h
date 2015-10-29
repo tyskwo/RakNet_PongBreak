@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <iostream>
+#include <array>
 
 #include "BitStream.h"
 #include "Gets.h"
@@ -49,6 +50,9 @@ private:
 	//first client
 	RakNet::SystemAddress clientID = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
 
+	std::array<std::array<int, 2>, 8> mClientPairs;
+	int mNumGames;
+	
 	//message to send to client
 	char mMessage[2048];
 

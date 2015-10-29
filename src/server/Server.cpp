@@ -7,7 +7,9 @@ enum MessageTypes
 	//-------------------------------------------------------------------------------------------------------------
 
 	ID_SEND_SHAPE = ID_USER_PACKET_ENUM,
-	ID_RECEIVE_SHAPE
+	ID_RECEIVE_SHAPE,
+	ID_FIRST_CONNECTION,
+	ID_SECOND_CONNECTION
 };
 
 Server::Server()
@@ -55,6 +57,14 @@ void Server::init(const char* serverPort)
 		RakNet::SystemAddress sa = mpServer->GetInternalID(RakNet::UNASSIGNED_SYSTEM_ADDRESS, i);
 		printf("%s\n", sa.ToString(false));
 	}
+
+	for (int i = 0; i < mClientPairs.size(); i++)
+	{
+		mClientPairs[i][0] = -1;
+		mClientPairs[i][1] = -1;
+	}
+
+	mNumGames = 0;
 }
 
 
@@ -118,6 +128,23 @@ void Server::getPackets()
 				{
 					printf("%i. %s\n", index + 1, internalId.ToString(true));
 				}
+			}
+
+			if (mClientPairs[mNumGames][0] == -1 && mClientPairs[mNumGames][1] == -1)
+			{
+				std::cout << (int)p->systemAddress.GetPort();
+				mClientPairs[mNumGames][0] = (int)p->systemAddress.GetPort();
+
+				int id = ID_FIRST_CONNECTION;
+				mpServer->Send((const char*)&id, sizeof(id), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+			}
+			else
+			{
+				mClientPairs[mNumGames][1] = (int)p->systemAddress.GetPort();
+				mNumGames++;
+
+				int id = ID_SECOND_CONNECTION;
+				mpServer->Send((const char*)&id, sizeof(id), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
 
 			break;

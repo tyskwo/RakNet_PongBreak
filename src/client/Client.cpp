@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstring>
 #include <stdlib.h>
+#include <iostream>
 #include "RakNetTypes.h"
 #include "Kbhit.h"
 #include "WindowsIncludes.h" // Sleep
@@ -26,8 +27,9 @@ enum MessageTypes
 	//-------------------------------------------------------------------------------------------------------------
 
 	ID_SEND_SHAPE = ID_USER_PACKET_ENUM,
-	ID_SET_FIRST_CONNECTED,
-	ID_RECEIVE_SHAPE
+	ID_RECEIVE_SHAPE,
+	ID_FIRST_CONNECTION,
+	ID_SECOND_CONNECTION
 };
 
 Client::Client()
@@ -72,7 +74,7 @@ void Client::init(const char* clientPort, const char* serverAddress, const char*
 	RakNet::ConnectionAttemptResult car = mpClient->Connect(serverAddress, atoi(serverPort), "hello", (int)strlen("hello"));
 	RakAssert(car == RakNet::CONNECTION_ATTEMPT_STARTED);
 
-	puts("'quit' to quit. 'stat' to show stats. 'ping' to ping.\n'disconnect' to disconnect. 'connect' to reconnnect. Type to talk.\n");
+	//puts("'quit' to quit. 'stat' to show stats. 'ping' to ping.\n'disconnect' to disconnect. 'connect' to reconnnect. Type to talk.\n");
 }
 
 void Client::cleanup()
@@ -171,10 +173,18 @@ void Client::getPackets()
 			printf("Ping from %s\n", mpPacket->systemAddress.ToString(true));
 			break;
 
-		case ID_SET_FIRST_CONNECTED:
+		case ID_FIRST_CONNECTION:
 		{
 			//set as first connected or second connected.
-			setFirstConnected(p->data);
+			setFirstConnected(true);
+			std::cout << "first" << std::endl;
+			break;
+		}
+		case ID_SECOND_CONNECTION:
+		{
+			//set as first connected or second connected.
+			setFirstConnected(false);
+			std::cout << "second" << std::endl;
 			break;
 		}
 

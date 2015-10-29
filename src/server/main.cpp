@@ -18,6 +18,9 @@ int main()
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				window.close();
 		}
 
 		// clear the window with black color
