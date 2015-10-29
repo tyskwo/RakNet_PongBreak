@@ -25,34 +25,36 @@ int main()
 	Client* mpClient = new Client(char_type, ipAddress.c_str(), "200");
 
 
-	while (!mpClient->getConnected()) {}
-
-
-	sf::RectangleShape rect(sf::Vector2f(20, 100));
-	sf::RectangleShape otherRect(sf::Vector2f(20, 100));
-
-	if (mpClient->getFirstConnected())
-	{
-		rect.setFillColor(sf::Color(200, 10, 10));
-		rect.setPosition(sf::Vector2f(100.0f, 0.0f));
-
-		otherRect.setFillColor(sf::Color(10, 10, 200));
-	}
-	else
-	{
-		rect.setFillColor(sf::Color(10, 10, 200));
-		rect.setPosition(sf::Vector2f(700.0f, 0.0f));
-
-		otherRect.setFillColor(sf::Color(200, 10, 10));
-	}
-
-	sf::Vector2f rectY = rect.getPosition();
+	
 
 
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
 		mpClient->update();
+
+		while (!mpClient->getConnected()) {}
+
+
+		sf::RectangleShape rect(sf::Vector2f(20, 100));
+		sf::RectangleShape otherRect(sf::Vector2f(20, 100));
+
+		if (mpClient->getFirstConnected())
+		{
+			rect.setFillColor(sf::Color(200, 10, 10));
+			rect.setPosition(sf::Vector2f(100.0f, 0.0f));
+
+			otherRect.setFillColor(sf::Color(10, 10, 200));
+		}
+		else
+		{
+			rect.setFillColor(sf::Color(10, 10, 200));
+			rect.setPosition(sf::Vector2f(700.0f, 0.0f));
+
+			otherRect.setFillColor(sf::Color(200, 10, 10));
+		}
+
+		sf::Vector2f rectY = rect.getPosition();
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectY.y -= 20;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectY.y += 20;

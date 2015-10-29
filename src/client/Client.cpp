@@ -56,6 +56,8 @@ Client::~Client()
 
 void Client::init(const char* clientPort, const char* serverAddress, const char* serverPort)
 {
+	mIsConnected = false;
+
 	//create client instance
 	mpClient = RakNet::RakPeerInterface::GetInstance();
 
