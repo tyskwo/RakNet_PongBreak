@@ -28,9 +28,11 @@ public:
 
 	float otherShapeX, otherShapeY;
 
+	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; }
+	inline bool getFirstConnected()			     { return mWasFirstConnected; }
+
 
 private:
-
 	//pointer to client object
 	RakNet::RakPeerInterface* mpClient;
 
@@ -51,6 +53,7 @@ private:
 	char mIPaddress[64], mServerPort[3], mClientPort[3];
 	char mMessage[2048];
 
+	bool mWasFirstConnected;
 };
 
 #endif

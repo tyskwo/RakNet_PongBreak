@@ -26,6 +26,7 @@ enum MessageTypes
 	//-------------------------------------------------------------------------------------------------------------
 
 	ID_SEND_SHAPE = ID_USER_PACKET_ENUM,
+	ID_SET_FIRST_CONNECTED,
 	ID_RECEIVE_SHAPE
 };
 
@@ -166,6 +167,17 @@ void Client::getPackets()
 			break;
 		case ID_CONNECTED_PING:
 			break;
+		case ID_UNCONNECTED_PING:
+			printf("Ping from %s\n", mpPacket->systemAddress.ToString(true));
+			break;
+
+		case ID_SET_FIRST_CONNECTED:
+		{
+			//set as first connected or second connected.
+			setFirstConnected(p->data);
+			break;
+		}
+
 		case ID_RECEIVE_SHAPE:
 		{
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(mpPacket->data);
@@ -173,9 +185,7 @@ void Client::getPackets()
 			otherShapeY = pos.yPos;
 			break;
 		}
-		case ID_UNCONNECTED_PING:
-			printf("Ping from %s\n", mpPacket->systemAddress.ToString(true));
-			break;
+
 		default:
 			// It's a client, so just show the message
 			printf("%s\n", mpPacket->data);
