@@ -60,8 +60,8 @@ void Server::init(const char* serverPort)
 
 	for (int i = 0; i < mClientPairs.size(); i++)
 	{
-		mClientPairs[i][0] = -1;
-		mClientPairs[i][1] = -1;
+		mClientPairs[i][0] = "";
+		mClientPairs[i][1] = "";
 	}
 
 	mNumGames = 0;
@@ -130,17 +130,17 @@ void Server::getPackets()
 				}
 			}
 
-			if (mClientPairs[mNumGames][0] == -1 && mClientPairs[mNumGames][1] == -1)
+			if (mClientPairs[mNumGames][0] == "" && mClientPairs[mNumGames][1] == "")
 			{
-				std::cout << (int)p->systemAddress.GetPort();
-				mClientPairs[mNumGames][0] = (int)p->systemAddress.GetPort();
+				mClientPairs[mNumGames][0] = p->systemAddress;
 
 				int id = ID_FIRST_CONNECTION;
+
 				mpServer->Send((const char*)&id, sizeof(id), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
 			else
 			{
-				mClientPairs[mNumGames][1] = (int)p->systemAddress.GetPort();
+				mClientPairs[mNumGames][1] = p->systemAddress;
 				mNumGames++;
 
 				int id = ID_SECOND_CONNECTION;
@@ -168,8 +168,18 @@ void Server::getPackets()
 		{
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
 			pos.mID = ID_RECEIVE_SHAPE;
-
-			mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+			for (int i = 0; i < mClientPairs.size(); i++)
+			{
+				if (mClientPairs[i][0] == p->systemAddress)
+				{
+					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], true);
+				}
+				else
+				{
+					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], true);
+				}
+			}
+			
 			break;
 		}
 		default:

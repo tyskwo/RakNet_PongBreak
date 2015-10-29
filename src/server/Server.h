@@ -50,7 +50,7 @@ private:
 	//first client
 	RakNet::SystemAddress clientID = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
 
-	std::array<std::array<int, 2>, 8> mClientPairs;
+	std::array<std::array<RakNet::SystemAddress, 2>, 8> mClientPairs;
 	int mNumGames;
 	
 	//message to send to client
