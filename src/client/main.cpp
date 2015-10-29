@@ -26,35 +26,37 @@ int main()
 
 
 	sf::RectangleShape rect(sf::Vector2f(20, 100));
-	rect.setPosition(sf::Vector2f(100.0f, 0.0f));
-	sf::Vector2f rectY = rect.getPosition();
+	sf::RectangleShape otherRect(sf::Vector2f(20, 100));
 
-	// set the shape color to green
-	rect.setFillColor(sf::Color(100, 250, 50));
 
-	sf::CircleShape circleOther(50);
-	// set the shape color to green
-	circleOther.setFillColor(sf::Color(200, 100, 100));
+	if (mpClient->getFirstConnected())
+	{
+		rect.setFillColor(sf::Color(200, 10, 10));
+		rect.setPosition(sf::Vector2f(100.0f, 0.0f));
+
+		otherRect.setFillColor(sf::Color(10, 10, 200));
+	}
+	else
+	{
+		rect.setFillColor(sf::Color(10, 10, 200));
+		rect.setPosition(sf::Vector2f(700.0f, 0.0f));
+
+		otherRect.setFillColor(sf::Color(200, 10, 10));
+	}
 
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
 		mpClient->update();
 
-		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rect.getPosition().y >= 20) rect.getPosition().y -= 20;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rect.getPosition().y <= 600 - rect.getSize().y - 20) rect.getPosition().y += 20;
 
-		/*if (mousePos.x > 800 - rect.getRadius() * 2)	mousePos.x = 800 - circle.getRadius() * 2;
-		if (mousePos.y > 600 - circle.getRadius() * 2)	mousePos.y = 600 - circle.getRadius() * 2;
-		if (mousePos.x <   0)							mousePos.x =   0;
-		if (mousePos.y <   0)							mousePos.y =   0;*/
+		rect.setPosition(rect.getPosition().x, rect.getPosition().y);
+		mpClient->sendShapePacket(rect.getPosition().x, rect.getPosition().y);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectY.y -= 20;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectY.y += 20;
-
-		rect.setPosition(rectY);
-		mpClient->sendShapePacket(mousePos.x, mousePos.y);
 		sf::Vector2f otherPosition = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
-		circleOther.setPosition(otherPosition);
+		otherRect.setPosition(otherPosition);
 
 
 
@@ -71,7 +73,7 @@ int main()
 		window.clear(sf::Color::Black);
 
 		window.draw(rect);
-		window.draw(circleOther);
+		window.draw(otherRect);
 
 		// draw everything here...
 		// window.draw(...);
