@@ -172,11 +172,11 @@ void Server::getPackets()
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
 				{
-					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], true);
+					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
 				}
 				else
 				{
-					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], true);
+					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
 				}
 			}
 			
