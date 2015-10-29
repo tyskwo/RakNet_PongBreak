@@ -56,7 +56,7 @@ private:
 	char mIPaddress[64], mServerPort[3], mClientPort[3];
 	char mMessage[2048];
 
-	bool mIsConnected = false;
+	bool mIsConnected;
 	bool mWasFirstConnected;
 };
 
