@@ -108,7 +108,7 @@ void Server::update()
 	QueryPerformanceCounter(&mEndTime);
 	if (calcDifferenceInMS(mStartTime, mEndTime) >= (1000.0/30.0))
 	{
-		sendPacket();
+		broadcastGameInfo();
 		QueryPerformanceCounter(&mStartTime);
 	}
 }
@@ -127,21 +127,28 @@ void Server::getPackets()
 			// Connection lost normally
 			printf("ID_DISCONNECTION_NOTIFICATION from %s\n", p->systemAddress.ToString(true));;
 			break;
+		case ID_INCOMPATIBLE_PROTOCOL_VERSION:
+			printf("ID_INCOMPATIBLE_PROTOCOL_VERSION\n");
+			break;
+		case ID_CONNECTED_PING:
+		case ID_UNCONNECTED_PING:
+			printf("Ping from %s\n", p->systemAddress.ToString(true));
+			break;
+		case ID_CONNECTION_LOST:
+			// Couldn't deliver a reliable packet - i.e. the other system was abnormally
+			// terminated
+			printf("ID_CONNECTION_LOST from %s\n", p->systemAddress.ToString(true));
+			break;
+
+
+
+		/*###########################################USER CHANGED/DEFINED###############################################*/
 
 
 		case ID_NEW_INCOMING_CONNECTION:
+		{
 			// Somebody connected.  We have their IP now
-			printf("ID_NEW_INCOMING_CONNECTION from %s with GUID %s\n", p->systemAddress.ToString(true), p->guid.ToString());
-
-			printf("Remote internal IDs:\n");
-			for (int index = 0; index < MAXIMUM_NUMBER_OF_INTERNAL_IDS; index++)
-			{
-				RakNet::SystemAddress internalId = mpServer->GetInternalID(p->systemAddress, index);
-				if (internalId != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
-				{
-					printf("%i. %s\n", index + 1, internalId.ToString(true));
-				}
-			}
+			printf("New connection from %s\n", p->systemAddress.ToString(true));
 
 			if (mClientPairs[mNumGames][0] == "" && mClientPairs[mNumGames][1] == "")
 			{
@@ -154,6 +161,9 @@ void Server::getPackets()
 			else
 			{
 				mClientPairs[mNumGames][1] = p->systemAddress;
+
+				//add gameinfo struct here
+
 				mNumGames++;
 
 				int id = ID_SECOND_CONNECTION;
@@ -161,22 +171,7 @@ void Server::getPackets()
 			}
 
 			break;
-
-		case ID_INCOMPATIBLE_PROTOCOL_VERSION:
-			printf("ID_INCOMPATIBLE_PROTOCOL_VERSION\n");
-			break;
-
-		case ID_CONNECTED_PING:
-		case ID_UNCONNECTED_PING:
-			printf("Ping from %s\n", p->systemAddress.ToString(true));
-			break;
-
-		case ID_CONNECTION_LOST:
-			// Couldn't deliver a reliable packet - i.e. the other system was abnormally
-			// terminated
-			printf("ID_CONNECTION_LOST from %s\n", p->systemAddress.ToString(true));
-			break;
-
+		}
 		case ID_SEND_SHAPE:
 		{
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
@@ -192,38 +187,24 @@ void Server::getPackets()
 					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
 				}
 			}
-			
+
 			break;
 		}
 		default:
-			// The server knows the static data of all clients, so we can prefix the message
-			// With the name data
+			//try to print data
 			printf("%s\n", p->data);
-
-			// Relay the message.  We prefix the name for other clients.  This demonstrates
-			// That messages can be changed on the server before being broadcast
-			// Sending is the same as before
-			sprintf_s(mMessage, "%s", p->data);
-			mpServer->Send(mMessage, (const int)strlen(mMessage) + 1, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
-
 			break;
 		}
 	}
 }
 
-void Server::sendPacket()
+void Server::broadcastGameInfo()
 {
-	//legacy for sending messages
-	/*if (kbhit())
+	//send each gameinfo to the correct clients
+	for (unsigned int i = 0; i < mClientPairs.size; i++)
 	{
-		Gets(mMessage, sizeof(mMessage));
-
-		if (strcmp(mMessage, "quit") == 0)
-		{
-			puts("Quitting.");
-			cleanup();
-		}
-
-		mpServer->Send(mMessage, (int)strlen(mMessage) + 1, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	}*/
+		mGameInfos[i];
+		mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+		mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+	}
 }

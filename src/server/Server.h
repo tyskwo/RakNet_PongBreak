@@ -27,31 +27,27 @@ struct ShapePosition
 struct GameInfo
 {
 	unsigned char mID;
-	struct lPlayer
-	{
-		float xPos, yPos;
-		float xVel, yVel;
 
-		std::array<std::array<bool, 3>, 6> bricks;
-
-		int goalsScored;
-	};
-	struct rPlayer
-	{
-		float xPos, yPos;
-		float xVel, yVel;
-
-		std::array<std::array<bool, 3>, 6> bricks;
-
-		int goalsScored;
-	};
-	struct Ball
-	{
-		float xPos, yPos;
-		float xVel, yVel;
-	};
+	Player lPlayer, rPlayer;
+	Ball ball;
 };
 #pragma pack(pop)
+
+struct Player
+{
+	float xPos, yPos;
+	float xVel, yVel;
+
+	std::array<std::array<bool, 3>, 6> bricks;
+
+	int goalsScored;
+};
+
+struct Ball
+{
+	float xPos, yPos;
+	float xVel, yVel;
+};
 
 class Server
 {
@@ -64,7 +60,7 @@ public:
 	void cleanup();
 
 	void update();
-	void sendPacket();
+	void broadcastGameInfo();
 
 private:
 	//pointer to server object
