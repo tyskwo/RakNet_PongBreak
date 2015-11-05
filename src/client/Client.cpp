@@ -195,21 +195,12 @@ void Client::getPackets()
 			break;
 		}
 
-		case ID_RECIEVE_GAME_INFO:
+		case ID_RECIEVE_PADDLE_DATA:
 		{
-			GameInfo info = *reinterpret_cast<GameInfo*>(mpPacket->data);
-			if (mWasFirstConnected)
-			{
-				otherShapeX = info.rPlayer.xPos;
-				otherShapeY = info.rPlayer.yPos;
-				otherVelocity = info.rPlayer.yVel;
-			}
-			else
-			{
-				otherShapeX = info.lPlayer.xPos;
-				otherShapeY = info.lPlayer.yPos;
-				otherVelocity = info.lPlayer.yVel;
-			}
+			ShapePosition pos = *reinterpret_cast<ShapePosition*>(mpPacket->data);
+			otherShapeX = pos.xPos;
+			otherShapeY = pos.yPos;
+			otherVelocity = pos.velocity;
 			break;
 		}
 

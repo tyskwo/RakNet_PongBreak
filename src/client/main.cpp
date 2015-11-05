@@ -50,8 +50,6 @@ int main()
 
 	float rectVelocity = 0.0f;
 
-	mpClient->update();
-
 	sf::Vector2f prevPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 	sf::Vector2f currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 

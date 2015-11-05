@@ -188,7 +188,7 @@ void Server::getPackets()
 				}
 				else
 				{
-					mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
 				}
 			}
 
@@ -205,10 +205,10 @@ void Server::getPackets()
 void Server::broadcastGameInfo()
 {
 	//send each gameinfo to the correct clients
-	for (unsigned int i = 0; i < mClientPairs.size(); i++)
+	/*for (unsigned int i = 0; i < mClientPairs.size(); i++)
 	{
 		GameInfo info = mGameInfos[i];
 		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
 		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
-	}
+	}*/
 }
