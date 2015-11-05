@@ -70,10 +70,21 @@ int main()
 			currGameInfo.rPlayer.yVel = mpClient->otherVelocity;
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectVelocity = -5.0f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectVelocity = 5.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) rectVelocity = -5.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 5.0f;
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 0.0f;
-
+		
+		if (rectY.y < 0)
+		{
+			rectVelocity = 0.0f;
+			rectY.y = 0;
+		}
+		if (rectY.y > 600 - rect.getSize().y)
+		{
+			rectVelocity = 0.0f;
+			rectY.y = 600 - rect.getSize().y;
+		}
+		
 		rectY.y += rectVelocity;
 		rect.setPosition(rectY);
 		mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);

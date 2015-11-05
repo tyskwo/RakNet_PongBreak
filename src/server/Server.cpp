@@ -180,6 +180,9 @@ void Server::getPackets()
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
 			pos.mID = ID_RECIEVE_PADDLE_DATA;
 
+			//if (pos.yPos <= 0) pos.yPos = 0;
+			//else if (pos.yPos >= 500) pos.yPos = 500;
+
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
