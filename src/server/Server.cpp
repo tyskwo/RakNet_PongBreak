@@ -6,8 +6,8 @@ enum MessageTypes
 	//ID_USER_PACKET_ENUM,
 	//-------------------------------------------------------------------------------------------------------------
 
-	ID_SEND_SHAPE = ID_USER_PACKET_ENUM,
-	ID_RECEIVE_SHAPE,
+	ID_SEND_PADDLE_DATA = ID_USER_PACKET_ENUM,
+	ID_RECIEVE_PADDLE_DATA,
 	ID_FIRST_CONNECTION,
 	ID_SECOND_CONNECTION,
 	ID_SEND_GAME_INFO,
@@ -175,16 +175,16 @@ void Server::getPackets()
 
 			break;
 		}
-		case ID_SEND_GAME_INFO:
+		case ID_SEND_PADDLE_DATA:
 		{
-			//ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
-			GameInfo info = *reinterpret_cast<GameInfo*>(p->data);
-			info.mID = ID_RECIEVE_GAME_INFO;
+			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
+			pos.mID = ID_RECIEVE_PADDLE_DATA;
+
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
 				{
-					mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
 				}
 				else
 				{
@@ -205,7 +205,7 @@ void Server::getPackets()
 void Server::broadcastGameInfo()
 {
 	//send each gameinfo to the correct clients
-	for (unsigned int i = 0; i < mClientPairs.size; i++)
+	for (unsigned int i = 0; i < mClientPairs.size(); i++)
 	{
 		GameInfo info = mGameInfos[i];
 		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);

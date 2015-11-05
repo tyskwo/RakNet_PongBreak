@@ -12,16 +12,6 @@ struct ShapePosition
 };
 #pragma pack(pop)
 
-#pragma pack(push, 1)
-struct GameInfo
-{
-	unsigned char mID;
-
-	Player lPlayer, rPlayer;
-	Ball ball;
-};
-#pragma pack(pop)
-
 struct Player
 {
 	float xPos, yPos;
@@ -38,6 +28,16 @@ struct Ball
 	float xVel, yVel;
 };
 
+#pragma pack(push, 1)
+struct GameInfo
+{
+	unsigned char mID;
+
+	Player lPlayer, rPlayer;
+	Ball ball;
+};
+#pragma pack(pop)
+
 class Client
 {
 public:
@@ -51,7 +51,7 @@ public:
 	void update();
 	
 	void sendPacket();
-	void sendGameInfo(GameInfo clientInfo);
+	void sendPaddleData(float x, float y, float velocity);
 
 	float otherShapeX, otherShapeY, otherVelocity;
 

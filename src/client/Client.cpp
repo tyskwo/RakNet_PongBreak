@@ -26,12 +26,12 @@ enum MessageTypes
 	//ID_USER_PACKET_ENUM,
 	//-------------------------------------------------------------------------------------------------------------
 
-	ID_SEND_SHAPE = ID_USER_PACKET_ENUM,
-	ID_RECEIVE_SHAPE,
+	ID_SEND_PADDLE_DATA = ID_USER_PACKET_ENUM,
+	ID_RECIEVE_PADDLE_DATA,
 	ID_FIRST_CONNECTION,
 	ID_SECOND_CONNECTION,
 	ID_SEND_GAME_INFO,
-	ID_RECIEVE_GAME_INFO
+	ID_RECIEVE_GAME_INFO,
 };
 
 Client::Client()
@@ -237,8 +237,12 @@ void Client::sendPacket()
 	}
 }
 
-void Client::sendGameInfo(GameInfo clientInfo)
+void Client::sendPaddleData(float x, float y, float velocity)
 {
-	clientInfo.mID = ID_SEND_GAME_INFO;
-	mpClient->Send((const char*)&clientInfo, sizeof(clientInfo), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	ShapePosition pos;
+	pos.xPos = x;
+	pos.yPos = y;
+	pos.velocity = velocity;
+	pos.mID = ID_SEND_PADDLE_DATA;
+	mpClient->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

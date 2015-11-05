@@ -71,7 +71,6 @@ int main()
 			currGameInfo.rPlayer.yPos = mpClient->otherShapeY;
 			currGameInfo.rPlayer.yVel = mpClient->otherVelocity;
 		}
-		
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectVelocity = -5.0f;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectVelocity = 5.0f;
@@ -79,7 +78,7 @@ int main()
 
 		rectY.y += rectVelocity;
 		rect.setPosition(rectY);
-		mpClient->sendGameInfo(currGameInfo);
+		mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
 
 		currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		
