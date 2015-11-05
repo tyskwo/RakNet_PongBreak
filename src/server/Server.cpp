@@ -58,7 +58,7 @@ void Server::init(const char* serverPort)
 		printf("%s\n", sa.ToString(false));
 	}
 
-	for (int i = 0; i < mClientPairs.size(); i++)
+	for (unsigned int i = 0; i < mClientPairs.size(); i++)
 	{
 		mClientPairs[i][0] = "";
 		mClientPairs[i][1] = "";
@@ -132,7 +132,6 @@ void Server::getPackets()
 		case ID_NEW_INCOMING_CONNECTION:
 			// Somebody connected.  We have their IP now
 			printf("ID_NEW_INCOMING_CONNECTION from %s with GUID %s\n", p->systemAddress.ToString(true), p->guid.ToString());
-			clientID = p->systemAddress; // Record the player ID of the client
 
 			printf("Remote internal IDs:\n");
 			for (int index = 0; index < MAXIMUM_NUMBER_OF_INTERNAL_IDS; index++)
@@ -182,7 +181,7 @@ void Server::getPackets()
 		{
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
 			pos.mID = ID_RECEIVE_SHAPE;
-			for (int i = 0; i < mClientPairs.size(); i++)
+			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
 				{
@@ -214,7 +213,8 @@ void Server::getPackets()
 
 void Server::sendPacket()
 {
-	if (kbhit())
+	//legacy for sending messages
+	/*if (kbhit())
 	{
 		Gets(mMessage, sizeof(mMessage));
 
@@ -225,5 +225,5 @@ void Server::sendPacket()
 		}
 
 		mpServer->Send(mMessage, (int)strlen(mMessage) + 1, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	}
+	}*/
 }

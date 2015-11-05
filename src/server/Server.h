@@ -8,7 +8,6 @@
 
 #include "BitStream.h"
 #include "Gets.h"
-#include "Kbhit.h"
 #include "MessageIdentifiers.h"
 #include "PacketLogger.h"
 #include "RakNetStatistics.h"
@@ -24,6 +23,36 @@ struct ShapePosition
 };
 #pragma pack(pop)
 
+#pragma pack(push, 1)
+struct GameInfo
+{
+	unsigned char mID;
+	struct lPlayer
+	{
+		float xPos, yPos;
+		float xVel, yVel;
+
+		std::array<std::array<bool, 3>, 6> bricks;
+
+		int goalsScored;
+	};
+	struct rPlayer
+	{
+		float xPos, yPos;
+		float xVel, yVel;
+
+		std::array<std::array<bool, 3>, 6> bricks;
+
+		int goalsScored;
+	};
+	struct Ball
+	{
+		float xPos, yPos;
+		float xVel, yVel;
+	};
+};
+#pragma pack(pop)
+
 class Server
 {
 public:
@@ -35,7 +64,6 @@ public:
 	void cleanup();
 
 	void update();
-
 	void sendPacket();
 
 private:
@@ -45,27 +73,27 @@ private:
 	//Holds packets
 	RakNet::Packet* p;
 
-	// GetPacketIdentifier returns this
+	//get packet
+	void getPackets();
+
+	//determine id of packet
 	unsigned char packetIdentifier;
+	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
-	//first client
-	RakNet::SystemAddress clientID = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
-
+	//arrays for the games, and info for said games
 	std::array<std::array<RakNet::SystemAddress, 2>, 8> mClientPairs;
+	std::array<GameInfo, 8>								mGameInfos;
 	int mNumGames;
 	
 	//message to send to client
+	//MIGHT NOT BE NEEDED IN END.
 	char mMessage[2048];
 
-	double mTimeSinceLastSend;
+	//timer variables
 	LARGE_INTEGER mStartTime;
 	LARGE_INTEGER mEndTime;
 	LARGE_INTEGER mFrequency;
-
-	void getPackets();
 	double Server::calcDifferenceInMS(LARGE_INTEGER from, LARGE_INTEGER to) const;
-
-	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 };
 
 #endif
