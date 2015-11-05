@@ -198,6 +198,7 @@ void Client::getPackets()
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(mpPacket->data);
 			otherShapeX = pos.xPos;
 			otherShapeY = pos.yPos;
+			otherVelocity = pos.velocity;
 			break;
 		}
 
@@ -225,11 +226,12 @@ void Client::sendPacket()
 	}
 }
 
-void Client::sendShapePacket(float x, float y)
+void Client::sendShapePacket(float x, float y, float velocity)
 {
 	ShapePosition pos;
 	pos.mID = ID_SEND_SHAPE;
 	pos.xPos = x;
 	pos.yPos = y;
+	pos.velocity = velocity;
 	mpClient->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

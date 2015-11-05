@@ -7,7 +7,7 @@
 struct ShapePosition
 {
 	unsigned char mID;
-	float xPos, yPos;
+	float xPos, yPos, velocity;
 };
 #pragma pack(pop)
 
@@ -24,9 +24,9 @@ public:
 	void update();
 	
 	void sendPacket();
-	void sendShapePacket(float x, float y);
+	void sendShapePacket(float x, float y, float velocity);
 
-	float otherShapeX, otherShapeY;
+	float otherShapeX, otherShapeY, otherVelocity;
 
 	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; };
 	inline bool getFirstConnected()			     { return mWasFirstConnected; };

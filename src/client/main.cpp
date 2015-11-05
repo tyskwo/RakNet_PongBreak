@@ -48,23 +48,38 @@ int main()
 
 	sf::Vector2f rectY = rect.getPosition();
 
+	float rectVelocity = 0.0f;
+
+	mpClient->update();
+
+	sf::Vector2f prevPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
+	sf::Vector2f currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
 		mpClient->update();
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectY.y -= 20;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectY.y += 20;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectVelocity = -5.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectVelocity = 5.0f;
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 0.0f;
 
+		rectY.y += rectVelocity;
 		rect.setPosition(rectY);
-		mpClient->sendShapePacket(rectY.x, rectY.y);
+		mpClient->sendShapePacket(rectY.x, rectY.y, rectVelocity);
 
-		sf::Vector2f otherPosition = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
-		otherRect.setPosition(otherPosition);
-
-
-
+		currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
+		
+		if (currPos.x != prevPos.x && currPos.y != prevPos.y)
+		{
+			otherRect.setPosition(currPos);
+		}
+		else
+		{
+			prevPos.y += mpClient->otherVelocity;
+			otherRect.setPosition(prevPos);
+		}
+		
 		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;
 		while (window.pollEvent(event))
