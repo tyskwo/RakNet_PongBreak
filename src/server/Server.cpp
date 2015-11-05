@@ -65,6 +65,8 @@ void Server::init(const char* serverPort)
 	}
 
 	mNumGames = 0;
+	QueryPerformanceFrequency(&mFrequency);
+	QueryPerformanceCounter(&mStartTime);
 }
 
 
@@ -73,6 +75,12 @@ void Server::cleanup()
 	mpServer->Shutdown(300);
 	// We're done with the network
 	RakNet::RakPeerInterface::DestroyInstance(mpServer);
+}
+
+double Server::calcDifferenceInMS(LARGE_INTEGER from, LARGE_INTEGER to) const
+{
+	double difference = (double)(to.QuadPart - from.QuadPart) / (double)(mFrequency.QuadPart);
+	return difference * 1000;
 }
 
 unsigned char Server::GetPacketIdentifier(RakNet::Packet *p)
@@ -96,7 +104,13 @@ void Server::update()
 
 	// Get a packet from either the server or the client
 	getPackets();
-	sendPacket();
+
+	QueryPerformanceCounter(&mEndTime);
+	if (calcDifferenceInMS(mStartTime, mEndTime) >= (1000.0/30.0))
+	{
+		sendPacket();
+		QueryPerformanceCounter(&mStartTime);
+	}
 }
 
 void Server::getPackets()

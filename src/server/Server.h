@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <iostream>
 #include <array>
+#include <time.h>
 
 #include "BitStream.h"
 #include "Gets.h"
@@ -56,8 +57,13 @@ private:
 	//message to send to client
 	char mMessage[2048];
 
+	double mTimeSinceLastSend;
+	LARGE_INTEGER mStartTime;
+	LARGE_INTEGER mEndTime;
+	LARGE_INTEGER mFrequency;
 
 	void getPackets();
+	double Server::calcDifferenceInMS(LARGE_INTEGER from, LARGE_INTEGER to) const;
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 };
