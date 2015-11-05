@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include "RakPeerInterface.h"
+#include <array>
 
 #pragma pack(push, 1)
 struct ShapePosition
@@ -10,6 +11,32 @@ struct ShapePosition
 	float xPos, yPos, velocity;
 };
 #pragma pack(pop)
+
+#pragma pack(push, 1)
+struct GameInfo
+{
+	unsigned char mID;
+
+	Player lPlayer, rPlayer;
+	Ball ball;
+};
+#pragma pack(pop)
+
+struct Player
+{
+	float xPos, yPos;
+	float xVel, yVel;
+
+	std::array<std::array<bool, 3>, 6> bricks;
+
+	int goalsScored;
+};
+
+struct Ball
+{
+	float xPos, yPos;
+	float xVel, yVel;
+};
 
 class Client
 {
@@ -24,7 +51,7 @@ public:
 	void update();
 	
 	void sendPacket();
-	void sendShapePacket(float x, float y, float velocity);
+	void sendGameInfo(GameInfo clientInfo);
 
 	float otherShapeX, otherShapeY, otherVelocity;
 

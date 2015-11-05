@@ -55,10 +55,23 @@ int main()
 	sf::Vector2f prevPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 	sf::Vector2f currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 
+	GameInfo currGameInfo;
+
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
 		mpClient->update();
+
+		if (mpClient->getFirstConnected())
+		{
+			currGameInfo.lPlayer.xPos = rectY.x;
+			currGameInfo.lPlayer.yPos = rectY.y;
+			currGameInfo.lPlayer.yVel = rectVelocity;
+			currGameInfo.rPlayer.xPos = mpClient->otherShapeX;
+			currGameInfo.rPlayer.yPos = mpClient->otherShapeY;
+			currGameInfo.rPlayer.yVel = mpClient->otherVelocity;
+		}
+		
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && rectY.y >= 20) rectVelocity = -5.0f;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && rectY.y <= 600 - rect.getSize().y - 20) rectVelocity = 5.0f;
@@ -66,7 +79,7 @@ int main()
 
 		rectY.y += rectVelocity;
 		rect.setPosition(rectY);
-		mpClient->sendShapePacket(rectY.x, rectY.y, rectVelocity);
+		mpClient->sendGameInfo(currGameInfo);
 
 		currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		

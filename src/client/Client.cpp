@@ -29,7 +29,9 @@ enum MessageTypes
 	ID_SEND_SHAPE = ID_USER_PACKET_ENUM,
 	ID_RECEIVE_SHAPE,
 	ID_FIRST_CONNECTION,
-	ID_SECOND_CONNECTION
+	ID_SECOND_CONNECTION,
+	ID_SEND_GAME_INFO,
+	ID_RECIEVE_GAME_INFO
 };
 
 Client::Client()
@@ -193,12 +195,21 @@ void Client::getPackets()
 			break;
 		}
 
-		case ID_RECEIVE_SHAPE:
+		case ID_RECIEVE_GAME_INFO:
 		{
-			ShapePosition pos = *reinterpret_cast<ShapePosition*>(mpPacket->data);
-			otherShapeX = pos.xPos;
-			otherShapeY = pos.yPos;
-			otherVelocity = pos.velocity;
+			GameInfo info = *reinterpret_cast<GameInfo*>(mpPacket->data);
+			if (mWasFirstConnected)
+			{
+				otherShapeX = info.rPlayer.xPos;
+				otherShapeY = info.rPlayer.yPos;
+				otherVelocity = info.rPlayer.yVel;
+			}
+			else
+			{
+				otherShapeX = info.lPlayer.xPos;
+				otherShapeY = info.lPlayer.yPos;
+				otherVelocity = info.lPlayer.yVel;
+			}
 			break;
 		}
 
@@ -226,12 +237,8 @@ void Client::sendPacket()
 	}
 }
 
-void Client::sendShapePacket(float x, float y, float velocity)
+void Client::sendGameInfo(GameInfo clientInfo)
 {
-	ShapePosition pos;
-	pos.mID = ID_SEND_SHAPE;
-	pos.xPos = x;
-	pos.yPos = y;
-	pos.velocity = velocity;
-	mpClient->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	clientInfo.mID = ID_SEND_GAME_INFO;
+	mpClient->Send((const char*)&clientInfo, sizeof(clientInfo), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

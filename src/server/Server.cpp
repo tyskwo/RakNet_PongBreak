@@ -9,7 +9,9 @@ enum MessageTypes
 	ID_SEND_SHAPE = ID_USER_PACKET_ENUM,
 	ID_RECEIVE_SHAPE,
 	ID_FIRST_CONNECTION,
-	ID_SECOND_CONNECTION
+	ID_SECOND_CONNECTION,
+	ID_SEND_GAME_INFO,
+	ID_RECIEVE_GAME_INFO
 };
 
 Server::Server()
@@ -100,7 +102,7 @@ unsigned char Server::GetPacketIdentifier(RakNet::Packet *p)
 void Server::update()
 {
 	// This sleep keeps RakNet responsive
-	RakSleep(30);
+	//RakSleep(30);
 
 	// Get a packet from either the server or the client
 	getPackets();
@@ -163,6 +165,7 @@ void Server::getPackets()
 				mClientPairs[mNumGames][1] = p->systemAddress;
 
 				//add gameinfo struct here
+				mGameInfos[mNumGames].mID = ID_RECIEVE_GAME_INFO;
 
 				mNumGames++;
 
@@ -172,19 +175,20 @@ void Server::getPackets()
 
 			break;
 		}
-		case ID_SEND_SHAPE:
+		case ID_SEND_GAME_INFO:
 		{
-			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
-			pos.mID = ID_RECEIVE_SHAPE;
+			//ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
+			GameInfo info = *reinterpret_cast<GameInfo*>(p->data);
+			info.mID = ID_RECIEVE_GAME_INFO;
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
 				{
-					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+					mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
 				}
 				else
 				{
-					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+					mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
 				}
 			}
 
@@ -203,8 +207,8 @@ void Server::broadcastGameInfo()
 	//send each gameinfo to the correct clients
 	for (unsigned int i = 0; i < mClientPairs.size; i++)
 	{
-		mGameInfos[i];
-		mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
-		mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+		GameInfo info = mGameInfos[i];
+		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
 	}
 }
