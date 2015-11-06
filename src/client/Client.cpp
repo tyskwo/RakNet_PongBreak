@@ -23,8 +23,7 @@
 enum MessageTypes
 {
 	// For the user to use.  Start your first enumeration at this value.
-	//ID_USER_PACKET_ENUM,
-	//-------------------------------------------------------------------------------------------------------------
+	//ID_USER_PACKET_ENUM
 
 	ID_SEND_PADDLE_DATA = ID_USER_PACKET_ENUM,
 	ID_RECIEVE_PADDLE_DATA,
@@ -78,7 +77,8 @@ void Client::init(const char* clientPort, const char* serverAddress, const char*
 	RakNet::ConnectionAttemptResult car = mpClient->Connect(serverAddress, atoi(serverPort), "hello", (int)strlen("hello"));
 	RakAssert(car == RakNet::CONNECTION_ATTEMPT_STARTED);
 
-	//puts("'quit' to quit. 'stat' to show stats. 'ping' to ping.\n'disconnect' to disconnect. 'connect' to reconnnect. Type to talk.\n");
+	mRakNetFrameTime = 1.0 / 5.0; //5 fps
+	mCumulativeRakNetDeltaT = 0.0;
 }
 
 void Client::cleanup()
@@ -103,14 +103,18 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 		return (unsigned char)p->data[0];
 }
 
-void Client::update()
+void Client::update(double timeSinceLastUpdate)
 {
-	// This sleep keeps RakNet responsive
-	Sleep(30);
-
 	// Get a packet from either the server or the client
 	getPackets();
-	sendPacket();
+
+	//if enough time has passed (30fps), broadcast game states to clients
+	mCumulativeRakNetDeltaT += timeSinceLastUpdate;
+	if (mCumulativeRakNetDeltaT >= mRakNetFrameTime)
+	{
+		//sendPaddleData(rectY.x, rectY.y, rectVelocity);
+		mCumulativeRakNetDeltaT = mCumulativeRakNetDeltaT - mRakNetFrameTime;
+	}
 }
 
 void Client::getPackets()
@@ -178,6 +182,10 @@ void Client::getPackets()
 			printf("Ping from %s\n", mpPacket->systemAddress.ToString(true));
 			break;
 
+
+
+		//########################################USER CHANGED IDs################################################
+
 		case ID_FIRST_CONNECTION:
 		{
 			//set as first connected or second connected.
@@ -205,26 +213,10 @@ void Client::getPackets()
 		}
 
 		default:
-			// It's a client, so just show the message
+			//try to print data
 			printf("%s\n", mpPacket->data);
 			break;
 		}
-	}
-}
-
-void Client::sendPacket()
-{
-	if (kbhit())
-	{
-		Gets(mMessage, sizeof(mMessage));
-
-		if (strcmp(mMessage, "quit") == 0)
-		{
-			puts("Quitting.");
-			cleanup();
-		}
-		
-		mpClient->Send(mMessage, (int)strlen(mMessage) + 1, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 	}
 }
 

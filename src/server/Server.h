@@ -23,6 +23,7 @@ struct ShapePosition
 };
 #pragma pack(pop)
 
+//struct for player values
 struct Player
 {
 	float xPos, yPos;
@@ -33,12 +34,14 @@ struct Player
 	int goalsScored;
 };
 
+//struct for ball values
 struct Ball
 {
 	float xPos, yPos;
 	float xVel, yVel;
 };
 
+//struct for game info, both players, ball, scores
 #pragma pack(push, 1)
 struct GameInfo
 {
@@ -60,7 +63,7 @@ public:
 	void init(const char* serverPort);
 	void cleanup();
 
-	void update();
+	void update(double timeSinceLastUpdate);
 	void broadcastGameInfo();
 
 private:
@@ -70,9 +73,7 @@ private:
 	//Holds packets
 	RakNet::Packet* p;
 
-	//get packet
 	void getPackets();
-
 	//determine id of packet
 	unsigned char packetIdentifier;
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
@@ -81,16 +82,9 @@ private:
 	std::array<std::array<RakNet::SystemAddress, 2>, 8> mClientPairs;
 	std::array<GameInfo, 8>								mGameInfos;
 	int mNumGames;
-	
-	//message to send to client
-	//MIGHT NOT BE NEEDED IN END.
-	char mMessage[2048];
 
 	//timer variables
-	LARGE_INTEGER mStartTime;
-	LARGE_INTEGER mEndTime;
-	LARGE_INTEGER mFrequency;
-	double Server::calcDifferenceInMS(LARGE_INTEGER from, LARGE_INTEGER to) const;
+	double mRakNetFrameTime, mCumulativeRakNetDeltaT;
 };
 
 #endif

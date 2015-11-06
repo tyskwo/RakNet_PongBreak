@@ -1,3 +1,3 @@
-# SFML ClientServer Lab #
+# PongBreak #
+## If Pong and BrickBreak had a baby. AN ACTION-PACKED BABY! ##
 
-This repo is for the lab from 10/16/15, using RakNet and SFML with CMake to create a dedicated server with a chat based client system.

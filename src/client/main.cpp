@@ -10,10 +10,12 @@
 int main()
 {
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "PONGBREAK");
+	window.setFramerateLimit(60);
 
-	srand(time(0));
-	int randPortNumber = rand() % (250 - 201 + 1) + 201;
+	//connect
+	srand(time(NULL));
+	int randPortNumber = rand() % (301 - 201 + 1) + 201;
 	std::stringstream converter;
 	converter << randPortNumber;
 	std::string temp_str = converter.str();
@@ -24,9 +26,19 @@ int main()
 	std::cin >> ipAddress;
 	Client* mpClient = new Client(char_type, ipAddress.c_str(), "200");
 
-
+	//while trying to conncet, don't update the game logic
 	while (!mpClient->getConnected()) { mpClient->update(); }
 
+	//timer variables
+	LARGE_INTEGER mStartTime;
+	LARGE_INTEGER mEndTime;
+	LARGE_INTEGER mFrequency;
+
+	QueryPerformanceFrequency(&mFrequency);
+	QueryPerformanceCounter(&mStartTime);
+
+
+	//#######Everything below here should be elsewhere########
 
 	sf::RectangleShape rect(sf::Vector2f(20, 100));
 	sf::RectangleShape otherRect(sf::Vector2f(20, 100));
@@ -55,10 +67,14 @@ int main()
 
 	GameInfo currGameInfo;
 
+	//##############################################################
+
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
-		mpClient->update();
+		QueryPerformanceCounter(&mEndTime);
+		double timeSinceLastUpdate = calcDifferenceInMS(mStartTime, mEndTime);
+		mpClient->update(timeSinceLastUpdate);
 
 		if (mpClient->getFirstConnected())
 		{

@@ -12,6 +12,7 @@ struct ShapePosition
 };
 #pragma pack(pop)
 
+//struct for player values
 struct Player
 {
 	float xPos, yPos;
@@ -22,12 +23,14 @@ struct Player
 	int goalsScored;
 };
 
+//struct for ball values
 struct Ball
 {
 	float xPos, yPos;
 	float xVel, yVel;
 };
 
+//struct to receive game state from server
 #pragma pack(push, 1)
 struct GameInfo
 {
@@ -48,18 +51,20 @@ public:
 	void init(const char* clientPort, const char* serverAddress, const char* serverPort);
 	void cleanup();
 
-	void update();
+	void update(double timeSinceLastUpdate);
 	
-	void sendPacket();
+	//send paddle data
 	void sendPaddleData(float x, float y, float velocity);
 
+	//values for the other player's shape position and velocity
+	//########Need to convert to player struct##############
 	float otherShapeX, otherShapeY, otherVelocity;
 
+	//set flags for whether it was first connected, or connected second
 	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; };
 	inline bool getFirstConnected()			     { return mWasFirstConnected; };
-
-	inline void setConnected(bool connected) { mIsConnected = connected; };
-	inline bool getConnected()			     { return mIsConnected; };
+	inline void setConnected(bool wasSecond)	 { mIsConnected = wasSecond; };
+	inline bool getConnected()					 { return mIsConnected; };
 
 
 private:
@@ -70,21 +75,25 @@ private:
 	RakNet::Packet* mpPacket;
 
 	//first client
+	//########Do we need these?#########
 	RakNet::SystemAddress mClientID;
 	RakNet::SocketDescriptor mSocketDescriptor;
 
-	// GetPacketIdentifier returns this
+	//get and identify packet
 	unsigned char mPacketIdentifier;
-
+	unsigned char GetPacketIdentifier(RakNet::Packet* pPacket);
 	void getPackets();
 
-	unsigned char GetPacketIdentifier(RakNet::Packet* pPacket);
-
+	//values for the connection values.
 	char mIPaddress[64], mServerPort[3], mClientPort[3];
 	char mMessage[2048];
 
+	//flag for if client is connected, and if so, first player
 	bool mIsConnected;
 	bool mWasFirstConnected;
+
+	//for timing
+	double mRakNetFrameTime, mCumulativeRakNetDeltaT;
 };
 
 #endif

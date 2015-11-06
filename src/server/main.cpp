@@ -1,16 +1,35 @@
 #include <SFML/Graphics.hpp>
 #include "Server.h"
 
+double calcDifferenceInMS(LARGE_INTEGER from, LARGE_INTEGER to) const
+{
+		double difference = (double)(to.QuadPart - from.QuadPart) / (double)(mFrequency.QuadPart);
+		return difference * 1000;
+}
+
 int main()
 {
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "PONGBREAK server");
+	window.setFramerateLimit(60);
+
+	//timer variables
+	LARGE_INTEGER mStartTime;
+	LARGE_INTEGER mEndTime;
+	LARGE_INTEGER mFrequency;
+
+	QueryPerformanceFrequency(&mFrequency);
+	QueryPerformanceCounter(&mStartTime);
+
 	Server* mpServer = new Server("200");
 
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
-		mpServer->update();
+		QueryPerformanceCounter(&mEndTime);
+		double timeSinceLastUpdate = calcDifferenceInMS(mStartTime, mEndTime);
+		mpServer->update(timeSinceLastUpdate);
+
 		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;
 		while (window.pollEvent(event))

@@ -42,8 +42,8 @@ void Server::init(const char* serverPort)
 	socketDescriptors[1].port = atoi(serverPort);
 	socketDescriptors[1].socketFamily = AF_INET6; // Test out IPV6
 	
-	bool b = mpServer->Startup(6, socketDescriptors, 1) == RakNet::RAKNET_STARTED;
-	mpServer->SetMaximumIncomingConnections(6);
+	bool b = mpServer->Startup(16, socketDescriptors, 1) == RakNet::RAKNET_STARTED;
+	mpServer->SetMaximumIncomingConnections(16);
 
 	if (!b)
 	{
@@ -66,9 +66,12 @@ void Server::init(const char* serverPort)
 		mClientPairs[i][1] = "";
 	}
 
+	//############Do we need to init GameInfos to empty GameInfo structs here?############
+
 	mNumGames = 0;
-	QueryPerformanceFrequency(&mFrequency);
-	QueryPerformanceCounter(&mStartTime);
+
+	mRakNetFrameTime = 1.0 / 5.0; //5fps
+	mCumulativeRakNetDeltaT = 0.0;
 }
 
 
@@ -77,12 +80,6 @@ void Server::cleanup()
 	mpServer->Shutdown(300);
 	// We're done with the network
 	RakNet::RakPeerInterface::DestroyInstance(mpServer);
-}
-
-double Server::calcDifferenceInMS(LARGE_INTEGER from, LARGE_INTEGER to) const
-{
-	double difference = (double)(to.QuadPart - from.QuadPart) / (double)(mFrequency.QuadPart);
-	return difference * 1000;
 }
 
 unsigned char Server::GetPacketIdentifier(RakNet::Packet *p)
@@ -99,19 +96,17 @@ unsigned char Server::GetPacketIdentifier(RakNet::Packet *p)
 		return (unsigned char)p->data[0];
 }
 
-void Server::update()
+void Server::update(double timeSinceLastUpdate)
 {
-	// This sleep keeps RakNet responsive
-	//RakSleep(30);
-
-	// Get a packet from either the server or the client
+	//get packets from clients
 	getPackets();
 
-	QueryPerformanceCounter(&mEndTime);
-	if (calcDifferenceInMS(mStartTime, mEndTime) >= (1000.0/30.0))
+	//if enough time has passed (30fps), broadcast game states to clients
+	mCumulativeRakNetDeltaT += timeSinceLastUpdate;
+	if (mCumulativeRakNetDeltaT >= mRakNetFrameTime)
 	{
 		broadcastGameInfo();
-		QueryPerformanceCounter(&mStartTime);
+		mCumulativeRakNetDeltaT = mCumulativeRakNetDeltaT - mRakNetFrameTime;
 	}
 }
 
@@ -152,37 +147,42 @@ void Server::getPackets()
 			// Somebody connected.  We have their IP now
 			printf("New connection from %s\n", p->systemAddress.ToString(true));
 
+			//if its the first client in a pair
 			if (mClientPairs[mNumGames][0] == "" && mClientPairs[mNumGames][1] == "")
 			{
 				mClientPairs[mNumGames][0] = p->systemAddress;
 
+				//make it the first player
 				int id = ID_FIRST_CONNECTION;
-
 				mpServer->Send((const char*)&id, sizeof(id), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
+
+			//if its the second client in a pair
 			else
 			{
 				mClientPairs[mNumGames][1] = p->systemAddress;
 
-				//add gameinfo struct here
+				//set game info for this game
 				mGameInfos[mNumGames].mID = ID_RECIEVE_GAME_INFO;
 
+				//increase number of games
 				mNumGames++;
 
+				//set as second player
 				int id = ID_SECOND_CONNECTION;
 				mpServer->Send((const char*)&id, sizeof(id), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
 
 			break;
 		}
+
+		//the client sends over its paddle data
 		case ID_SEND_PADDLE_DATA:
 		{
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
 			pos.mID = ID_RECIEVE_PADDLE_DATA;
 
-			//if (pos.yPos <= 0) pos.yPos = 0;
-			//else if (pos.yPos >= 500) pos.yPos = 500;
-
+			//find correct game and client
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
