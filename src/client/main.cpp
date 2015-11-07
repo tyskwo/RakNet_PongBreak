@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Client.h"
-#include "PlayerInfo.h"
+#include "ObjectInfo.h"
 
 int main()
 {
@@ -103,7 +103,7 @@ int main()
 		rect.setPosition(rect.getPosition().x, mpClient->getY());
 		//mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
 
-		PlayerInfo info = mpClient->getInterpolation().GetNext(mpClient->getDeltaT());
+		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getDeltaT());
 		otherRect.setPosition(sf::Vector2f(otherRect.getPosition().x, info.GetState().mY ));
 
 		ball.setPosition(mpClient->ballX, mpClient->ballY);

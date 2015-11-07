@@ -1,31 +1,24 @@
-#include "PlayerInfo.h"
+#include "ObjectInfo.h"
 
-PlayerInfo::PlayerInfo() {}
+ObjectInfo::ObjectInfo() {}
 
-PlayerInfo::PlayerInfo(PlayerState state, guid guid)
+ObjectInfo::ObjectInfo(ObjectState state)
 : mState(state)
-, mGuid(guid)
 {}
 
-auto PlayerInfo::SetGuid(const guid& aGuid) -> player_info&
-{
-	mGuid = aGuid;
-	return *this;
-}
-
-PlayerInfoBuffer::PlayerInfoBuffer()
+ObjectInfoBuffer::ObjectInfoBuffer()
 : mTotalTimeToInterpolate(1.0 / 10.0)
 , mCurrentTime(0)
 {}
 
-PlayerInfoBuffer::PlayerInfoBuffer(player_info aStarting)
-: PlayerInfoBuffer()
+ObjectInfoBuffer::ObjectInfoBuffer(object_info aStarting)
+	: ObjectInfoBuffer()
 {
 	mStarting = aStarting;
 	mCurrent =  mStarting;
 }
 
-auto PlayerInfoBuffer::GetNext(second aDeltaT) const -> player_info
+auto ObjectInfoBuffer::GetNext(second aDeltaT) const -> object_info
 {
 	if (mTargets.size() == 0)
 	{
@@ -52,22 +45,21 @@ auto PlayerInfoBuffer::GetNext(second aDeltaT) const -> player_info
 	auto xVal = startState.mX * (1.0 - time) + targetState.mX * time;
 	auto yVal = startState.mY * (1.0 - time) + targetState.mY * time;
 
-	PlayerState pState;
+	ObjectState pState;
 	pState.mX = static_cast<float>(xVal);
 	pState.mY = static_cast<float>(yVal);
 
 	mCurrent.SetState(pState);
-	mCurrent.SetGuid(mStarting.GetGuid());
 
-	return PlayerInfo(pState, mStarting.GetGuid());
+	return ObjectInfo(pState);
 }
 
-void PlayerInfoBuffer::AddTarget(player_info aTarget)
+void ObjectInfoBuffer::AddTarget(object_info aTarget)
 {
 	mTargets.push_back(aTarget);
 }
 
-auto PlayerInfoBuffer::SetStartingInfo(const player_info& info) -> player_buffer&
+auto ObjectInfoBuffer::SetStartingInfo(const object_info& info) -> object_buffer&
 {
 	mCurrentTime = 0.0;
 	mStarting    = info;
