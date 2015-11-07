@@ -25,6 +25,9 @@ bool Timer::shouldUpdate()
 	if (mDeltaT >= mRakNetFrameTime) //if it is time to update raknet
 	{
 		mDeltaT = mDeltaT - mRakNetFrameTime; //don't forget excess time
+
+		TIMER_START //start timer again.
+
 		return true; //return true
 	}
 	return false; //else return false
