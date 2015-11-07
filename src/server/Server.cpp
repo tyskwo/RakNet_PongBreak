@@ -69,6 +69,8 @@ void Server::init(const char* serverPort)
 	//############Do we need to init GameInfos to empty GameInfo structs here?############
 
 	mNumGames = 0;
+
+	mpTimer = new Timer();
 }
 
 
