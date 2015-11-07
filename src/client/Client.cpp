@@ -57,6 +57,9 @@ Client::~Client()
 
 void Client::init(const char* clientPort, const char* serverAddress, const char* serverPort)
 {
+	m_x = 0;
+	m_y = 0;
+
 	mIsConnected = false;
 
 	//create client instance
@@ -106,11 +109,12 @@ void Client::update()
 {
 	// Get a packet from either the server or the client
 	getPackets();
-
+std::cout << mpTimer->getDeltaT() << std::endl;
 	//if enough time has passed (30fps), broadcast game states to clients
 	if (mpTimer->shouldUpdate())
 	{
-		//sendPaddleData(rectY.x, rectY.y, rectVelocity);
+		sendPaddleData(m_x, m_y);
+		
 	}
 }
 
@@ -217,12 +221,12 @@ void Client::getPackets()
 	}
 }
 
-void Client::sendPaddleData(float x, float y, float velocity)
+void Client::sendPaddleData(float x, float y)
 {
 	ShapePosition pos;
 	pos.xPos = x;
 	pos.yPos = y;
-	pos.velocity = velocity;
+	pos.velocity = 0;
 	pos.mID = ID_SEND_PADDLE_DATA;
 	mpClient->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

@@ -76,8 +76,8 @@ int main()
 			currGameInfo.rPlayer.yVel = mpClient->otherVelocity;
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) rectVelocity = -5.0f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 5.0f;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) mpClient->setY(-5.0);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) mpClient->setY(5.0);
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 0.0f;
 		
 		if (rectY.y < 0)
@@ -92,10 +92,12 @@ int main()
 		}
 		
 		rectY.y += rectVelocity;
-		rect.setPosition(rectY);
-		mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
+		rect.setPosition(rect.getPosition().x, mpClient->getY());
+		//mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
 
-		currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
+		otherRect.setPosition(sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY));
+
+		/*currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		
 		if (currPos.x != prevPos.x && currPos.y != prevPos.y)
 		{
@@ -105,7 +107,7 @@ int main()
 		{
 			prevPos.y += mpClient->otherVelocity;
 			otherRect.setPosition(prevPos);
-		}
+		}*/
 		
 		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;

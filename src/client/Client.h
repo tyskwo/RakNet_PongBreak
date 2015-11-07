@@ -55,7 +55,7 @@ public:
 	void update();
 	
 	//send paddle data
-	void sendPaddleData(float x, float y, float velocity);
+	void sendPaddleData(float x, float y);
 
 	//values for the other player's shape position and velocity
 	//########Need to convert to player struct##############
@@ -67,7 +67,8 @@ public:
 	inline void setConnected(bool wasSecond)	 { mIsConnected = wasSecond; };
 	inline bool getConnected()					 { return mIsConnected; };
 
-
+	void setY(const float& yDiff) { m_y += yDiff; }
+	const float& getY() { return m_y; }
 private:
 	//pointer to client object
 	RakNet::RakPeerInterface* mpClient;
@@ -95,6 +96,10 @@ private:
 
 	//timer
 	Timer* mpTimer;
+
+	//paddle data
+	float m_x;
+	float m_y;
 };
 
 #endif
