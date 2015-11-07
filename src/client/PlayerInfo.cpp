@@ -1,91 +1,76 @@
 #include "PlayerInfo.h"
 
-PlayerInfo::
-PlayerInfo()
-{ }
+PlayerInfo::PlayerInfo() {}
 
-PlayerInfo::
-PlayerInfo(PlayerState state, guid_type guid)
-: m_state(state)
-, m_guid(guid)
-{ }
+PlayerInfo::PlayerInfo(PlayerState state, guid guid)
+: mState(state)
+, mGuid(guid)
+{}
 
-auto
-PlayerInfo::
-SetGuid(const guid_type& a_guid) -> this_type&
+auto PlayerInfo::SetGuid(const guid& aGuid) -> player_info&
 {
-	m_guid = a_guid;
+	mGuid = aGuid;
 	return *this;
 }
 
-PlayerInfoPair::
-PlayerInfoPair()
-: m_totalTimeToInter(1.0 / 10.0)
-, m_currTime(0)
-{ }
+PlayerInfoBuffer::PlayerInfoBuffer()
+: mTotalTimeToInterpolate(1.0 / 10.0)
+, mCurrentTime(0)
+{}
 
-PlayerInfoPair::
-PlayerInfoPair(player_info a_starting)
-: PlayerInfoPair()
+PlayerInfoBuffer::PlayerInfoBuffer(player_info aStarting)
+: PlayerInfoBuffer()
 {
-	m_starting = a_starting;
-	m_current = m_starting;
+	mStarting = aStarting;
+	mCurrent =  mStarting;
 }
 
-auto
-PlayerInfoPair::
-GetNext(sec_type a_deltaT) const
--> player_info
+auto PlayerInfoBuffer::GetNext(second aDeltaT) const -> player_info
 {
-	if (m_targets.size() == 0)
+	if (mTargets.size() == 0)
 	{
-		return m_starting;
+		return mStarting;
 	}
 
-	m_currTime += a_deltaT;
+	mCurrentTime += aDeltaT;
 
-	if (m_currTime >= m_totalTimeToInter)
+	if (mCurrentTime >= mTotalTimeToInterpolate)
 	{
-		m_currTime = 0.0;
-		m_starting = m_targets.front();
-		m_current = m_starting;
-		m_targets.erase(m_targets.begin());
+		mCurrentTime = 0.0;
+		mStarting    = mTargets.front();
+		mCurrent     = mStarting;
+		mTargets.erase(mTargets.begin());
 
-		return m_current;
+		return mCurrent;
 	}
 
-	const auto t = m_currTime / m_totalTimeToInter;
+	const auto time  = mCurrentTime / mTotalTimeToInterpolate;
 
-	auto startState = m_starting.GetState();
-	auto targetState = m_targets.front().GetState();
+	auto startState  = mStarting.GetState();
+	auto targetState = mTargets.front().GetState();
 
-	auto xVal = startState.m_x * (1 - t) + targetState.m_x * t;
-	auto yVal = startState.m_y * (1 - t) + targetState.m_y * t;
+	auto xVal = startState.mX * (1.0 - time) + targetState.mX * time;
+	auto yVal = startState.mY * (1.0 - time) + targetState.mY * time;
 
 	PlayerState pState;
-	pState.m_x = static_cast<int>(xVal);
-	pState.m_y = static_cast<int>(yVal);
+	pState.mX = static_cast<float>(xVal);
+	pState.mY = static_cast<float>(yVal);
 
-	m_current.SetState(pState);
-	m_current.SetGuid(m_starting.GetGuid());
+	mCurrent.SetState(pState);
+	mCurrent.SetGuid(mStarting.GetGuid());
 
-	return PlayerInfo(pState, m_starting.GetGuid());
+	return PlayerInfo(pState, mStarting.GetGuid());
 }
 
-void
-PlayerInfoPair::
-AddTarget(player_info a_target)
+void PlayerInfoBuffer::AddTarget(player_info aTarget)
 {
-	m_targets.push_back(a_target);
+	mTargets.push_back(aTarget);
 }
 
-auto
-PlayerInfoPair::
-SetStartingInfo(const player_info& info)
--> this_type&
+auto PlayerInfoBuffer::SetStartingInfo(const player_info& info) -> player_buffer&
 {
-	m_currTime = 0.0;
-	m_starting = info;
-	m_current = m_starting;
+	mCurrentTime = 0.0;
+	mStarting    = info;
+	mCurrent     = mStarting;
 	return *this;
 }

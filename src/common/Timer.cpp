@@ -12,9 +12,9 @@ Timer::Timer()
 
 Timer::~Timer() {}
 
-double Timer::calcDifferenceInMS()
+Timer::milliseconds Timer::calcDifferenceInMS()
 {
-	double difference = (double)(mEndTime.QuadPart - mStartTime.QuadPart) / (double)(mFrequency.QuadPart);
+	milliseconds difference = (milliseconds)(mEndTime.QuadPart - mStartTime.QuadPart) / (milliseconds)(mFrequency.QuadPart);
 	return difference * 1000;
 }
 
