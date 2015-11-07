@@ -34,6 +34,7 @@ enum MessageTypes
 };
 
 Client::Client()
+: mInterp()
 {
 	puts("Enter IP to connect to:");
 	char temp[32];
@@ -46,6 +47,7 @@ Client::Client()
 }
 
 Client::Client(const char* clientPort, const char* serverAddress, const char* serverPort)
+: mInterp()
 {
 	init(clientPort, serverAddress, serverPort);
 }
@@ -109,12 +111,15 @@ void Client::update()
 {
 	// Get a packet from either the server or the client
 	getPackets();
-std::cout << mpTimer->getDeltaT() << std::endl;
+
 	//if enough time has passed (30fps), broadcast game states to clients
 	if (mpTimer->shouldUpdate())
 	{
 		sendPaddleData(m_x, m_y);
-		
+	}
+	else
+	{
+
 	}
 }
 
@@ -210,6 +215,14 @@ void Client::getPackets()
 			otherShapeX = pos.xPos;
 			otherShapeY = pos.yPos;
 			otherVelocity = pos.velocity;
+
+			PlayerState pState;
+			pState.m_x = pos.xPos;
+			pState.m_y = pos.yPos;
+			PlayerInfo info;
+			info.SetState(pState);
+
+			mInterp.AddTarget(info);
 			break;
 		}
 

@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Client.h"
+#include "PlayerInfo.h"
 
 int main()
 {
@@ -95,7 +96,8 @@ int main()
 		rect.setPosition(rect.getPosition().x, mpClient->getY());
 		//mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
 
-		otherRect.setPosition(sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY));
+		PlayerInfo info = mpClient->getInterp().GetNext(mpClient->getDeltaT());
+		otherRect.setPosition(sf::Vector2f(otherRect.getPosition().x, info.GetState().m_y ));
 
 		/*currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		

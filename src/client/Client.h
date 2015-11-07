@@ -3,6 +3,7 @@
 
 #include "RakPeerInterface.h"
 #include "../common/Timer.h"
+#include "PlayerInfo.h"
 #include <array>
 
 #pragma pack(push, 1)
@@ -67,8 +68,12 @@ public:
 	inline void setConnected(bool wasSecond)	 { mIsConnected = wasSecond; };
 	inline bool getConnected()					 { return mIsConnected; };
 
-	void setY(const float& yDiff) { m_y += yDiff; }
-	const float& getY() { return m_y; }
+	void setY(const float& yDiff) { m_y += yDiff; };
+	const float& getY() { return m_y; };
+
+	const PlayerInfoPair& getInterp() { return mInterp; };
+	const double& getDeltaT() { return mpTimer->getDeltaT(); };
+
 private:
 	//pointer to client object
 	RakNet::RakPeerInterface* mpClient;
@@ -100,6 +105,8 @@ private:
 	//paddle data
 	float m_x;
 	float m_y;
+
+	PlayerInfoPair mInterp;
 };
 
 #endif
