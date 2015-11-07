@@ -3,7 +3,7 @@
 
 Timer::Timer()
 {
-	mRakNetFrameTime = 200;// 1.0 / 5.0; //30 fps
+	mRakNetFrameTime = 1000.0 / 5.0; //30 fps
 	mDeltaT = 0.0; //no time has elapsed yet
 
 	QueryPerformanceFrequency(&mFrequency); //get frequency
@@ -27,7 +27,6 @@ bool Timer::shouldUpdate()
 
 	addDelta(calcDifferenceInMS()); //calculate and add elapsed time
 
-	std::cout << mDeltaT << std::endl;
 	if (mDeltaT >= mRakNetFrameTime) //if it is time to update raknet
 	{
 		mDeltaT = mDeltaT - mRakNetFrameTime; //don't forget excess time

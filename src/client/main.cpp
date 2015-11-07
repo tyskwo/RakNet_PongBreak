@@ -80,7 +80,7 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) mpClient->setY(5.0);
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 0.0f;
 		
-		if (rectY.y < 0)
+		/*if (rectY.y < 0)
 		{
 			rectVelocity = 0.0f;
 			rectY.y = 0;
@@ -89,7 +89,7 @@ int main()
 		{
 			rectVelocity = 0.0f;
 			rectY.y = 600 - rect.getSize().y;
-		}
+		}*/
 		
 		rectY.y += rectVelocity;
 		rect.setPosition(rect.getPosition().x, mpClient->getY());
