@@ -35,6 +35,7 @@ int main()
 
 	sf::RectangleShape rect(sf::Vector2f(20, 100));
 	sf::RectangleShape otherRect(sf::Vector2f(20, 100));
+	sf::RectangleShape ball(sf::Vector2f(20, 20));
 
 	if (mpClient->getFirstConnected())
 	{
@@ -50,6 +51,8 @@ int main()
 
 		otherRect.setFillColor(sf::Color(200, 10, 10));
 	}
+
+	ball.setFillColor(sf::Color::Cyan);
 
 	sf::Vector2f rectY = rect.getPosition();
 
@@ -99,6 +102,8 @@ int main()
 		PlayerInfo info = mpClient->getInterpolation().GetNext(mpClient->getDeltaT());
 		otherRect.setPosition(sf::Vector2f(otherRect.getPosition().x, info.GetState().mY ));
 
+		ball.setPosition(mpClient->ballX, mpClient->ballY);
+
 		/*currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		
 		if (currPos.x != prevPos.x && currPos.y != prevPos.y)
@@ -125,6 +130,7 @@ int main()
 
 		window.draw(rect);
 		window.draw(otherRect);
+		window.draw(ball);
 
 		// draw everything here...
 		// window.draw(...);

@@ -31,6 +31,7 @@ enum MessageTypes
 	ID_SECOND_CONNECTION,
 	ID_SEND_GAME_INFO,
 	ID_RECIEVE_GAME_INFO,
+	ID_RECIEVE_BALL_INFO
 };
 
 Client::Client()
@@ -223,6 +224,15 @@ void Client::getPackets()
 			info.SetState(pState);
 
 			mInterpolation.AddTarget(info);
+			break;
+		}
+
+		case ID_RECIEVE_BALL_INFO:
+		{
+			Ball theBall = *reinterpret_cast<Ball*>(mpPacket->data);
+			ballX = theBall.xPos;
+			ballY = theBall.yPos;
+			std::cout << "ball" << std::endl;
 			break;
 		}
 

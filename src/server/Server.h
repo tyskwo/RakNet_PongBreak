@@ -17,7 +17,7 @@
 #include "../common/Timer.h"
 
 #pragma pack(push, 1)
-struct ShapePosition
+struct PaddleData
 {
 	unsigned char mID;
 	float xPos, yPos;
@@ -35,12 +35,15 @@ struct Player
 	int goalsScored;
 };
 
+#pragma pack(push, 1)
 //struct for ball values
 struct Ball
 {
+	unsigned char mID;
 	float xPos, yPos;
 	float xVel, yVel;
 };
+#pragma pack(pop)
 
 //struct for game info, both players, ball, scores
 #pragma pack(push, 1)
@@ -83,6 +86,8 @@ private:
 	std::array<std::array<RakNet::SystemAddress, 2>, 8> mClientPairs;
 	std::array<GameInfo, 8>								mGameInfos;
 	int mNumGames;
+
+	std::array<Ball, 4>									mBallContainer;
 
 	//timer
 	Timer* mpTimer;

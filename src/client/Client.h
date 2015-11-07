@@ -25,12 +25,15 @@ struct Player
 	int goalsScored;
 };
 
+#pragma pack(push, 1)
 //struct for ball values
 struct Ball
 {
+	unsigned char mID;
 	float xPos, yPos;
 	float xVel, yVel;
 };
+#pragma pack(pop)
 
 //struct to receive game state from server
 #pragma pack(push, 1)
@@ -61,6 +64,7 @@ public:
 	//values for the other player's shape position and velocity
 	//########Need to convert to player struct##############
 	float otherShapeX, otherShapeY, otherVelocity;
+	float ballX, ballY;
 
 	//set flags for whether it was first connected, or connected second
 	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; };

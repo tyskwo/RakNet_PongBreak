@@ -11,7 +11,8 @@ enum MessageTypes
 	ID_FIRST_CONNECTION,
 	ID_SECOND_CONNECTION,
 	ID_SEND_GAME_INFO,
-	ID_RECIEVE_GAME_INFO
+	ID_RECIEVE_GAME_INFO,
+	ID_RECIEVE_BALL_INFO
 };
 
 Server::Server()
@@ -71,6 +72,13 @@ void Server::init(const char* serverPort)
 	mNumGames = 0;
 
 	mpTimer = new Timer();
+
+	for (unsigned int i = 0; i < mBallContainer.size(); i++)
+	{
+		mBallContainer[i].xPos = 400, mBallContainer[i].yPos = 400;
+		mBallContainer[i].xVel = -2.5, mBallContainer[i].yVel = 0;
+	}
+	
 }
 
 
@@ -99,6 +107,14 @@ void Server::update()
 {
 	//get packets from clients
 	getPackets();
+
+	for (unsigned int i = 0; i < mBallContainer.size(); i++)
+	{
+		mBallContainer[i].xPos += mBallContainer[i].xVel;
+		mBallContainer[i].yPos += mBallContainer[i].yVel;
+
+		if (mBallContainer[i].xPos <= 0) mBallContainer[i].xVel *= -1;
+	}
 
 	//if enough time has passed (30fps), broadcast game states to clients
 	if (mpTimer->shouldUpdate())
@@ -176,19 +192,19 @@ void Server::getPackets()
 		//the client sends over its paddle data
 		case ID_SEND_PADDLE_DATA:
 		{
-			ShapePosition pos = *reinterpret_cast<ShapePosition*>(p->data);
-			pos.mID = ID_RECIEVE_PADDLE_DATA;
+			PaddleData paddle = *reinterpret_cast<PaddleData*>(p->data);
+			paddle.mID = ID_RECIEVE_PADDLE_DATA;
 
 			//find correct game and client
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
 				{
-					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+					mpServer->Send((const char*)&paddle, sizeof(paddle), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
 				}
 				else
 				{
-					mpServer->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+					mpServer->Send((const char*)&paddle, sizeof(paddle), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
 				}
 			}
 
@@ -205,10 +221,19 @@ void Server::getPackets()
 void Server::broadcastGameInfo()
 {
 	//send each gameinfo to the correct clients
-	/*for (unsigned int i = 0; i < mClientPairs.size(); i++)
+	int j = 0;
+	for (unsigned int i = 0; i < mClientPairs.size(); i++)
 	{
-		GameInfo info = mGameInfos[i];
-		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
-		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
-	}*/
+		//GameInfo info = mGameInfos[i];
+		Ball theBall;
+		theBall.xPos = mBallContainer[j].xPos;
+		theBall.yPos = mBallContainer[j].yPos;
+		theBall.xVel = mBallContainer[j].xVel;
+		theBall.yVel = mBallContainer[j].yVel;
+
+		theBall.mID = ID_RECIEVE_BALL_INFO;
+		mpServer->Send((const char*)&theBall, sizeof(theBall), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+		mpServer->Send((const char*)&theBall, sizeof(theBall), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+		if (i == 1 || i == 3 || i == 5) j++;
+	}
 }
