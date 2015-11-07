@@ -62,6 +62,8 @@ void Client::init(const char* clientPort, const char* serverAddress, const char*
 {
 	mX = 0;
 	mY = 0;
+	ballX = 400;
+	ballY = 400;
 
 	mIsConnected = false;
 
@@ -230,8 +232,8 @@ void Client::getPackets()
 		case ID_RECIEVE_BALL_INFO:
 		{
 			Ball theBall = *reinterpret_cast<Ball*>(mpPacket->data);
-			ballX = theBall.xPos;
-			ballY = theBall.yPos;
+			ballX = theBall.x;
+			ballY = theBall.y;
 			std::cout << "ball" << std::endl;
 			break;
 		}

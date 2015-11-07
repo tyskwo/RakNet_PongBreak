@@ -27,8 +27,9 @@ struct PaddleData
 //struct for player values
 struct Player
 {
-	float xPos, yPos;
-	float xVel, yVel;
+	float x, y;
+	float width, height;
+	//float xVel, yVel;
 
 	std::array<std::array<bool, 3>, 6> bricks;
 
@@ -40,13 +41,12 @@ struct Player
 struct Ball
 {
 	unsigned char mID;
-	float xPos, yPos;
+	float x, y;
 	float xVel, yVel;
 };
 #pragma pack(pop)
 
 //struct for game info, both players, ball, scores
-#pragma pack(push, 1)
 struct GameInfo
 {
 	unsigned char mID;
@@ -55,7 +55,6 @@ struct GameInfo
 	Player rPlayer;
 	Ball ball;
 };
-#pragma pack(pop)
 
 class Server
 {
@@ -84,10 +83,10 @@ private:
 
 	//arrays for the games, and info for said games
 	std::array<std::array<RakNet::SystemAddress, 2>, 8> mClientPairs;
-	std::array<GameInfo, 8>								mGameInfos;
+	std::array<GameInfo, 4>								mGameInfos;
 	int mNumGames;
 
-	std::array<Ball, 4>									mBallContainer;
+	//std::array<Ball, 4>									mBallContainer;
 
 	//timer
 	Timer* mpTimer;

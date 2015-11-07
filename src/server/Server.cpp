@@ -73,12 +73,20 @@ void Server::init(const char* serverPort)
 
 	mpTimer = new Timer();
 
-	for (unsigned int i = 0; i < mBallContainer.size(); i++)
+	/*for (unsigned int i = 0; i < mBallContainer.size(); i++)
 	{
-		mBallContainer[i].xPos = 400, mBallContainer[i].yPos = 400;
+		mBallContainer[i].x = 400, mBallContainer[i].y = 400;
 		mBallContainer[i].xVel = -2.5, mBallContainer[i].yVel = 0;
-	}
+	}*/
 	
+	for (unsigned int i = 0; i < mGameInfos.size(); i++)
+	{
+		mGameInfos[i].ball.x = 400, mGameInfos[i].ball.y = 400;
+		mGameInfos[i].ball.xVel = -10, mGameInfos[i].ball.yVel = 0;
+
+		mGameInfos[i].lPlayer.width = 20, mGameInfos[i].lPlayer.height = 100;
+		mGameInfos[i].rPlayer.width = 20, mGameInfos[i].rPlayer.height = 100;
+	}
 }
 
 
@@ -108,17 +116,35 @@ void Server::update()
 	//get packets from clients
 	getPackets();
 
-	for (unsigned int i = 0; i < mBallContainer.size(); i++)
-	{
-		mBallContainer[i].xPos += mBallContainer[i].xVel;
-		mBallContainer[i].yPos += mBallContainer[i].yVel;
-
-		if (mBallContainer[i].xPos <= 0) mBallContainer[i].xVel *= -1;
-	}
-
 	//if enough time has passed (30fps), broadcast game states to clients
 	if (mpTimer->shouldUpdate())
 	{
+		for (unsigned int i = 0; i < mGameInfos.size(); i++)
+		{
+			mGameInfos[i].ball.x += mGameInfos[i].ball.xVel;
+			mGameInfos[i].ball.y += mGameInfos[i].ball.yVel;
+
+			float p1LeftX = mGameInfos[i].lPlayer.x;
+			float p1RightX = mGameInfos[i].lPlayer.x + mGameInfos[i].lPlayer.width;
+			float p1TopY = mGameInfos[i].lPlayer.y;
+			float p1BottomY = mGameInfos[i].lPlayer.y + mGameInfos[i].lPlayer.height;
+
+			float p2LeftX = mGameInfos[i].rPlayer.x;
+			float p2RightX = mGameInfos[i].rPlayer.x + mGameInfos[i].rPlayer.width;
+			float p2TopY = mGameInfos[i].rPlayer.y;
+			float p2BottomY = mGameInfos[i].rPlayer.y + mGameInfos[i].rPlayer.height;
+
+			if (mGameInfos[i].ball.x <= p1RightX && mGameInfos[i].ball.x > p1LeftX && mGameInfos[i].ball.y > p1TopY  && mGameInfos[i].ball.y < p1BottomY) 
+				mGameInfos[i].ball.xVel *= -1;
+			if (mGameInfos[i].ball.x >= p2LeftX && mGameInfos[i].ball.x < p2RightX && mGameInfos[i].ball.y > p2TopY  && mGameInfos[i].ball.y < p2BottomY)
+				mGameInfos[i].ball.xVel *= -1;
+
+			if (mGameInfos[i].ball.x < 0) mGameInfos[i].ball.xVel *= -1;
+			if (mGameInfos[i].ball.x >= 800 - 20) mGameInfos[i].ball.xVel *= -1;
+			if (mGameInfos[i].ball.y < 0) mGameInfos[i].ball.yVel *= -1;
+			if (mGameInfos[i].ball.y >= 600 - 20) mGameInfos[i].ball.yVel *= -1;
+		}
+
 		broadcastGameInfo();
 	}
 }
@@ -196,16 +222,22 @@ void Server::getPackets()
 			paddle.mID = ID_RECIEVE_PADDLE_DATA;
 
 			//find correct game and client
+			int j = 0;
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
 				{
+					mGameInfos[j].lPlayer.x = paddle.xPos;
+					mGameInfos[j].lPlayer.y = paddle.yPos;
 					mpServer->Send((const char*)&paddle, sizeof(paddle), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
 				}
 				else
 				{
+					mGameInfos[j].rPlayer.x = paddle.xPos;
+					mGameInfos[j].rPlayer.y = paddle.yPos;
 					mpServer->Send((const char*)&paddle, sizeof(paddle), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
 				}
+				if (i == 1 || i == 3 || i == 5) j++;
 			}
 
 			break;
@@ -226,10 +258,10 @@ void Server::broadcastGameInfo()
 	{
 		//GameInfo info = mGameInfos[i];
 		Ball theBall;
-		theBall.xPos = mBallContainer[j].xPos;
-		theBall.yPos = mBallContainer[j].yPos;
-		theBall.xVel = mBallContainer[j].xVel;
-		theBall.yVel = mBallContainer[j].yVel;
+		theBall.x = mGameInfos[j].ball.x;
+		theBall.y = mGameInfos[j].ball.y;
+		theBall.xVel = mGameInfos[j].ball.xVel;
+		theBall.yVel = mGameInfos[j].ball.yVel;
 
 		theBall.mID = ID_RECIEVE_BALL_INFO;
 		mpServer->Send((const char*)&theBall, sizeof(theBall), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);

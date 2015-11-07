@@ -30,7 +30,7 @@ struct Player
 struct Ball
 {
 	unsigned char mID;
-	float xPos, yPos;
+	float x, y;
 	float xVel, yVel;
 };
 #pragma pack(pop)
@@ -72,6 +72,7 @@ public:
 	inline void setConnected(bool wasSecond)	 { mIsConnected = wasSecond; };
 	inline bool getConnected()					 { return mIsConnected; };
 
+	void setX(const float& x) { mX = x; };
 	void setY(const float& yDiff) { mY += yDiff; };
 	const float& getY()			  { return mY; };
 

@@ -63,6 +63,10 @@ int main()
 
 	GameInfo currGameInfo;
 
+	ball.setPosition(mpClient->ballX, mpClient->ballY);
+
+	mpClient->setX(rect.getPosition().x);
+
 	//##############################################################
 
 	// run the program as long as the window is open
