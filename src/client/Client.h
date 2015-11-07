@@ -68,10 +68,10 @@ public:
 	inline void setConnected(bool wasSecond)	 { mIsConnected = wasSecond; };
 	inline bool getConnected()					 { return mIsConnected; };
 
-	void setY(const float& yDiff) { m_y += yDiff; };
-	const float& getY() { return m_y; };
+	void setY(const float& yDiff) { mY += yDiff; };
+	const float& getY()			  { return mY; };
 
-	const PlayerInfoPair& getInterp() { return mInterp; };
+	const PlayerInfoBuffer& getInterpolation() { return mInterpolation; };
 	const double& getDeltaT() { return mpTimer->getDeltaT(); };
 
 private:
@@ -103,10 +103,10 @@ private:
 	Timer* mpTimer;
 
 	//paddle data
-	float m_x;
-	float m_y;
+	float mX;
+	float mY;
 
-	PlayerInfoPair mInterp;
+	PlayerInfoBuffer mInterpolation;
 };
 
 #endif

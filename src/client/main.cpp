@@ -96,8 +96,8 @@ int main()
 		rect.setPosition(rect.getPosition().x, mpClient->getY());
 		//mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
 
-		PlayerInfo info = mpClient->getInterp().GetNext(mpClient->getDeltaT());
-		otherRect.setPosition(sf::Vector2f(otherRect.getPosition().x, info.GetState().m_y ));
+		PlayerInfo info = mpClient->getInterpolation().GetNext(mpClient->getDeltaT());
+		otherRect.setPosition(sf::Vector2f(otherRect.getPosition().x, info.GetState().mY ));
 
 		/*currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		
