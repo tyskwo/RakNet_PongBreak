@@ -1,8 +1,9 @@
 #include "Timer.h"
+#include <iostream>
 
 Timer::Timer()
 {
-	mRakNetFrameTime = 1.0 / 30.0; //30 fps
+	mRakNetFrameTime = 200;// 1.0 / 5.0; //30 fps
 	mDeltaT = 0.0; //no time has elapsed yet
 
 	QueryPerformanceFrequency(&mFrequency); //get frequency
@@ -19,16 +20,22 @@ double Timer::calcDifferenceInMS()
 
 bool Timer::shouldUpdate()
 {
+	bool shouldUpdate = false;
+
+
 	TIMER_STOP //end timer
 
 	addDelta(calcDifferenceInMS()); //calculate and add elapsed time
+
+	std::cout << mDeltaT << std::endl;
 	if (mDeltaT >= mRakNetFrameTime) //if it is time to update raknet
 	{
 		mDeltaT = mDeltaT - mRakNetFrameTime; //don't forget excess time
 
-		TIMER_START //start timer again.
-
-		return true; //return true
+		shouldUpdate = true; //return true
 	}
-	return false; //else return false
+
+	TIMER_START //reset start time
+
+	return shouldUpdate; //else return false
 }

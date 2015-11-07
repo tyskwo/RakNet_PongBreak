@@ -13,7 +13,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), "PONGBREAK");
 	window.setFramerateLimit(60);
 
-	//connect
+	//connect with random port number
 	srand(time(NULL));
 	int randPortNumber = rand() % (301 - 201 + 1) + 201;
 	std::stringstream converter;
@@ -26,7 +26,7 @@ int main()
 	std::cin >> ipAddress;
 	Client* mpClient = new Client(char_type, ipAddress.c_str(), "200");
 
-	//while trying to conncet, don't update the game logic
+	//while trying to connect, don't update the game logic
 	while (!mpClient->getConnected()) { mpClient->update(); }
 
 
@@ -80,6 +80,11 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 5.0f;
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 0.0f;
 		
+		
+		
+		rectY.y += rectVelocity;
+		rect.setPosition(rectY);
+
 		if (rectY.y < 0)
 		{
 			rectVelocity = 0.0f;
@@ -90,9 +95,7 @@ int main()
 			rectVelocity = 0.0f;
 			rectY.y = 600 - rect.getSize().y;
 		}
-		
-		rectY.y += rectVelocity;
-		rect.setPosition(rectY);
+
 		mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
 
 		currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
