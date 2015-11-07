@@ -217,9 +217,9 @@ void Client::getPackets()
 		case ID_RECIEVE_PADDLE_DATA:
 		{
 			ShapePosition pos = *reinterpret_cast<ShapePosition*>(mpPacket->data);
-			otherShapeX = pos.xPos;
-			otherShapeY = pos.yPos;
-			otherVelocity = pos.velocity;
+			//otherShapeX = pos.xPos;
+			//otherShapeY = pos.yPos;
+			//otherVelocity = pos.velocity;
 
 			ObjectState pState;
 			pState.mX = pos.xPos;
@@ -234,8 +234,8 @@ void Client::getPackets()
 		case ID_RECIEVE_BALL_INFO:
 		{
 			Ball theBall = *reinterpret_cast<Ball*>(mpPacket->data);
-			ballX = theBall.x;
-			ballY = theBall.y;
+			//ballX = theBall.x;
+			//ballY = theBall.y;
 
 			ObjectState pState;
 			pState.mX = ballX;

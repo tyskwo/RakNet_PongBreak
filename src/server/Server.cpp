@@ -83,7 +83,7 @@ void Server::init(const char* serverPort)
 	for (unsigned int i = 0; i < mGameInfos.size(); i++)
 	{
 		mGameInfos[i].ball.x = 400, mGameInfos[i].ball.y = 400;
-		mGameInfos[i].ball.xVel = -10, mGameInfos[i].ball.yVel = 0;
+		mGameInfos[i].ball.xVel = -30, mGameInfos[i].ball.yVel = 0;
 
 		mGameInfos[i].lPlayer.width = 20, mGameInfos[i].lPlayer.height = 100;
 		mGameInfos[i].rPlayer.width = 20, mGameInfos[i].rPlayer.height = 100;

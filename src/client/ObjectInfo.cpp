@@ -26,7 +26,7 @@ auto ObjectInfoBuffer::GetNext(second aDeltaT) const -> object_info
 		return mStarting;
 	}
 
-	mCurrentTime = aDeltaT;
+	mCurrentTime += aDeltaT;
 
 	if (mCurrentTime >= mTotalTimeToInterpolate)
 	{
