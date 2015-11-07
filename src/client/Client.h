@@ -3,7 +3,7 @@
 
 #include "RakPeerInterface.h"
 #include "../common/Timer.h"
-#include "PlayerInfo.h"
+#include "ObjectInfo.h"
 #include <array>
 
 #pragma pack(push, 1)
@@ -75,7 +75,8 @@ public:
 	void setY(const float& yDiff) { mY += yDiff; };
 	const float& getY()			  { return mY; };
 
-	const PlayerInfoBuffer& getInterpolation() { return mInterpolation; };
+	const ObjectInfoBuffer& getOpponentInterpolation() { return mOpponentInterpolation; };
+	const ObjectInfoBuffer& getBallInterpolation()	   { return mBallInterpolation; };
 	const double& getDeltaT() { return mpTimer->getDeltaT(); };
 
 private:
@@ -110,7 +111,7 @@ private:
 	float mX;
 	float mY;
 
-	PlayerInfoBuffer mInterpolation;
+	ObjectInfoBuffer mOpponentInterpolation, mBallInterpolation;
 };
 
 #endif

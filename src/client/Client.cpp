@@ -35,7 +35,8 @@ enum MessageTypes
 };
 
 Client::Client()
-: mInterpolation()
+: mOpponentInterpolation()
+, mBallInterpolation()
 {
 	puts("Enter IP to connect to:");
 	char temp[32];
@@ -48,7 +49,8 @@ Client::Client()
 }
 
 Client::Client(const char* clientPort, const char* serverAddress, const char* serverPort)
-: mInterpolation()
+: mOpponentInterpolation()
+, mBallInterpolation()
 {
 	init(clientPort, serverAddress, serverPort);
 }
@@ -217,13 +219,13 @@ void Client::getPackets()
 			otherShapeY = pos.yPos;
 			otherVelocity = pos.velocity;
 
-			PlayerState pState;
+			ObjectState pState;
 			pState.mX = pos.xPos;
 			pState.mY = pos.yPos;
-			PlayerInfo info;
+			ObjectInfo info;
 			info.SetState(pState);
 
-			mInterpolation.AddTarget(info);
+			mOpponentInterpolation.AddTarget(info);
 			break;
 		}
 
