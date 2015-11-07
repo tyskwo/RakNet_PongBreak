@@ -1,4 +1,5 @@
 #include "ObjectInfo.h"
+#include <iostream>
 
 ObjectInfo::ObjectInfo() {}
 
@@ -7,7 +8,7 @@ ObjectInfo::ObjectInfo(ObjectState state)
 {}
 
 ObjectInfoBuffer::ObjectInfoBuffer()
-: mTotalTimeToInterpolate(1.0 / 10.0)
+: mTotalTimeToInterpolate(1000.0 / 1.0)
 , mCurrentTime(0)
 {}
 
@@ -25,7 +26,7 @@ auto ObjectInfoBuffer::GetNext(second aDeltaT) const -> object_info
 		return mStarting;
 	}
 
-	mCurrentTime += aDeltaT;
+	mCurrentTime = aDeltaT;
 
 	if (mCurrentTime >= mTotalTimeToInterpolate)
 	{

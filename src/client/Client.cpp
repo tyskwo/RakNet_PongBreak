@@ -236,7 +236,14 @@ void Client::getPackets()
 			Ball theBall = *reinterpret_cast<Ball*>(mpPacket->data);
 			ballX = theBall.x;
 			ballY = theBall.y;
-			std::cout << "ball" << std::endl;
+
+			ObjectState pState;
+			pState.mX = ballX;
+			pState.mY = ballY;
+			ObjectInfo info;
+			info.SetState(pState);
+
+			mBallInterpolation.AddTarget(info);
 			break;
 		}
 

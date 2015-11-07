@@ -106,7 +106,8 @@ int main()
 		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getDeltaT());
 		otherRect.setPosition(sf::Vector2f(mpClient->otherShapeX, info.GetState().mY ));
 
-		ball.setPosition(mpClient->ballX, mpClient->ballY);
+		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getDeltaT());
+		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
 
 		/*currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 		
