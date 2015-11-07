@@ -20,7 +20,7 @@ SetGuid(const guid_type& a_guid) -> this_type&
 
 PlayerInfoPair::
 PlayerInfoPair()
-: m_totalTimeToInter(1.0 / 10.0)
+: m_totalTimeToInter(1000.0 / 1.0)
 , m_currTime(0)
 { }
 
@@ -59,12 +59,12 @@ GetNext(sec_type a_deltaT) const
 	auto startState = m_starting.GetState();
 	auto targetState = m_targets.front().GetState();
 
-	auto xVal = startState.m_x * (1 - t) + targetState.m_x * t;
-	auto yVal = startState.m_y * (1 - t) + targetState.m_y * t;
+	auto xVal = startState.m_x * (1.0 - t) + targetState.m_x * t;
+	auto yVal = startState.m_y * (1.0 - t) + targetState.m_y * t;
 
 	PlayerState pState;
-	pState.m_x = static_cast<int>(xVal);
-	pState.m_y = static_cast<int>(yVal);
+	pState.m_x = static_cast<float>(xVal);
+	pState.m_y = static_cast<float>(yVal);
 
 	m_current.SetState(pState);
 	m_current.SetGuid(m_starting.GetGuid());
