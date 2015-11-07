@@ -90,6 +90,8 @@ private:
 
 	//timer
 	Timer* mpTimer;
+
+	const double PI = std::atan(1.0) * 4;
 };
 
 #endif
