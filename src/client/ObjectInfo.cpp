@@ -58,6 +58,7 @@ auto ObjectInfoBuffer::GetNext(second aDeltaT) const -> object_info
 void ObjectInfoBuffer::AddTarget(object_info aTarget)
 {
 	mTargets.push_back(aTarget);
+	std::cout << mTargets.size() << std::endl;
 }
 
 auto ObjectInfoBuffer::SetStartingInfo(const object_info& info) -> object_buffer&

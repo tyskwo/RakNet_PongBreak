@@ -117,6 +117,8 @@ void Server::update()
 	//get packets from clients
 	getPackets();
 
+	std::cout << mGameInfos[0].ball.x << std::endl;
+
 	//if enough time has passed (30fps), broadcast game states to clients
 	if (mpTimer->shouldUpdate())
 	{
