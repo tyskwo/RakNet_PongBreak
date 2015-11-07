@@ -40,14 +40,14 @@ int main()
 	if (mpClient->getFirstConnected())
 	{
 		rect.setFillColor(sf::Color(200, 10, 10));
-		rect.setPosition(sf::Vector2f(100.0f, 0.0f));
+		rect.setPosition(sf::Vector2f(200.0, 0.0));
 
 		otherRect.setFillColor(sf::Color(10, 10, 200));
 	}
 	else
 	{
 		rect.setFillColor(sf::Color(10, 10, 200));
-		rect.setPosition(sf::Vector2f(700.0f, 0.0f));
+		rect.setPosition(sf::Vector2f(1024.0 - 200.0 - 20.0, 0.0));
 
 		otherRect.setFillColor(sf::Color(200, 10, 10));
 	}
