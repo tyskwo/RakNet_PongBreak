@@ -11,7 +11,7 @@
 int main()
 {
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(800, 600), "PONGBREAK");
+	sf::RenderWindow window(sf::VideoMode(1024, 768), "PONGBREAK");
 	window.setFramerateLimit(60);
 
 	//connect
@@ -104,7 +104,7 @@ int main()
 		//mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
 
 		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getDeltaT());
-		otherRect.setPosition(sf::Vector2f(otherRect.getPosition().x, info.GetState().mY ));
+		otherRect.setPosition(sf::Vector2f(mpClient->otherShapeX, info.GetState().mY ));
 
 		ball.setPosition(mpClient->ballX, mpClient->ballY);
 

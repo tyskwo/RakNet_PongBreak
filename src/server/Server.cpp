@@ -140,9 +140,9 @@ void Server::update()
 				mGameInfos[i].ball.xVel *= -1;
 
 			if (mGameInfos[i].ball.x < 0) mGameInfos[i].ball.xVel *= -1;
-			if (mGameInfos[i].ball.x >= 800 - 20) mGameInfos[i].ball.xVel *= -1;
+			if (mGameInfos[i].ball.x >= 1024 - 20) mGameInfos[i].ball.xVel *= -1;
 			if (mGameInfos[i].ball.y < 0) mGameInfos[i].ball.yVel *= -1;
-			if (mGameInfos[i].ball.y >= 600 - 20) mGameInfos[i].ball.yVel *= -1;
+			if (mGameInfos[i].ball.y >= 768 - 20) mGameInfos[i].ball.yVel *= -1;
 		}
 
 		broadcastGameInfo();
