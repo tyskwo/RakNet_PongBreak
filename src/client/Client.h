@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include "RakPeerInterface.h"
+#include "../common/Timer.h"
 #include <array>
 
 #pragma pack(push, 1)
@@ -51,7 +52,7 @@ public:
 	void init(const char* clientPort, const char* serverAddress, const char* serverPort);
 	void cleanup();
 
-	void update(double timeSinceLastUpdate);
+	void update();
 	
 	//send paddle data
 	void sendPaddleData(float x, float y, float velocity);
@@ -92,8 +93,8 @@ private:
 	bool mIsConnected;
 	bool mWasFirstConnected;
 
-	//for timing
-	double mRakNetFrameTime, mCumulativeRakNetDeltaT;
+	//timer
+	Timer* mpTimer;
 };
 
 #endif

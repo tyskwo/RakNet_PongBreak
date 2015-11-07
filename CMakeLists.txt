@@ -8,8 +8,8 @@ include_directories(${CMAKE_SOURCE_DIR}/3rdParty/RakNet/source)
 link_directories(${CMAKE_SOURCE_DIR}/3rdParty/SFML/lib)
 link_directories(${CMAKE_SOURCE_DIR}/3rdParty/RakNet/lib)
 
-add_executable(Client src/client/main.cpp src/client/client.h src/client/client.cpp src/client/PlayerInfo.h src/client/PlayerInfo.cpp)
-add_executable(Server src/server/main.cpp src/server/server.h src/server/server.cpp src/server/game.h src/server/game.cpp src/server/GameInfo.h src/server/GameInfo.cpp)
+add_executable(Client src/client/main.cpp src/client/client.h src/client/client.cpp src/client/PlayerInfo.h src/client/PlayerInfo.cpp src/common/Timer.h src/common/Timer.cpp)
+add_executable(Server src/server/main.cpp src/server/server.h src/server/server.cpp src/server/game.h src/server/game.cpp src/server/GameInfo.h src/server/GameInfo.cpp  src/common/Timer.h src/common/Timer.cpp)
 
 add_custom_command(TARGET Client PRE_BUILD
  COMMAND ${CMAKE_COMMAND} -E copy_directory

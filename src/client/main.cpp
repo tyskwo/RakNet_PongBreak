@@ -29,14 +29,6 @@ int main()
 	//while trying to conncet, don't update the game logic
 	while (!mpClient->getConnected()) { mpClient->update(); }
 
-	//timer variables
-	LARGE_INTEGER mStartTime;
-	LARGE_INTEGER mEndTime;
-	LARGE_INTEGER mFrequency;
-
-	QueryPerformanceFrequency(&mFrequency);
-	QueryPerformanceCounter(&mStartTime);
-
 
 	//#######Everything below here should be elsewhere########
 
@@ -72,9 +64,7 @@ int main()
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
-		QueryPerformanceCounter(&mEndTime);
-		double timeSinceLastUpdate = calcDifferenceInMS(mStartTime, mEndTime);
-		mpClient->update(timeSinceLastUpdate);
+		mpClient->update();
 
 		if (mpClient->getFirstConnected())
 		{

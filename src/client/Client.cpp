@@ -77,8 +77,7 @@ void Client::init(const char* clientPort, const char* serverAddress, const char*
 	RakNet::ConnectionAttemptResult car = mpClient->Connect(serverAddress, atoi(serverPort), "hello", (int)strlen("hello"));
 	RakAssert(car == RakNet::CONNECTION_ATTEMPT_STARTED);
 
-	mRakNetFrameTime = 1.0 / 5.0; //5 fps
-	mCumulativeRakNetDeltaT = 0.0;
+	mpTimer = new Timer();
 }
 
 void Client::cleanup()
@@ -103,17 +102,15 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 		return (unsigned char)p->data[0];
 }
 
-void Client::update(double timeSinceLastUpdate)
+void Client::update()
 {
 	// Get a packet from either the server or the client
 	getPackets();
 
 	//if enough time has passed (30fps), broadcast game states to clients
-	mCumulativeRakNetDeltaT += timeSinceLastUpdate;
-	if (mCumulativeRakNetDeltaT >= mRakNetFrameTime)
+	if (mpTimer->shouldUpdate())
 	{
 		//sendPaddleData(rectY.x, rectY.y, rectVelocity);
-		mCumulativeRakNetDeltaT = mCumulativeRakNetDeltaT - mRakNetFrameTime;
 	}
 }
 

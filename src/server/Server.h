@@ -14,6 +14,7 @@
 #include "RakNetTypes.h"
 #include "RakPeerInterface.h"
 #include "RakSleep.h"
+#include "../common/Timer.h"
 
 #pragma pack(push, 1)
 struct ShapePosition
@@ -63,7 +64,7 @@ public:
 	void init(const char* serverPort);
 	void cleanup();
 
-	void update(double timeSinceLastUpdate);
+	void update();
 	void broadcastGameInfo();
 
 private:
@@ -83,8 +84,8 @@ private:
 	std::array<GameInfo, 8>								mGameInfos;
 	int mNumGames;
 
-	//timer variables
-	double mRakNetFrameTime, mCumulativeRakNetDeltaT;
+	//timer
+	Timer* mpTimer;
 };
 
 #endif

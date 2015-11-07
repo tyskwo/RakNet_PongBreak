@@ -69,9 +69,6 @@ void Server::init(const char* serverPort)
 	//############Do we need to init GameInfos to empty GameInfo structs here?############
 
 	mNumGames = 0;
-
-	mRakNetFrameTime = 1.0 / 5.0; //5fps
-	mCumulativeRakNetDeltaT = 0.0;
 }
 
 
@@ -96,17 +93,15 @@ unsigned char Server::GetPacketIdentifier(RakNet::Packet *p)
 		return (unsigned char)p->data[0];
 }
 
-void Server::update(double timeSinceLastUpdate)
+void Server::update()
 {
 	//get packets from clients
 	getPackets();
 
 	//if enough time has passed (30fps), broadcast game states to clients
-	mCumulativeRakNetDeltaT += timeSinceLastUpdate;
-	if (mCumulativeRakNetDeltaT >= mRakNetFrameTime)
+	if (mpTimer->shouldUpdate())
 	{
 		broadcastGameInfo();
-		mCumulativeRakNetDeltaT = mCumulativeRakNetDeltaT - mRakNetFrameTime;
 	}
 }
 
