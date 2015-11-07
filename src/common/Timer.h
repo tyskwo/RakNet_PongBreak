@@ -17,6 +17,7 @@ public:
 	//returns true if enough time has passed
 	bool   shouldUpdate();
 	
+	inline const double& getDeltaT() { return mDeltaT; };
 private:
 	//timer variables
 	LARGE_INTEGER mStartTime;
