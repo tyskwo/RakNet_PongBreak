@@ -137,7 +137,7 @@ void Server::update()
 
 			if (mGameInfos[i].ball.x <= p1RightX && mGameInfos[i].ball.x > p1LeftX && mGameInfos[i].ball.y > p1TopY  && mGameInfos[i].ball.y < p1BottomY)
 			{
-				mGameInfos[i].ball.xVel *= -1;
+				//mGameInfos[i].ball.xVel *= -1;
 
 				float paddleMidY = mGameInfos[i].lPlayer.y + mGameInfos[i].lPlayer.height / 2;
 				float ballMidY = mGameInfos[i].ball.y + 10;
@@ -148,7 +148,16 @@ void Server::update()
 			}
 
 			if ((mGameInfos[i].ball.x + 20) >= p2LeftX && (mGameInfos[i].ball.x + 20) < p2RightX && mGameInfos[i].ball.y > p2TopY  && mGameInfos[i].ball.y < p2BottomY)
-				mGameInfos[i].ball.xVel *= -1;
+			{
+				//mGameInfos[i].ball.xVel *= -1;
+
+				float paddleMidY = mGameInfos[i].rPlayer.y + mGameInfos[i].rPlayer.height / 2;
+				float ballMidY = mGameInfos[i].ball.y + 10;
+
+				float angle = (PI / 2) * (abs(paddleMidY - ballMidY) / (mGameInfos[i].rPlayer.height / 2));
+				mGameInfos[i].ball.xVel = sin(angle) + 5.0;
+				mGameInfos[i].ball.yVel = cos(angle) + 5.0;
+			}
 
 			if (mGameInfos[i].ball.x < 0) mGameInfos[i].ball.xVel *= -1;
 			if (mGameInfos[i].ball.x >= 1024 - 20) mGameInfos[i].ball.xVel *= -1;
