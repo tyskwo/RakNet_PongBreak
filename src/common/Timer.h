@@ -7,6 +7,9 @@
 class Timer
 {
 public:
+	typedef double milliseconds;
+
+public:
 	Timer();
 	~Timer();
 
@@ -17,7 +20,7 @@ public:
 	//returns true if enough time has passed
 	bool   shouldUpdate();
 	
-	inline const double& getDeltaT() { return mDeltaT; };
+	inline const milliseconds& getDeltaT() { return mDeltaT; };
 private:
 	//timer variables
 	LARGE_INTEGER mStartTime;
@@ -25,12 +28,12 @@ private:
 	LARGE_INTEGER mEndTime;
 
 	//how often RakNet should update and elapsed time
-	double mRakNetFrameTime, mDeltaT;
+	milliseconds mRakNetFrameTime, mDeltaT;
 
 	//add time
-	inline void addDelta(double delta) { mDeltaT += delta; };
+	inline void addDelta(milliseconds delta) { mDeltaT += delta; };
 	//calc elapsed time
-	double calcDifferenceInMS();
+	milliseconds calcDifferenceInMS();
 };
 
 #endif
