@@ -29,9 +29,7 @@ enum MessageTypes
 	ID_RECIEVE_PADDLE_DATA,
 	ID_FIRST_CONNECTION,
 	ID_SECOND_CONNECTION,
-	ID_SEND_GAME_INFO,
 	ID_RECIEVE_GAME_INFO,
-	ID_RECIEVE_BALL_INFO
 };
 
 Client::Client()
@@ -62,17 +60,10 @@ Client::~Client()
 
 void Client::init(const char* clientPort, const char* serverAddress, const char* serverPort)
 {
-	mX = 0;
-	mY = 0;
-	ballX = 400;
-	ballY = 400;
-
 	mIsConnected = false;
 
 	//create client instance
 	mpClient = RakNet::RakPeerInterface::GetInstance();
-
-	mClientID = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
 	mpClient->AllowConnectionResponseIPMigration(false);
 
 
@@ -120,11 +111,14 @@ void Client::update()
 	//if enough time has passed (30fps), broadcast game states to clients
 	if (mpTimer->shouldUpdate())
 	{
-		sendPaddleData(mX, mY);
-	}
-	else
-	{
-
+		if (getFirstConnected())
+		{
+			sendPaddleData(mGameInfo.lPlayer.x, mGameInfo.lPlayer.y);
+		}
+		else
+		{
+			sendPaddleData(mGameInfo.rPlayer.x, mGameInfo.rPlayer.y);
+		}
 	}
 }
 
@@ -202,7 +196,7 @@ void Client::getPackets()
 			//set as first connected or second connected.
 			setFirstConnected(true);
 			setConnected(true);
-			std::cout << "first" << std::endl;
+
 			break;
 		}
 		case ID_SECOND_CONNECTION:
@@ -210,40 +204,48 @@ void Client::getPackets()
 			//set as first connected or second connected.
 			setFirstConnected(false);
 			setConnected(true);
-			std::cout << "second" << std::endl;
+
 			break;
 		}
 
-		case ID_RECIEVE_PADDLE_DATA:
+		case ID_RECIEVE_GAME_INFO:
 		{
-			ShapePosition pos = *reinterpret_cast<ShapePosition*>(mpPacket->data);
-			//otherShapeX = pos.xPos;
-			//otherShapeY = pos.yPos;
-			//otherVelocity = pos.velocity;
+			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
 
-			ObjectState pState;
-			pState.mX = pos.xPos;
-			pState.mY = pos.yPos;
-			ObjectInfo info;
-			info.SetState(pState);
+			ObjectState ballState;
+			ballState.mX = gameInfo.ball.x;
+			ballState.mY = gameInfo.ball.y;
+			ObjectInfo ballInfo;
+			ballInfo.SetState(ballState);
+			mBallInterpolation.AddTarget(ballInfo);
 
-			mOpponentInterpolation.AddTarget(info);
-			break;
-		}
+			if (getFirstConnected())
+			{
+				ObjectState opponentState;
+				opponentState.mX = gameInfo.rPlayer.x;
+				opponentState.mY = gameInfo.rPlayer.y;
+				ObjectInfo opponentInfo;
+				opponentInfo.SetState(opponentState);
+				mOpponentInterpolation.AddTarget(opponentInfo);
 
-		case ID_RECIEVE_BALL_INFO:
-		{
-			Ball theBall = *reinterpret_cast<Ball*>(mpPacket->data);
-			//ballX = theBall.x;
-			//ballY = theBall.y;
+				//gameInfo.lPlayer.y = mGameInfo.lPlayer.y;
+			}
+			else
+			{
+				ObjectState opponentState;
+				opponentState.mX = gameInfo.lPlayer.x;
+				opponentState.mY = gameInfo.lPlayer.y;
+				ObjectInfo opponentInfo;
+				opponentInfo.SetState(opponentState);
+				mOpponentInterpolation.AddTarget(opponentInfo);
 
-			ObjectState pState;
-			pState.mX = ballX;
-			pState.mY = ballY;
-			ObjectInfo info;
-			info.SetState(pState);
+				//gameInfo.rPlayer.y = mGameInfo.rPlayer.y;
+			}
 
-			mBallInterpolation.AddTarget(info);
+			
+
+			mGameInfo = gameInfo;
+
 			break;
 		}
 
@@ -257,10 +259,9 @@ void Client::getPackets()
 
 void Client::sendPaddleData(float x, float y)
 {
-	ShapePosition pos;
-	pos.xPos = x;
-	pos.yPos = y;
-	pos.velocity = 0;
+	Position pos;
+	pos.x = x;
+	pos.y = y;
 	pos.mID = ID_SEND_PADDLE_DATA;
 	mpClient->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

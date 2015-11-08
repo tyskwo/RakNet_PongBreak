@@ -14,7 +14,12 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(1024, 768), "PONGBREAK");
 	window.setFramerateLimit(60);
 
-	//connect
+
+
+
+
+//##############################################################INIT CLIENT############################################
+	//connect to a random port
 	srand(time(NULL));
 	int randPortNumber = rand() % (301 - 201 + 1) + 201;
 	std::stringstream converter;
@@ -22,106 +27,112 @@ int main()
 	std::string temp_str = converter.str();
 	char* char_type = (char*)temp_str.c_str();
 
+	//connect to external ip
 	std::string ipAddress = "";
 	std::cout << "Input server IP or \"localhost\": ";
 	std::cin >> ipAddress;
 	Client* mpClient = new Client(char_type, ipAddress.c_str(), "200");
 
-	//while trying to conncet, don't update the game logic
+	//while trying to connect, don't update the game logic
 	while (!mpClient->getConnected()) { mpClient->update(); }
 
 
-	//#######Everything below here should be elsewhere########
 
-	sf::RectangleShape rect(sf::Vector2f(20, 100));
-	sf::RectangleShape otherRect(sf::Vector2f(20, 100));
+
+
+//########################################################INIT SHAPES##################################################
+	sf::RectangleShape player(sf::Vector2f(20, 100));
+	sf::RectangleShape opponent(sf::Vector2f(20, 100));
 	sf::RectangleShape ball(sf::Vector2f(20, 20));
 
 	if (mpClient->getFirstConnected())
 	{
-		rect.setFillColor(sf::Color(200, 10, 10));
-		rect.setPosition(sf::Vector2f(200.0, 0.0));
+		player.setFillColor(sf::Color(200, 10, 10));
+		player.setPosition(sf::Vector2f(200.0, 0.0));
 
-		otherRect.setFillColor(sf::Color(10, 10, 200));
+		opponent.setFillColor(sf::Color(10, 10, 200));
+		opponent.setPosition(sf::Vector2f(1024.0 - 200.0 - 20.0, 0.0));
 	}
 	else
 	{
-		rect.setFillColor(sf::Color(10, 10, 200));
-		rect.setPosition(sf::Vector2f(1024.0 - 200.0 - 20.0, 0.0));
+		player.setFillColor(sf::Color(10, 10, 200));
+		player.setPosition(sf::Vector2f(1024.0 - 200.0 - 20.0, 0.0));
 
-		otherRect.setFillColor(sf::Color(200, 10, 10));
+		opponent.setFillColor(sf::Color(200, 10, 10));
+		opponent.setPosition(sf::Vector2f(200.0, 0.0));
 	}
 
 	ball.setFillColor(sf::Color::Cyan);
+	ball.setPosition(400, 400);
 
-	sf::Vector2f rectY = rect.getPosition();
 
-	float rectVelocity = 0.0f;
 
-	sf::Vector2f prevPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
-	sf::Vector2f currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
 
-	GameInfo currGameInfo;
 
-	ball.setPosition(mpClient->ballX, mpClient->ballY);
-
-	mpClient->setX(rect.getPosition().x);
-
-	//##############################################################
-
-	// run the program as long as the window is open
+//####################################################RUN PROGRAM#####################################################
 	while (window.isOpen())
 	{
 		mpClient->update();
 
 		if (mpClient->getFirstConnected())
 		{
-			currGameInfo.lPlayer.xPos = rectY.x;
-			currGameInfo.lPlayer.yPos = rectY.y;
-			currGameInfo.lPlayer.yVel = rectVelocity;
-			currGameInfo.rPlayer.xPos = mpClient->otherShapeX;
-			currGameInfo.rPlayer.yPos = mpClient->otherShapeY;
-			currGameInfo.rPlayer.yVel = mpClient->otherVelocity;
+			//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
+			//opponent.setPosition(position);
+
+			sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
+			player.setPosition(position2);
+		}
+		else		
+		{
+			//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
+			//opponent.setPosition(position);
+
+			sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
+			player.setPosition(position2);
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) mpClient->setY(-5.0);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) mpClient->setY(5.0);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) rectVelocity = 0.0f;
-		
-		/*if (rectY.y < 0)
-		{
-			rectVelocity = 0.0f;
-			rectY.y = 0;
-		}
-		if (rectY.y > 600 - rect.getSize().y)
-		{
-			rectVelocity = 0.0f;
-			rectY.y = 600 - rect.getSize().y;
-		}*/
-		
-		rectY.y += rectVelocity;
-		rect.setPosition(rect.getPosition().x, mpClient->getY());
-		//mpClient->sendPaddleData(rectY.x, rectY.y, rectVelocity);
+		//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
+		//ball.setPosition(position);
 
+
+
+//#############################################GET INPUT##############################################################
+		if (mpClient->getFirstConnected())
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    mpClient->setYdiff(-5.0);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  mpClient->setYdiff( 5.0);
+			player.setPosition(player.getPosition().x, mpClient->getGameInfo().lPlayer.y);
+		}
+		else
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    mpClient->setYdiff(-5.0);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  mpClient->setYdiff( 5.0);
+			player.setPosition(player.getPosition().x, mpClient->getGameInfo().rPlayer.y);
+		}
+
+
+		
+
+
+//##############################################INTERPOLATE###########################################################
 		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getDeltaT());
-		otherRect.setPosition(sf::Vector2f(mpClient->otherShapeX, info.GetState().mY ));
+		if (mpClient->getFirstConnected())
+		{
+			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
+		}
+		else
+		{
+			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
+		}
 
 		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getDeltaT());
 		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
 
-		/*currPos = sf::Vector2f(mpClient->otherShapeX, mpClient->otherShapeY);
-		
-		if (currPos.x != prevPos.x && currPos.y != prevPos.y)
-		{
-			otherRect.setPosition(currPos);
-		}
-		else
-		{
-			prevPos.y += mpClient->otherVelocity;
-			otherRect.setPosition(prevPos);
-		}*/
-		
-		// check all the window's events that were triggered since the last iteration of the loop
+
+
+
+
+//###############################################WINDOW CLOSE#########################################################
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -130,17 +141,16 @@ int main()
 				window.close();
 		}
 
-		// clear the window with black color
-		window.clear(sf::Color::Black);
 
-		window.draw(rect);
-		window.draw(otherRect);
+
+
+
+//################################################CLEAR AND DRAW######################################################
+		window.clear(sf::Color::Black);
+		window.draw(player);
+		window.draw(opponent);
 		window.draw(ball);
 
-		// draw everything here...
-		// window.draw(...);
-
-		// end the current frame
 		window.display();
 	}
 

@@ -7,6 +7,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), "PONGBREAK server");
 	window.setFramerateLimit(60);
 
+
 	Server* mpServer = new Server("200");
 
 	// run the program as long as the window is open
@@ -28,9 +29,6 @@ int main()
 
 		// clear the window with black color
 		window.clear(sf::Color::Black);
-
-		// draw everything here...
-		// window.draw(...);
 
 		// end the current frame
 		window.display();

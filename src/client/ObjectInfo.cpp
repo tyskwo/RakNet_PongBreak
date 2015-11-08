@@ -8,12 +8,12 @@ ObjectInfo::ObjectInfo(ObjectState state)
 {}
 
 ObjectInfoBuffer::ObjectInfoBuffer()
-: mTotalTimeToInterpolate(1000.0 / 1.0)
+: mTotalTimeToInterpolate(1000.0 / 30.0)
 , mCurrentTime(0)
 {}
 
 ObjectInfoBuffer::ObjectInfoBuffer(object_info aStarting)
-	: ObjectInfoBuffer()
+: ObjectInfoBuffer()
 {
 	mStarting = aStarting;
 	mCurrent =  mStarting;

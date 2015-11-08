@@ -11,7 +11,6 @@ enum MessageTypes
 	ID_RECIEVE_PADDLE_DATA,
 	ID_FIRST_CONNECTION,
 	ID_SECOND_CONNECTION,
-	ID_SEND_GAME_INFO,
 	ID_RECIEVE_GAME_INFO,
 	ID_RECIEVE_BALL_INFO
 };
@@ -68,25 +67,19 @@ void Server::init(const char* serverPort)
 		mClientPairs[i][1] = "";
 	}
 
-	//############Do we need to init GameInfos to empty GameInfo structs here?############
+	initializeGameInfos();
 
 	mNumGames = 0;
 
 	mpTimer = new Timer();
-
-	/*for (unsigned int i = 0; i < mBallContainer.size(); i++)
-	{
-		mBallContainer[i].x = 400, mBallContainer[i].y = 400;
-		mBallContainer[i].xVel = -2.5, mBallContainer[i].yVel = 0;
-	}*/
 	
 	for (unsigned int i = 0; i < mGameInfos.size(); i++)
 	{
 		mGameInfos[i].ball.x = 400, mGameInfos[i].ball.y = 400;
 		mGameInfos[i].ball.xVel = -30, mGameInfos[i].ball.yVel = 0;
 
-		mGameInfos[i].lPlayer.width = 20, mGameInfos[i].lPlayer.height = 100;
-		mGameInfos[i].rPlayer.width = 20, mGameInfos[i].rPlayer.height = 100;
+		//mGameInfos[i].lPlayer.width = 20, mGameInfos[i].lPlayer.height = 100;
+		//mGameInfos[i].rPlayer.width = 20, mGameInfos[i].rPlayer.height = 100;
 	}
 }
 
@@ -117,55 +110,60 @@ void Server::update()
 	//get packets from clients
 	getPackets();
 
+	updateGames();
+
 	//if enough time has passed (30fps), broadcast game states to clients
 	if (mpTimer->shouldUpdate())
 	{
-		for (unsigned int i = 0; i < mGameInfos.size(); i++)
+		broadcastGameInfo();
+	}
+}
+
+void Server::updateGames()
+{
+	for (unsigned int i = 0; i < mGameInfos.size(); i++)
+	{
+		mGameInfos[i].ball.x += mGameInfos[i].ball.xVel;
+		mGameInfos[i].ball.y += mGameInfos[i].ball.yVel;
+
+		float p1LeftX = mGameInfos[i].lPlayer.x;
+		float p1RightX = mGameInfos[i].lPlayer.x + 20;
+		float p1TopY = mGameInfos[i].lPlayer.y;
+		float p1BottomY = mGameInfos[i].lPlayer.y + 100;
+
+		float p2LeftX = mGameInfos[i].rPlayer.x;
+		float p2RightX = mGameInfos[i].rPlayer.x + 20;
+		float p2TopY = mGameInfos[i].rPlayer.y;
+		float p2BottomY = mGameInfos[i].rPlayer.y + 100;
+
+		if (mGameInfos[i].ball.x <= p1RightX && mGameInfos[i].ball.x > p1LeftX && mGameInfos[i].ball.y > p1TopY  && mGameInfos[i].ball.y < p1BottomY)
 		{
-			mGameInfos[i].ball.x += mGameInfos[i].ball.xVel;
-			mGameInfos[i].ball.y += mGameInfos[i].ball.yVel;
+			//mGameInfos[i].ball.xVel *= -1;
 
-			float p1LeftX = mGameInfos[i].lPlayer.x;
-			float p1RightX = mGameInfos[i].lPlayer.x + mGameInfos[i].lPlayer.width;
-			float p1TopY = mGameInfos[i].lPlayer.y;
-			float p1BottomY = mGameInfos[i].lPlayer.y + mGameInfos[i].lPlayer.height;
+			float paddleMidY = mGameInfos[i].lPlayer.y + 100 / 2;
+			float ballMidY = mGameInfos[i].ball.y + 10;
 
-			float p2LeftX = mGameInfos[i].rPlayer.x;
-			float p2RightX = mGameInfos[i].rPlayer.x + mGameInfos[i].rPlayer.width;
-			float p2TopY = mGameInfos[i].rPlayer.y;
-			float p2BottomY = mGameInfos[i].rPlayer.y + mGameInfos[i].rPlayer.height;
-
-			if (mGameInfos[i].ball.x <= p1RightX && mGameInfos[i].ball.x > p1LeftX && mGameInfos[i].ball.y > p1TopY  && mGameInfos[i].ball.y < p1BottomY)
-			{
-				//mGameInfos[i].ball.xVel *= -1;
-
-				float paddleMidY = mGameInfos[i].lPlayer.y + mGameInfos[i].lPlayer.height / 2;
-				float ballMidY = mGameInfos[i].ball.y + 10;
-
-				float angle = (PI / 2) * (abs(paddleMidY - ballMidY) / (mGameInfos[i].lPlayer.height / 2));
-				mGameInfos[i].ball.xVel = sin(angle) + 5.0;
-				mGameInfos[i].ball.yVel = cos(angle) + 5.0;
-			}
-
-			if ((mGameInfos[i].ball.x + 20) >= p2LeftX && (mGameInfos[i].ball.x + 20) < p2RightX && mGameInfos[i].ball.y > p2TopY  && mGameInfos[i].ball.y < p2BottomY)
-			{
-				//mGameInfos[i].ball.xVel *= -1;
-
-				float paddleMidY = mGameInfos[i].rPlayer.y + mGameInfos[i].rPlayer.height / 2;
-				float ballMidY = mGameInfos[i].ball.y + 10;
-
-				float angle = (PI / 2) * (abs(paddleMidY - ballMidY) / (mGameInfos[i].rPlayer.height / 2));
-				mGameInfos[i].ball.xVel = sin(angle) + 5.0;
-				mGameInfos[i].ball.yVel = cos(angle) + 5.0;
-			}
-
-			if (mGameInfos[i].ball.x < 0) mGameInfos[i].ball.xVel *= -1;
-			if (mGameInfos[i].ball.x >= 1024 - 20) mGameInfos[i].ball.xVel *= -1;
-			if (mGameInfos[i].ball.y < 0) mGameInfos[i].ball.yVel *= -1;
-			if (mGameInfos[i].ball.y >= 768 - 20) mGameInfos[i].ball.yVel *= -1;
+			float angle = static_cast<float>((PI / 2) * (abs(paddleMidY - ballMidY) / (100 / 2)));
+			mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0);
+			mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
 		}
 
-		broadcastGameInfo();
+		if ((mGameInfos[i].ball.x + 20) >= p2LeftX && (mGameInfos[i].ball.x + 20) < p2RightX && mGameInfos[i].ball.y > p2TopY  && mGameInfos[i].ball.y < p2BottomY)
+		{
+			//mGameInfos[i].ball.xVel *= -1;
+
+			float paddleMidY = mGameInfos[i].rPlayer.y + 100 / 2;
+			float ballMidY = mGameInfos[i].ball.y + 10;
+
+			float angle = static_cast<float>((PI / 2) * (abs(paddleMidY - ballMidY) / (100 / 2)));
+			mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0);
+			mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
+		}
+
+		if (mGameInfos[i].ball.x < 0) mGameInfos[i].ball.xVel *= -1;
+		if (mGameInfos[i].ball.x >= 1024 - 20) mGameInfos[i].ball.xVel *= -1;
+		if (mGameInfos[i].ball.y < 0) mGameInfos[i].ball.yVel *= -1;
+		if (mGameInfos[i].ball.y >= 768 - 20) mGameInfos[i].ball.yVel *= -1;
 	}
 }
 
@@ -239,7 +237,6 @@ void Server::getPackets()
 		case ID_SEND_PADDLE_DATA:
 		{
 			PaddleData paddle = *reinterpret_cast<PaddleData*>(p->data);
-			paddle.mID = ID_RECIEVE_PADDLE_DATA;
 
 			//find correct game and client
 			int j = 0;
@@ -247,17 +244,15 @@ void Server::getPackets()
 			{
 				if (mClientPairs[i][0] == p->systemAddress)
 				{
-					mGameInfos[j].lPlayer.x = paddle.xPos;
-					mGameInfos[j].lPlayer.y = paddle.yPos;
-					mpServer->Send((const char*)&paddle, sizeof(paddle), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+					mGameInfos[j].lPlayer.x = paddle.x;
+					mGameInfos[j].lPlayer.y = paddle.y;
 				}
-				else
+				else if (mClientPairs[i][1] == p->systemAddress)
 				{
-					mGameInfos[j].rPlayer.x = paddle.xPos;
-					mGameInfos[j].rPlayer.y = paddle.yPos;
-					mpServer->Send((const char*)&paddle, sizeof(paddle), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+					mGameInfos[j].rPlayer.x = paddle.x;
+					mGameInfos[j].rPlayer.y = paddle.y;
 				}
-				if (i == 1 || i == 3 || i == 5) j++;
+				if (i % 2 == 1) j++;
 			}
 
 			break;
@@ -276,16 +271,34 @@ void Server::broadcastGameInfo()
 	int j = 0;
 	for (unsigned int i = 0; i < mClientPairs.size(); i++)
 	{
-		//GameInfo info = mGameInfos[i];
-		Ball theBall;
-		theBall.x = mGameInfos[j].ball.x;
-		theBall.y = mGameInfos[j].ball.y;
-		theBall.xVel = mGameInfos[j].ball.xVel;
-		theBall.yVel = mGameInfos[j].ball.yVel;
+		GameInfo info = mGameInfos[j];
+		info.mID = ID_RECIEVE_GAME_INFO;
+		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
+		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+		if (i % 2 == 1) j++;
+	}
+}
 
-		theBall.mID = ID_RECIEVE_BALL_INFO;
-		mpServer->Send((const char*)&theBall, sizeof(theBall), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
-		mpServer->Send((const char*)&theBall, sizeof(theBall), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
-		if (i == 1 || i == 3 || i == 5) j++;
+void Server::initializeGameInfos()
+{
+	int j = 0;
+	for (unsigned int i = 0; i < mClientPairs.size(); i++)
+	{
+		mGameInfos[j].mID = ID_RECIEVE_GAME_INFO;
+		
+		mGameInfos[j].ball.x = 400;
+		mGameInfos[j].ball.y = 400;
+		mGameInfos[j].ball.xVel = -30;
+		mGameInfos[j].ball.yVel = 0;
+
+		mGameInfos[j].lPlayer.goalsScored = 0;
+		mGameInfos[j].lPlayer.x = 200;
+		mGameInfos[j].lPlayer.y = 768 / 2;
+
+		mGameInfos[j].rPlayer.goalsScored = 0;
+		mGameInfos[j].rPlayer.x = 1024 - 200 - 20;
+		mGameInfos[j].rPlayer.y = 768 / 2;
+
+		if (i % 2 == 1) j++;
 	}
 }

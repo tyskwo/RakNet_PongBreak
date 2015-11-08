@@ -7,33 +7,33 @@
 #include <array>
 
 #pragma pack(push, 1)
-struct ShapePosition
+//struct for position values
+struct Position
 {
 	unsigned char mID;
-	float xPos, yPos, velocity;
+	float x, y;
 };
 #pragma pack(pop)
 
+//#pragma pack(push, 1)
 //struct for player values
 struct Player
 {
-	float xPos, yPos;
-	float xVel, yVel;
-
+	float x, y;
 	std::array<std::array<bool, 3>, 6> bricks;
 
 	int goalsScored;
 };
+//#pragma pack(pop)
 
-#pragma pack(push, 1)
+//#pragma pack(push, 1)
 //struct for ball values
 struct Ball
 {
-	unsigned char mID;
 	float x, y;
 	float xVel, yVel;
 };
-#pragma pack(pop)
+//#pragma pack(pop)
 
 //struct to receive game state from server
 #pragma pack(push, 1)
@@ -41,7 +41,8 @@ struct GameInfo
 {
 	unsigned char mID;
 
-	Player lPlayer, rPlayer;
+	Player lPlayer;
+	Player rPlayer;
 	Ball ball;
 };
 #pragma pack(pop)
@@ -61,10 +62,6 @@ public:
 	//send paddle data
 	void sendPaddleData(float x, float y);
 
-	//values for the other player's shape position and velocity
-	//########Need to convert to player struct##############
-	float otherShapeX, otherShapeY, otherVelocity;
-	float ballX, ballY;
 
 	//set flags for whether it was first connected, or connected second
 	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; };
@@ -72,9 +69,20 @@ public:
 	inline void setConnected(bool wasSecond)	 { mIsConnected = wasSecond; };
 	inline bool getConnected()					 { return mIsConnected; };
 
-	void setX(const float& x) { mX = x; };
-	void setY(const float& yDiff) { mY += yDiff; };
-	const float& getY()			  { return mY; };
+	inline GameInfo getGameInfo()	{ return mGameInfo; };
+
+
+
+
+	void setYdiff(float yDiff) 
+	{ 
+		if (mWasFirstConnected) mGameInfo.lPlayer.y += yDiff; 
+		else mGameInfo.rPlayer.y += yDiff;
+	} //workaround, should try to do it differently!
+
+
+
+
 
 	const ObjectInfoBuffer& getOpponentInterpolation() { return mOpponentInterpolation; };
 	const ObjectInfoBuffer& getBallInterpolation()	   { return mBallInterpolation; };
@@ -87,9 +95,7 @@ private:
 	//Holds packets
 	RakNet::Packet* mpPacket;
 
-	//first client
-	//########Do we need these?#########
-	RakNet::SystemAddress mClientID;
+	//socket descriptor
 	RakNet::SocketDescriptor mSocketDescriptor;
 
 	//get and identify packet
@@ -99,7 +105,6 @@ private:
 
 	//values for the connection values.
 	char mIPaddress[64], mServerPort[3], mClientPort[3];
-	char mMessage[2048];
 
 	//flag for if client is connected, and if so, first player
 	bool mIsConnected;
@@ -108,10 +113,10 @@ private:
 	//timer
 	Timer* mpTimer;
 
-	//paddle data
-	float mX;
-	float mY;
+	//game info
+	GameInfo mGameInfo;
 
+	//interpolators for opponent and ball
 	ObjectInfoBuffer mOpponentInterpolation, mBallInterpolation;
 };
 

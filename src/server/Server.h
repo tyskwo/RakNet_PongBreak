@@ -20,32 +20,31 @@
 struct PaddleData
 {
 	unsigned char mID;
-	float xPos, yPos;
+	float x, y;
 };
 #pragma pack(pop)
 
+//#pragma pack(push, 1)
 //struct for player values
 struct Player
 {
 	float x, y;
-	float width, height;
-	//float xVel, yVel;
-
 	std::array<std::array<bool, 3>, 6> bricks;
 
 	int goalsScored;
 };
+//#pragma pack(pop)
 
-#pragma pack(push, 1)
+//#pragma pack(push, 1)
 //struct for ball values
 struct Ball
 {
-	unsigned char mID;
 	float x, y;
 	float xVel, yVel;
 };
-#pragma pack(pop)
+//#pragma pack(pop)
 
+#pragma pack(push, 1)
 //struct for game info, both players, ball, scores
 struct GameInfo
 {
@@ -55,6 +54,7 @@ struct GameInfo
 	Player rPlayer;
 	Ball ball;
 };
+#pragma pack(pop)
 
 class Server
 {
@@ -86,7 +86,8 @@ private:
 	std::array<GameInfo, 4>								mGameInfos;
 	int mNumGames;
 
-	//std::array<Ball, 4>									mBallContainer;
+	void initializeGameInfos();
+	void updateGames();
 
 	//timer
 	Timer* mpTimer;
