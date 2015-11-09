@@ -65,7 +65,9 @@ int main()
 	ball.setFillColor(sf::Color::Cyan);
 	ball.setPosition(400, 400);
 
-
+	float yPos = 0.0;
+	if (mpClient->getFirstConnected()) yPos = mpClient->getGameInfo().lPlayer.y;
+	else yPos = mpClient->getGameInfo().rPlayer.y;
 
 
 
@@ -74,44 +76,54 @@ int main()
 	{
 		mpClient->update();
 
-		if (mpClient->getFirstConnected())
+		/*if (mpClient->getFirstConnected())
 		{
-			//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
-			//opponent.setPosition(position);
+		//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
+		//opponent.setPosition(position);
 
-			sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
-			player.setPosition(position2);
+		sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
+		player.setPosition(position2);
 		}
-		else		
+		else
 		{
-			//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
-			//opponent.setPosition(position);
+		//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
+		//opponent.setPosition(position);
 
-			sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
-			player.setPosition(position2);
-		}
+		sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
+		player.setPosition(position2);
+		}*/
 
 		//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
 		//ball.setPosition(position);
 
 
 
-//#############################################GET INPUT##############################################################
-		if (mpClient->getFirstConnected())
-		{
+		//#############################################GET INPUT##############################################################
+		/*	if (mpClient->getFirstConnected())
+			{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    mpClient->setYdiff(-5.0);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  mpClient->setYdiff( 5.0);
 			player.setPosition(player.getPosition().x, mpClient->getGameInfo().lPlayer.y);
-		}
-		else
-		{
+			}
+			else
+			{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    mpClient->setYdiff(-5.0);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  mpClient->setYdiff( 5.0);
 			player.setPosition(player.getPosition().x, mpClient->getGameInfo().rPlayer.y);
+			}*/
+
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			mpClient->setYdiff(-5.0);
+			yPos -= 5.0;
 		}
-
-
-		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			mpClient->setYdiff(5.0);
+			yPos += 5.0;
+		}
+		player.setPosition(player.getPosition().x, yPos);
 
 
 //##############################################INTERPOLATE###########################################################

@@ -244,7 +244,9 @@ void Client::getPackets()
 
 			
 
-			mGameInfo = gameInfo;
+			mGameInfo.ball = gameInfo.ball;
+			mGameInfo.lPlayer = gameInfo.lPlayer;
+			mGameInfo.rPlayer = gameInfo.rPlayer;
 
 			break;
 		}
