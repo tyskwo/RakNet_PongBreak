@@ -66,8 +66,6 @@ int main()
 	ball.setPosition(400, 400);
 
 	float yPos = 0.0;
-	if (mpClient->getFirstConnected()) yPos = mpClient->getGameInfo().lPlayer.y;
-	else yPos = mpClient->getGameInfo().rPlayer.y;
 
 
 
@@ -76,44 +74,20 @@ int main()
 	{
 		mpClient->update();
 
-		/*if (mpClient->getFirstConnected())
-		{
-		//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
-		//opponent.setPosition(position);
-
-		sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
-		player.setPosition(position2);
-		}
-		else
-		{
-		//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y);
-		//opponent.setPosition(position);
-
-		sf::Vector2f position2 = sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y);
-		player.setPosition(position2);
-		}*/
-
-		//sf::Vector2f position = sf::Vector2f(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
-		//ball.setPosition(position);
-
-
-
 		//#############################################GET INPUT##############################################################
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			mpClient->setYdiff(-5.0);
 			yPos -= 5.0;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			mpClient->setYdiff(5.0);
 			yPos += 5.0;
 		}
 		player.setPosition(player.getPosition().x, yPos);
-
+		mpClient->setPaddleLoc(player.getPosition().x, yPos);
 
 //##############################################INTERPOLATE###########################################################
-		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getDeltaT());
+		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
 		if (mpClient->getFirstConnected())
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
@@ -123,7 +97,7 @@ int main()
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
 		}
 
-		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getDeltaT());
+		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
 		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
 
 

@@ -21,6 +21,7 @@ public:
 	bool   shouldUpdate();
 	
 	inline const milliseconds& getDeltaT() { return mDeltaT; };
+	inline const milliseconds& getElapsedT() { return mElapsedT; };
 private:
 	//timer variables
 	LARGE_INTEGER mStartTime;
@@ -28,7 +29,7 @@ private:
 	LARGE_INTEGER mEndTime;
 
 	//how often RakNet should update and elapsed time
-	milliseconds mRakNetFrameTime, mDeltaT;
+	milliseconds mRakNetFrameTime, mDeltaT, mElapsedT;
 
 	//add time
 	inline void addDelta(milliseconds delta) { mDeltaT += delta; };

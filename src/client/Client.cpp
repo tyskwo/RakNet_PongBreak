@@ -234,8 +234,6 @@ void Client::getPackets()
 				ObjectInfo opponentInfo;
 				opponentInfo.SetState(opponentState);
 				mOpponentInterpolation.AddTarget(opponentInfo);
-
-				//gameInfo.lPlayer.y = mGameInfo.lPlayer.y;
 			}
 			else
 			{
@@ -245,15 +243,7 @@ void Client::getPackets()
 				ObjectInfo opponentInfo;
 				opponentInfo.SetState(opponentState);
 				mOpponentInterpolation.AddTarget(opponentInfo);
-
-				//gameInfo.rPlayer.y = mGameInfo.rPlayer.y;
 			}
-
-			
-
-			//mGameInfo.ball = gameInfo.ball;
-			//mGameInfo.lPlayer = gameInfo.lPlayer;
-			//mGameInfo.rPlayer = gameInfo.rPlayer;
 
 			break;
 		}
@@ -273,4 +263,10 @@ void Client::sendPaddleData(float x, float y)
 	pos.y = y;
 	pos.mID = ID_SEND_PADDLE_DATA;
 	mpClient->Send((const char*)&pos, sizeof(pos), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+void Client::setPaddleLoc(const float& x, const float& y)
+{
+	if (mWasFirstConnected) mGameInfo.lPlayer.x = x, mGameInfo.lPlayer.y = y;
+	else mGameInfo.rPlayer.x = x, mGameInfo.rPlayer.y = y;
 }

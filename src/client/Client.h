@@ -71,22 +71,12 @@ public:
 
 	inline GameInfo getGameInfo()	{ return mGameInfo; };
 
-
-
-
-	void setYdiff(float yDiff) 
-	{ 
-		if (mWasFirstConnected) mGameInfo.lPlayer.y += yDiff; 
-		else mGameInfo.rPlayer.y += yDiff;
-	} //workaround, should try to do it differently!
-
-
-
-
-
 	const ObjectInfoBuffer& getOpponentInterpolation() { return mOpponentInterpolation; };
 	const ObjectInfoBuffer& getBallInterpolation()	   { return mBallInterpolation; };
 	const double& getDeltaT() { return mpTimer->getDeltaT(); };
+	const double& getElapsedT() { return mpTimer->getElapsedT(); };
+
+	void setPaddleLoc(const float& x, const float& y);
 
 private:
 	//pointer to client object

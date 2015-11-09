@@ -8,7 +8,7 @@ ObjectInfo::ObjectInfo(ObjectState state)
 {}
 
 ObjectInfoBuffer::ObjectInfoBuffer()
-: mTotalTimeToInterpolate(175.0)
+	: mTotalTimeToInterpolate(1000.0 / 30.0)
 , mCurrentTime(0)
 {}
 
@@ -25,7 +25,7 @@ ObjectInfo ObjectInfoBuffer::GetNext(second aDeltaT) const
 	{
 		return mStarting;
 	}
-	mCurrentTime = aDeltaT;
+	mCurrentTime += aDeltaT;
 
 	if (mCurrentTime >= mTotalTimeToInterpolate)
 	{
@@ -57,6 +57,7 @@ ObjectInfo ObjectInfoBuffer::GetNext(second aDeltaT) const
 void ObjectInfoBuffer::AddTarget(object_info aTarget)
 {
 	mTargets.push_back(aTarget);
+	std::cout << mTargets.size() << std::endl;
 }
 
 void ObjectInfoBuffer::SetStartingInfo(const object_info& info)

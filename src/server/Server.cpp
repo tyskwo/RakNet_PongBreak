@@ -138,7 +138,7 @@ void Server::updateGames()
 
 		if (mGameInfos[i].ball.x <= p1RightX && mGameInfos[i].ball.x > p1LeftX && mGameInfos[i].ball.y > p1TopY  && mGameInfos[i].ball.y < p1BottomY)
 		{
-			//mGameInfos[i].ball.xVel *= -1;
+			mGameInfos[i].ball.xVel *= -1;
 
 			float paddleMidY = mGameInfos[i].lPlayer.y + 100 / 2;
 			float ballMidY = mGameInfos[i].ball.y + 10;
@@ -150,7 +150,7 @@ void Server::updateGames()
 
 		if ((mGameInfos[i].ball.x + 20) >= p2LeftX && (mGameInfos[i].ball.x + 20) < p2RightX && mGameInfos[i].ball.y > p2TopY  && mGameInfos[i].ball.y < p2BottomY)
 		{
-			//mGameInfos[i].ball.xVel *= -1;
+			mGameInfos[i].ball.xVel *= -1;
 
 			float paddleMidY = mGameInfos[i].rPlayer.y + 100 / 2;
 			float ballMidY = mGameInfos[i].ball.y + 10;
@@ -285,16 +285,16 @@ void Server::initializeGameInfos()
 		
 		mGameInfos[j].ball.x = 400;
 		mGameInfos[j].ball.y = 400;
-		mGameInfos[j].ball.xVel = -30;
+		mGameInfos[j].ball.xVel = -15;
 		mGameInfos[j].ball.yVel = 0;
 
 		mGameInfos[j].lPlayer.goalsScored = 0;
-		mGameInfos[j].lPlayer.x = 200;
-		mGameInfos[j].lPlayer.y = 768 / 2;
+		mGameInfos[j].lPlayer.x = 0;
+		mGameInfos[j].lPlayer.y = 0;
 
 		mGameInfos[j].rPlayer.goalsScored = 0;
-		mGameInfos[j].rPlayer.x = 1024 - 200 - 20;
-		mGameInfos[j].rPlayer.y = 768 / 2;
+		mGameInfos[j].rPlayer.x = 1024.0 - 220.0;
+		mGameInfos[j].rPlayer.y = 0;
 
 		if (i % 2 == 1) j++;
 	}
