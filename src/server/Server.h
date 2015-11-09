@@ -70,6 +70,12 @@ public:
 	void broadcastGameInfo();
 
 private:
+	struct Rectangle
+	{
+		float leftX, rightX, topY, bottomY;
+		float width, height;
+	};
+
 	//pointer to server object
 	RakNet::RakPeerInterface* mpServer;
 	
@@ -88,6 +94,8 @@ private:
 
 	void initializeGameInfos();
 	void updateGames();
+
+	bool doesCollide(const Rectangle& rect1, const Rectangle& rect2);
 
 	//timer
 	Timer* mpTimer;

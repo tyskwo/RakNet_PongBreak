@@ -119,6 +119,20 @@ void Server::update()
 	}
 }
 
+bool Server::doesCollide(const Rectangle& rect1, const Rectangle& rect2)
+{
+	bool horizontalCollision = false;
+	bool verticalCollision = false;
+
+	if (rect1.leftX < rect2.leftX && rect2.leftX < rect1.rightX) horizontalCollision = true;
+	if (rect1.leftX < rect2.rightX && rect2.rightX < rect1.rightX) horizontalCollision = true;
+
+	if (rect1.topY < rect2.topY && rect2.topY < rect1.bottomY) verticalCollision = true;
+	if (rect1.topY < rect2.bottomY && rect2.bottomY < rect1.bottomY) verticalCollision = true;
+
+	return horizontalCollision && verticalCollision;
+}
+
 void Server::updateGames()
 {
 	for (unsigned int i = 0; i < mGameInfos.size(); i++)
@@ -126,17 +140,28 @@ void Server::updateGames()
 		mGameInfos[i].ball.x += mGameInfos[i].ball.xVel;
 		mGameInfos[i].ball.y += mGameInfos[i].ball.yVel;
 
-		float p1LeftX = mGameInfos[i].lPlayer.x;
-		float p1RightX = mGameInfos[i].lPlayer.x + 20;
-		float p1TopY = mGameInfos[i].lPlayer.y;
-		float p1BottomY = mGameInfos[i].lPlayer.y + 100;
+		Rectangle ballRect;
+		ballRect.width = 20, ballRect.height = 20;
+		ballRect.leftX = mGameInfos[i].ball.x;
+		ballRect.rightX = mGameInfos[i].ball.x + ballRect.width;
+		ballRect.topY = mGameInfos[i].ball.y;
+		ballRect.bottomY = mGameInfos[i].ball.y + ballRect.height;
 
-		float p2LeftX = mGameInfos[i].rPlayer.x;
-		float p2RightX = mGameInfos[i].rPlayer.x + 20;
-		float p2TopY = mGameInfos[i].rPlayer.y;
-		float p2BottomY = mGameInfos[i].rPlayer.y + 100;
+		Rectangle p1PaddleRect;
+		p1PaddleRect.width = 20, p1PaddleRect.height = 100;
+		p1PaddleRect.leftX = mGameInfos[i].lPlayer.x;
+		p1PaddleRect.rightX = mGameInfos[i].lPlayer.x + p1PaddleRect.width;
+		p1PaddleRect.topY = mGameInfos[i].lPlayer.y;
+		p1PaddleRect.bottomY = mGameInfos[i].lPlayer.y + p1PaddleRect.height;
 
-		if (mGameInfos[i].ball.x <= p1RightX && mGameInfos[i].ball.x > p1LeftX && mGameInfos[i].ball.y > p1TopY  && mGameInfos[i].ball.y < p1BottomY)
+		Rectangle p2PaddleRect;
+		p2PaddleRect.width = 20, p2PaddleRect.height = 100;
+		p2PaddleRect.leftX = mGameInfos[i].rPlayer.x;
+		p2PaddleRect.rightX = mGameInfos[i].rPlayer.x + p2PaddleRect.width;
+		p2PaddleRect.topY = mGameInfos[i].rPlayer.y;
+		p2PaddleRect.bottomY = mGameInfos[i].rPlayer.y + p2PaddleRect.height;
+
+		if (doesCollide(ballRect, p1PaddleRect))
 		{
 			mGameInfos[i].ball.xVel *= -1;
 
@@ -148,7 +173,7 @@ void Server::updateGames()
 			mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
 		}
 
-		if ((mGameInfos[i].ball.x + 20) >= p2LeftX && (mGameInfos[i].ball.x + 20) < p2RightX && mGameInfos[i].ball.y > p2TopY  && mGameInfos[i].ball.y < p2BottomY)
+		if (doesCollide(ballRect, p2PaddleRect))
 		{
 			mGameInfos[i].ball.xVel *= -1;
 
@@ -285,7 +310,7 @@ void Server::initializeGameInfos()
 		
 		mGameInfos[j].ball.x = 400;
 		mGameInfos[j].ball.y = 400;
-		mGameInfos[j].ball.xVel = -15;
+		mGameInfos[j].ball.xVel = 1;
 		mGameInfos[j].ball.yVel = 0;
 
 		mGameInfos[j].lPlayer.goalsScored = 0;

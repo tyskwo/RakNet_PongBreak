@@ -34,6 +34,7 @@ ObjectInfo ObjectInfoBuffer::GetNext(second aDeltaT) const
 		mCurrent     = mStarting;
 		mTargets.erase(mTargets.begin());
 
+		std::cout << mTargets.size() << std::endl;
 		return mCurrent;
 	}
 
@@ -57,7 +58,7 @@ ObjectInfo ObjectInfoBuffer::GetNext(second aDeltaT) const
 void ObjectInfoBuffer::AddTarget(object_info aTarget)
 {
 	mTargets.push_back(aTarget);
-	std::cout << mTargets.size() << std::endl;
+	
 }
 
 void ObjectInfoBuffer::SetStartingInfo(const object_info& info)

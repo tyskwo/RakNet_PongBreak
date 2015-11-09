@@ -87,7 +87,7 @@ int main()
 		mpClient->setPaddleLoc(player.getPosition().x, yPos);
 
 //##############################################INTERPOLATE###########################################################
-		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
+		/*ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
 		if (mpClient->getFirstConnected())
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
@@ -95,7 +95,7 @@ int main()
 		else
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
-		}
+		}*/
 
 		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
 		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
