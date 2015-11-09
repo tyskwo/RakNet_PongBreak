@@ -209,9 +209,9 @@ void Server::getPackets()
 			{
 				mClientPairs[mNumGames][0] = p->systemAddress;
 
-				//make it the first player
-				int id = ID_FIRST_CONNECTION;
-				mpServer->Send((const char*)&id, sizeof(id), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+				GameInfo info = mGameInfos[mNumGames];
+				info.mID = ID_FIRST_CONNECTION;
+				mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
 
 			//if its the second client in a pair
@@ -219,15 +219,12 @@ void Server::getPackets()
 			{
 				mClientPairs[mNumGames][1] = p->systemAddress;
 
-				//set game info for this game
-				mGameInfos[mNumGames].mID = ID_RECIEVE_GAME_INFO;
+				GameInfo info = mGameInfos[mNumGames];
+				info.mID = ID_SECOND_CONNECTION;
+				mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 
 				//increase number of games
 				mNumGames++;
-
-				//set as second player
-				int id = ID_SECOND_CONNECTION;
-				mpServer->Send((const char*)&id, sizeof(id), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
 
 			break;

@@ -99,20 +99,6 @@ int main()
 
 
 		//#############################################GET INPUT##############################################################
-		/*	if (mpClient->getFirstConnected())
-			{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    mpClient->setYdiff(-5.0);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  mpClient->setYdiff( 5.0);
-			player.setPosition(player.getPosition().x, mpClient->getGameInfo().lPlayer.y);
-			}
-			else
-			{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    mpClient->setYdiff(-5.0);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  mpClient->setYdiff( 5.0);
-			player.setPosition(player.getPosition().x, mpClient->getGameInfo().rPlayer.y);
-			}*/
-
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
 			mpClient->setYdiff(-5.0);

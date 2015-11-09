@@ -53,5 +53,5 @@ public:
 
 	inline void SetTotalTimeToInterpolate(second value) { mTotalTimeToInterpolate = value; }
 
-	auto SetStartingInfo(const object_info& info)->object_buffer&;
+	void SetStartingInfo(const object_info& info);
 };

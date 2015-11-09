@@ -8,7 +8,7 @@ ObjectInfo::ObjectInfo(ObjectState state)
 {}
 
 ObjectInfoBuffer::ObjectInfoBuffer()
-: mTotalTimeToInterpolate(1000.0 / 30.0)
+: mTotalTimeToInterpolate(175.0)
 , mCurrentTime(0)
 {}
 
@@ -19,14 +19,13 @@ ObjectInfoBuffer::ObjectInfoBuffer(object_info aStarting)
 	mCurrent =  mStarting;
 }
 
-auto ObjectInfoBuffer::GetNext(second aDeltaT) const -> object_info
+ObjectInfo ObjectInfoBuffer::GetNext(second aDeltaT) const
 {
 	if (mTargets.size() == 0)
 	{
 		return mStarting;
 	}
-
-	mCurrentTime += aDeltaT;
+	mCurrentTime = aDeltaT;
 
 	if (mCurrentTime >= mTotalTimeToInterpolate)
 	{
@@ -58,13 +57,11 @@ auto ObjectInfoBuffer::GetNext(second aDeltaT) const -> object_info
 void ObjectInfoBuffer::AddTarget(object_info aTarget)
 {
 	mTargets.push_back(aTarget);
-	std::cout << mTargets.size() << std::endl;
 }
 
-auto ObjectInfoBuffer::SetStartingInfo(const object_info& info) -> object_buffer&
+void ObjectInfoBuffer::SetStartingInfo(const object_info& info)
 {
 	mCurrentTime = 0.0;
 	mStarting    = info;
 	mCurrent     = mStarting;
-	return *this;
 }

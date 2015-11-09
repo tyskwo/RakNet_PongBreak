@@ -197,6 +197,9 @@ void Client::getPackets()
 			setFirstConnected(true);
 			setConnected(true);
 
+			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
+			mGameInfo = gameInfo;
+
 			break;
 		}
 		case ID_SECOND_CONNECTION:
@@ -204,6 +207,9 @@ void Client::getPackets()
 			//set as first connected or second connected.
 			setFirstConnected(false);
 			setConnected(true);
+
+			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
+			mGameInfo = gameInfo;
 
 			break;
 		}
@@ -215,6 +221,7 @@ void Client::getPackets()
 			ObjectState ballState;
 			ballState.mX = gameInfo.ball.x;
 			ballState.mY = gameInfo.ball.y;
+
 			ObjectInfo ballInfo;
 			ballInfo.SetState(ballState);
 			mBallInterpolation.AddTarget(ballInfo);
@@ -244,9 +251,9 @@ void Client::getPackets()
 
 			
 
-			mGameInfo.ball = gameInfo.ball;
-			mGameInfo.lPlayer = gameInfo.lPlayer;
-			mGameInfo.rPlayer = gameInfo.rPlayer;
+			//mGameInfo.ball = gameInfo.ball;
+			//mGameInfo.lPlayer = gameInfo.lPlayer;
+			//mGameInfo.rPlayer = gameInfo.rPlayer;
 
 			break;
 		}
