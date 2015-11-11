@@ -41,6 +41,8 @@ struct GameInfo
 {
 	unsigned char mID;
 
+	bool started = false;
+
 	Player lPlayer;
 	Player rPlayer;
 	Ball ball;
@@ -62,18 +64,27 @@ public:
 	//send paddle data
 	void sendPaddleData(float x, float y);
 
+	//send game start message
+	void sendGameStart();
+
 
 	//set flags for whether it was first connected, or connected second
-	inline void setFirstConnected(bool wasFirst) { mWasFirstConnected = wasFirst; };
+	inline void setFirstConnected(bool wasFirst)		{ mWasFirstConnected = wasFirst; };
 	inline bool getFirstConnected()			     { return mWasFirstConnected; };
-	inline void setConnected(bool wasSecond)	 { mIsConnected = wasSecond; };
+
+	inline void setConnected(bool wasSecond)			{ mIsConnected = wasSecond; };
 	inline bool getConnected()					 { return mIsConnected; };
 
-	inline GameInfo getGameInfo()	{ return mGameInfo; };
+
+	inline void setGameStart()	{ mGameInfo.started = true; mSendGameStart = true; };
+
+
+	inline GameInfo getGameInfo() { return mGameInfo; };
 
 	const ObjectInfoBuffer& getOpponentInterpolation() { return mOpponentInterpolation; };
-	const ObjectInfoBuffer& getBallInterpolation()	   { return mBallInterpolation; };
-	const double& getDeltaT() { return mpTimer->getDeltaT(); };
+	const ObjectInfoBuffer& getBallInterpolation()	   { return mBallInterpolation;     };
+
+	const double& getDeltaT()   { return mpTimer->getDeltaT();  };
 	const double& getElapsedT() { return mpTimer->getElapsedT(); };
 
 	void setPaddleLoc(const float& x, const float& y);
@@ -99,6 +110,9 @@ private:
 	//flag for if client is connected, and if so, first player
 	bool mIsConnected;
 	bool mWasFirstConnected;
+
+	//flag to send over game started packet
+	bool mSendGameStart;
 
 	//timer
 	Timer* mpTimer;

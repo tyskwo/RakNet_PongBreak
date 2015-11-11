@@ -30,6 +30,8 @@ enum MessageTypes
 	ID_FIRST_CONNECTION,
 	ID_SECOND_CONNECTION,
 	ID_RECIEVE_GAME_INFO,
+	ID_RECIEVE_BALL_INFO, //not used by client
+	ID_START_GAME
 };
 
 Client::Client()
@@ -78,6 +80,7 @@ void Client::init(const char* clientPort, const char* serverAddress, const char*
 	RakNet::ConnectionAttemptResult car = mpClient->Connect(serverAddress, atoi(serverPort), "hello", (int)strlen("hello"));
 	RakAssert(car == RakNet::CONNECTION_ATTEMPT_STARTED);
 
+	mSendGameStart = false;
 	mpTimer = new Timer();
 }
 
@@ -118,6 +121,12 @@ void Client::update()
 		else
 		{
 			sendPaddleData(mGameInfo.rPlayer.x, mGameInfo.rPlayer.y);
+		}
+
+		if (mSendGameStart)
+		{
+			sendGameStart();
+			mSendGameStart = false;
 		}
 	}
 }
@@ -269,4 +278,10 @@ void Client::setPaddleLoc(const float& x, const float& y)
 {
 	if (mWasFirstConnected) mGameInfo.lPlayer.x = x, mGameInfo.lPlayer.y = y;
 	else mGameInfo.rPlayer.x = x, mGameInfo.rPlayer.y = y;
+}
+
+void Client::sendGameStart()
+{
+	int mID = ID_START_GAME;
+	mpClient->Send((const char*)&mID, sizeof(mID), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

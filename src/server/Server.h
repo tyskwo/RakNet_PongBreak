@@ -49,6 +49,7 @@ struct Ball
 struct GameInfo
 {
 	unsigned char mID;
+	bool started = false;
 
 	Player lPlayer;
 	Player rPlayer;

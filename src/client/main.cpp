@@ -74,7 +74,7 @@ int main()
 	{
 		mpClient->update();
 
-		//#############################################GET INPUT##############################################################
+//#############################################GET INPUT##############################################################
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
 			yPos -= 5.0;
@@ -85,6 +85,11 @@ int main()
 		}
 		player.setPosition(player.getPosition().x, yPos);
 		mpClient->setPaddleLoc(player.getPosition().x, yPos);
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !mpClient->getFirstConnected())
+		{
+			mpClient->setGameStart();
+		}
 
 //##############################################INTERPOLATE###########################################################
 		/*ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
