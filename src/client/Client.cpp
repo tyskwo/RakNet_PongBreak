@@ -248,6 +248,15 @@ void Client::getPackets()
 			ObjectInfo ballInfo;
 			ballInfo.SetState(ballState);
 
+			ObjectState ballStartState;
+			ballStartState.mX = mGameInfo.ball.x + mGameInfo.ball.xVel;
+			ballStartState.mY = mGameInfo.ball.y + mGameInfo.ball.yVel;
+
+			ObjectInfo ballStartInfo;
+			ballStartInfo.SetState(ballStartState);
+			mBallInterpolation.SetStartingInfo(ballStartInfo);
+
+
 			if (mGameInfo.ball.x != gameInfo.ball.x && mGameInfo.ball.y != gameInfo.ball.y)
 			{
 				mBallInterpolation.AddTarget(ballInfo);
