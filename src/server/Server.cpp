@@ -412,8 +412,8 @@ void Server::initializeGameInfos()
 	{
 		mGameInfos[j].mID = ID_RECIEVE_GAME_INFO;
 		
-		mGameInfos[j].ball.x = HALF_SCREEN_WIDTH;
-		mGameInfos[j].ball.y = HALF_SCREEN_HEIGHT;
+		mGameInfos[j].ball.x = HALF_SCREEN_WIDTH - 10;
+		mGameInfos[j].ball.y = HALF_SCREEN_HEIGHT - 10;
 		mGameInfos[j].ball.xVel = 7;
 		mGameInfos[j].ball.yVel = 0;
 

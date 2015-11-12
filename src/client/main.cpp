@@ -72,9 +72,10 @@ int main()
 	{
 		playerScore.setFont(font);
 		opponentScore.setFont(font);
+
+		playerScore.setCharacterSize(400);
+		opponentScore.setCharacterSize(400);
 	}
-	playerScore.setColor(sf::Color(10, 10, 25));
-	opponentScore.setColor(sf::Color(10, 10, 25));
 
 	if (mpClient->getFirstConnected())
 	{
@@ -88,20 +89,25 @@ int main()
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			playerBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
-			playerBricks[i].setFillColor(sf::Color(10, 10, 25));
+			playerBricks[i].setFillColor(sf::Color(200, 10, 10, 100));
 		}
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
-			opponentBricks[i].setFillColor(sf::Color(10, 10, 25));
+			opponentBricks[i].setFillColor(sf::Color(10, 10, 200, 100));
 		}
 
 		playerScore.setString("0");
-		playerScore.setPosition(50.0f, 25.0f);
+		playerScore.setOrigin(playerScore.getLocalBounds().width / 2.0f, playerScore.getLocalBounds().height / 2.0f);
+		playerScore.setPosition(SCREEN_WIDTH / 4, HALF_SCREEN_HEIGHT);
+		playerScore.setColor(sf::Color(200, 10, 10, 50));
+
 		opponentScore.setString("0");
-		opponentScore.setPosition(SCREEN_WIDTH - 50.0f, 25.0f);
+		opponentScore.setOrigin(opponentScore.getLocalBounds().width / 2.0f, opponentScore.getLocalBounds().height / 2.0f);
+		opponentScore.setPosition(SCREEN_WIDTH / 4 * 3, HALF_SCREEN_HEIGHT);
+		opponentScore.setColor(sf::Color(10, 10, 200, 50));
 	}
 	else
 	{
@@ -115,24 +121,29 @@ int main()
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			opponentBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
-			opponentBricks[i].setFillColor(sf::Color(10, 10, 25));
+			opponentBricks[i].setFillColor(sf::Color(200, 10, 10, 100));
 		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
-			playerBricks[i].setFillColor(sf::Color(10, 10, 25));
+			playerBricks[i].setFillColor(sf::Color(10, 10, 200, 100));
 		}
 
 		playerScore.setString("0");
-		playerScore.setPosition(SCREEN_WIDTH - 50.0f, 25.0f);
+		playerScore.setOrigin(playerScore.getLocalBounds().width / 2.0f, playerScore.getLocalBounds().height / 2.0f);
+		playerScore.setPosition(SCREEN_WIDTH / 4 * 3, HALF_SCREEN_HEIGHT);
+		playerScore.setColor(sf::Color(10, 10, 200, 50));
+
 		opponentScore.setString("0");
-		opponentScore.setPosition(50.0f, 25.0f);
+		opponentScore.setOrigin(opponentScore.getLocalBounds().width / 2.0f, opponentScore.getLocalBounds().height / 2.0f);
+		opponentScore.setPosition(SCREEN_WIDTH / 4, HALF_SCREEN_HEIGHT);
+		opponentScore.setColor(sf::Color(200, 10, 10, 50));
 	}
 
 	ball.setFillColor(sf::Color(10, 10, 25));
-	ball.setPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
+	ball.setPosition(HALF_SCREEN_WIDTH - 10, HALF_SCREEN_HEIGHT - 10);
 
 	float yPos = 0.0;
 
@@ -216,9 +227,7 @@ int main()
 		}
 
 
-//##############################################UPDATE GOAL TEXT#####################################################
-		//std::cout << mpClient->getGameInfo().lPlayer.goalsScored << " " << mpClient->getGameInfo().rPlayer.goalsScored << std::endl;
-		
+//##############################################UPDATE GOAL TEXT#####################################################		
 		if (mpClient->getFirstConnected())
 		{
 			playerScore.setString(std::to_string(mpClient->getGameInfo().lPlayer.goalsScored));
@@ -228,7 +237,10 @@ int main()
 		{
 			playerScore.setString(std::to_string(mpClient->getGameInfo().rPlayer.goalsScored));
 			opponentScore.setString(std::to_string(mpClient->getGameInfo().lPlayer.goalsScored));
-		}		
+		}	
+
+		opponentScore.setOrigin(opponentScore.getLocalBounds().width / 2.0f, opponentScore.getLocalBounds().height / 2.0f);
+		playerScore.setOrigin(playerScore.getLocalBounds().width / 2.0f, playerScore.getLocalBounds().height / 2.0f);
 
 
 
