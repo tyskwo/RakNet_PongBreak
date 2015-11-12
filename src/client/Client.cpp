@@ -209,6 +209,13 @@ void Client::getPackets()
 			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
 			mGameInfo = gameInfo;
 
+			ObjectState ballState;
+			ballState.mX = gameInfo.ball.x;
+			ballState.mY = gameInfo.ball.y;
+			ObjectInfo ballInfo;
+			ballInfo.SetState(ballState);
+			mBallInterpolation.SetStartingInfo(ballInfo);
+
 			break;
 		}
 		case ID_SECOND_CONNECTION:
@@ -219,6 +226,13 @@ void Client::getPackets()
 
 			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
 			mGameInfo = gameInfo;
+
+			ObjectState ballState;
+			ballState.mX = gameInfo.ball.x;
+			ballState.mY = gameInfo.ball.y;
+			ObjectInfo ballInfo;
+			ballInfo.SetState(ballState);
+			mBallInterpolation.SetStartingInfo(ballInfo);
 
 			break;
 		}
