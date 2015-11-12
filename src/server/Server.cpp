@@ -429,16 +429,14 @@ void Server::initializeGameInfos()
 			mGameInfos[j].rPlayer.brickLocs[l].y = (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (l % 6);
 		}
 
-		for (unsigned int l = 0; l < mGameInfos[j].lPlayer.bricks.size(); l++)
+		for (unsigned int l = 0; l < mGameInfos[j].lPlayer.brickLocs.size(); l++)
 		{
 			mGameInfos[j].lPlayer.bricks[l % 6][l / 6] = true;
-			//std::cout << mGameInfos[j].rPlayer.bricks[l % 6][l / 6] << std::endl;
 		}
 
-		for (unsigned int l = 0; l < mGameInfos[j].rPlayer.bricks.size(); l++)
+		for (unsigned int l = 0; l < mGameInfos[j].rPlayer.brickLocs.size(); l++)
 		{
 			mGameInfos[j].rPlayer.bricks[l % 6][l / 6] = true;
-			//std::cout << mGameInfos[j].rPlayer.bricks[l % 6][l / 6] << std::endl;
 		}
 
 		if (i % 2 == 1) j++;

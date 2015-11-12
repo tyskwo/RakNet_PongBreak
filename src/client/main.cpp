@@ -173,6 +173,7 @@ int main()
 				}
 			}
 		}
+		std::cout << std::endl;
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
