@@ -227,6 +227,9 @@ void Client::getPackets()
 		{
 			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
 
+			mGameInfo.ball.x = gameInfo.ball.x;
+			mGameInfo.ball.y = gameInfo.ball.y;
+
 			ObjectState ballState;
 			ballState.mX = gameInfo.ball.x;
 			ballState.mY = gameInfo.ball.y;

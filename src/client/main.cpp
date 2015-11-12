@@ -204,9 +204,29 @@ int main()
 		prevBallPos.y = currBallPos.y;
 		currBallPos.x = mpClient->getGameInfo().ball.x;
 		currBallPos.y = mpClient->getGameInfo().ball.y;
-		ballVel.x = currBallPos.x - prevBallPos.x;
-		ballVel.y = currBallPos.y - prevBallPos.y;
-		ball.setPosition(ball.getPosition().x + ballVel.x, ball.getPosition().y + ballVel.y);
+		
+		if (mpClient->getNumBallTargets() < 1)
+		{
+			ballVel.x = currBallPos.x - prevBallPos.x;
+			ballVel.y = currBallPos.y - prevBallPos.y;
+			ball.setPosition(ball.getPosition().x + ballVel.x, ball.getPosition().y + ballVel.y);
+		}
+		else
+		{
+			ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
+			if (mpClient->getFirstConnected())
+			{
+				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
+			}
+			else
+			{
+				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
+			}
+
+			ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
+			//ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
+		}
+		
 			
 
 

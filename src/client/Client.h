@@ -96,6 +96,8 @@ public:
 
 	void setPaddleLoc(const float& x, const float& y);
 
+	const int& getNumBallTargets() { return mBallInterpolation.GetNumTargets(); };
+
 private:
 	//pointer to client object
 	RakNet::RakPeerInterface* mpClient;
