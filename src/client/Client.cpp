@@ -216,6 +216,13 @@ void Client::getPackets()
 			ballInfo.SetState(ballState);
 			mBallInterpolation.SetStartingInfo(ballInfo);
 
+			ObjectState otherState;
+			otherState.mX = gameInfo.rPlayer.x;
+			otherState.mY = gameInfo.rPlayer.y;
+			ObjectInfo otherInfo;
+			otherInfo.SetState(otherState);
+			mOpponentInterpolation.SetStartingInfo(otherInfo);
+
 			break;
 		}
 		case ID_SECOND_CONNECTION:
@@ -233,6 +240,13 @@ void Client::getPackets()
 			ObjectInfo ballInfo;
 			ballInfo.SetState(ballState);
 			mBallInterpolation.SetStartingInfo(ballInfo);
+
+			ObjectState otherState;
+			otherState.mX = gameInfo.lPlayer.x;
+			otherState.mY = gameInfo.lPlayer.y;
+			ObjectInfo otherInfo;
+			otherInfo.SetState(otherState);
+			mOpponentInterpolation.SetStartingInfo(otherInfo);
 
 			break;
 		}
@@ -281,7 +295,20 @@ void Client::getPackets()
 				opponentState.mY = gameInfo.rPlayer.y;
 				ObjectInfo opponentInfo;
 				opponentInfo.SetState(opponentState);
-				mOpponentInterpolation.AddTarget(opponentInfo);
+
+				ObjectState otherStartState;
+				otherStartState.mX = mGameInfo.rPlayer.x;
+				otherStartState.mY = mGameInfo.rPlayer.y;
+
+				ObjectInfo otherStartInfo;
+				otherStartInfo.SetState(otherStartState);
+				mOpponentInterpolation.SetStartingInfo(otherStartInfo);
+
+
+				if (mGameInfo.rPlayer.y != gameInfo.rPlayer.y)
+				{
+					mOpponentInterpolation.AddTarget(opponentInfo);
+				}
 			}
 			else
 			{
@@ -290,7 +317,20 @@ void Client::getPackets()
 				opponentState.mY = gameInfo.lPlayer.y;
 				ObjectInfo opponentInfo;
 				opponentInfo.SetState(opponentState);
-				mOpponentInterpolation.AddTarget(opponentInfo);
+
+				ObjectState otherStartState;
+				otherStartState.mX = mGameInfo.lPlayer.x;
+				otherStartState.mY = mGameInfo.lPlayer.y;
+
+				ObjectInfo otherStartInfo;
+				otherStartInfo.SetState(otherStartState);
+				mOpponentInterpolation.SetStartingInfo(otherStartInfo);
+
+
+				if (mGameInfo.lPlayer.y != gameInfo.lPlayer.y)
+				{
+					mOpponentInterpolation.AddTarget(opponentInfo);
+				}
 			}
 
 			break;
