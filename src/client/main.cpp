@@ -11,9 +11,13 @@
 int main()
 {
 	// create the window
+	const float SCREEN_WIDTH = 1024.0;
+	const float SCREEN_HEIGHT = 768.0;
+	const float HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2;
+	const float HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2;
+
 	sf::RenderWindow window(sf::VideoMode(1024, 768), "PONGBREAK");
 	window.setFramerateLimit(60);
-
 
 
 
@@ -54,31 +58,43 @@ int main()
 		player.setPosition(sf::Vector2f(200.0, 0.0));
 
 		opponent.setFillColor(sf::Color(10, 10, 200));
-		opponent.setPosition(sf::Vector2f(1024.0 - 200.0 - 20.0, 0.0));
+		opponent.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0 - 20.0, 0.0));
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			playerBricks[i].setPosition(10.0 + 40.0 * (i / 6), (768.0 / 2 - 100.0 * 3) + 100.0 * (i % 6));
+			playerBricks[i].setPosition(10.0 + 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
 		}
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			opponentBricks[i].setPosition(1024.0 - 10.0 - 20.0 - 40.0 * (i / 6), (768.0 / 2 - 100.0 * 3) + 100.0 * (i % 6));
+			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0 - 20.0 - 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
 		}
 	}
 	else
 	{
 		player.setFillColor(sf::Color(10, 10, 200));
-		player.setPosition(sf::Vector2f(1024.0 - 200.0 - 20.0, 0.0));
+		player.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0 - 20.0, 0.0));
 
 		opponent.setFillColor(sf::Color(200, 10, 10));
 		opponent.setPosition(sf::Vector2f(200.0, 0.0));
+
+		for (unsigned int i = 0; i < opponentBricks.size(); i++)
+		{
+			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
+			opponentBricks[i].setPosition(10.0 + 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
+		}
+
+		for (unsigned int i = 0; i < playerBricks.size(); i++)
+		{
+			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
+			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0 - 20.0 - 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
+		}
 	}
 
 	ball.setFillColor(sf::Color::Cyan);
-	ball.setPosition(400, 400);
+	ball.setPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
 
 	float yPos = 0.0;
 
