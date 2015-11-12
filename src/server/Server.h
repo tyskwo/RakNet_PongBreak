@@ -36,6 +36,7 @@ struct Player
 	float x, y;
 	std::array<std::array<bool, 3>, 6> bricks;
 	std::array<Point, 18> brickLocs;
+	float velocity;
 
 	int goalsScored;
 };

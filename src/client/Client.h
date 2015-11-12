@@ -27,6 +27,7 @@ struct Player
 	float x, y;
 	std::array<std::array<bool, 3>, 6> bricks;
 	std::array<Point, 18> brickLocs;
+	float velocity;
 
 	int goalsScored;
 };
@@ -98,7 +99,8 @@ public:
 
 	const int& getNumBallTargets() { return mBallInterpolation.GetNumTargets(); };
 
-	void setBallPosition(float x, float y);
+	void setBallPosition(const float& x, const float& y);
+	void setPaddleVelocity(const float& velocity);
 
 private:
 	//pointer to client object

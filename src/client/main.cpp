@@ -164,11 +164,19 @@ int main()
 		{
 			yPos -= 5.0;
 			if (yPos <= 0) yPos = 0;
+
+			mpClient->setPaddleVelocity(-5.0f);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
 			yPos += 5.0;
 			if (yPos >= SCREEN_HEIGHT - player.getSize().y) yPos = SCREEN_HEIGHT - player.getSize().y;
+
+			mpClient->setPaddleVelocity(5.0f);
+		}
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			mpClient->setPaddleVelocity(0.0f);
 		}
 		player.setPosition(player.getPosition().x, yPos);
 		mpClient->setPaddleLoc(player.getPosition().x, yPos);
@@ -190,6 +198,7 @@ int main()
 			ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
 			mpClient->setBallPosition(binfo.GetState().mX, binfo.GetState().mY);
 		}
+
 
 		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
 		if (mpClient->getFirstConnected())

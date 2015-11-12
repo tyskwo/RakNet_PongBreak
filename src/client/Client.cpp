@@ -365,9 +365,14 @@ void Client::sendGameStart()
 	mpClient->Send((const char*)&mID, sizeof(mID), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
-
-void Client::setBallPosition(float x, float y)
+void Client::setBallPosition(const float& x, const float& y)
 {
 	mGameInfo.ball.x = x;
 	mGameInfo.ball.y = y;
+}
+
+void Client::setPaddleVelocity(const float& velocity)
+{
+	if (mWasFirstConnected) mGameInfo.lPlayer.velocity = velocity;
+	else mGameInfo.rPlayer.velocity = velocity;
 }
