@@ -235,6 +235,9 @@ void Client::getPackets()
 			ballInfo.SetState(ballState);
 			mBallInterpolation.AddTarget(ballInfo);
 
+			mGameInfo.lPlayer.bricks = gameInfo.lPlayer.bricks;
+			mGameInfo.rPlayer.bricks = gameInfo.rPlayer.bricks;
+
 			if (getFirstConnected())
 			{
 				ObjectState opponentState;

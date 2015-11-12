@@ -197,58 +197,69 @@ void Server::updateGames()
 				}
 			}
 
+
 			for (unsigned int j = 0; j < mGameInfos[i].lPlayer.brickLocs.size(); j++)
 			{
-				Rectangle brickRect;
-				brickRect.width = 20, brickRect.height = 75;
-				brickRect.leftX = mGameInfos[i].lPlayer.brickLocs[j].x;
-				brickRect.rightX = brickRect.leftX + brickRect.width;
-				brickRect.topY = mGameInfos[i].lPlayer.brickLocs[j].y;
-				brickRect.bottomY = brickRect.topY + brickRect.height;
-
-				if (doesCollide(ballRect, brickRect))
+				if (mGameInfos[i].lPlayer.bricks[j % 6][j / 6] == true)
 				{
-					mGameInfos[i].ball.xVel *= -1;
-					float direction = mGameInfos[i].ball.xVel;
+					Rectangle brickRect;
+					brickRect.width = 20, brickRect.height = 75;
+					brickRect.leftX = mGameInfos[i].lPlayer.brickLocs[j].x;
+					brickRect.rightX = brickRect.leftX + brickRect.width;
+					brickRect.topY = mGameInfos[i].lPlayer.brickLocs[j].y;
+					brickRect.bottomY = brickRect.topY + brickRect.height;
 
-					float brickMidY = brickRect.topY + brickRect.height / 2;
-					float ballMidY = mGameInfos[i].ball.y + 10;
-
-					float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (75 / 2)));
-					mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
-					mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
-
-					if (direction < 0)
+					if (doesCollide(ballRect, brickRect))
 					{
+						mGameInfos[i].lPlayer.bricks[j % 6][j / 6] = false;
+
 						mGameInfos[i].ball.xVel *= -1;
+						float direction = mGameInfos[i].ball.xVel;
+
+						float brickMidY = brickRect.topY + brickRect.height / 2;
+						float ballMidY = mGameInfos[i].ball.y + 10;
+
+						float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (75 / 2)));
+						mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
+						mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
+
+						if (direction < 0)
+						{
+							mGameInfos[i].ball.xVel *= -1;
+						}
 					}
 				}
 			}
 
 			for (unsigned int j = 0; j < mGameInfos[i].rPlayer.brickLocs.size(); j++)
 			{
-				Rectangle brickRect;
-				brickRect.width = 20, brickRect.height = 75;
-				brickRect.leftX = mGameInfos[i].rPlayer.brickLocs[j].x;
-				brickRect.rightX = brickRect.leftX + brickRect.width;
-				brickRect.topY = mGameInfos[i].rPlayer.brickLocs[j].y;
-				brickRect.bottomY = brickRect.topY + brickRect.height;
-
-				if (doesCollide(ballRect, brickRect))
+				if (mGameInfos[i].rPlayer.bricks[j % 6][j / 6] == true)
 				{
-					mGameInfos[i].ball.xVel *= -1;
-					float direction = mGameInfos[i].ball.xVel;
+					Rectangle brickRect;
+					brickRect.width = 20, brickRect.height = 75;
+					brickRect.leftX = mGameInfos[i].rPlayer.brickLocs[j].x;
+					brickRect.rightX = brickRect.leftX + brickRect.width;
+					brickRect.topY = mGameInfos[i].rPlayer.brickLocs[j].y;
+					brickRect.bottomY = brickRect.topY + brickRect.height;
 
-					float brickMidY = brickRect.topY + brickRect.height / 2;
-					float ballMidY = mGameInfos[i].ball.y + 10;
-
-					float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (75 / 2)));
-					mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
-					mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
-
-					if (direction < 0)
+					if (doesCollide(ballRect, brickRect))
 					{
+						mGameInfos[i].rPlayer.bricks[j % 6][j / 6] = false;
+
 						mGameInfos[i].ball.xVel *= -1;
+						float direction = mGameInfos[i].ball.xVel;
+
+						float brickMidY = brickRect.topY + brickRect.height / 2;
+						float ballMidY = mGameInfos[i].ball.y + 10;
+
+						float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (75 / 2)));
+						mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
+						mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
+
+						if (direction < 0)
+						{
+							mGameInfos[i].ball.xVel *= -1;
+						}
 					}
 				}
 			}
@@ -416,6 +427,18 @@ void Server::initializeGameInfos()
 		{
 			mGameInfos[j].rPlayer.brickLocs[l].x = SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (l / 6);
 			mGameInfos[j].rPlayer.brickLocs[l].y = (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (l % 6);
+		}
+
+		for (unsigned int l = 0; l < mGameInfos[j].lPlayer.bricks.size(); l++)
+		{
+			mGameInfos[j].lPlayer.bricks[l % 6][l / 6] = true;
+			//std::cout << mGameInfos[j].rPlayer.bricks[l % 6][l / 6] << std::endl;
+		}
+
+		for (unsigned int l = 0; l < mGameInfos[j].rPlayer.bricks.size(); l++)
+		{
+			mGameInfos[j].rPlayer.bricks[l % 6][l / 6] = true;
+			//std::cout << mGameInfos[j].rPlayer.bricks[l % 6][l / 6] << std::endl;
 		}
 
 		if (i % 2 == 1) j++;

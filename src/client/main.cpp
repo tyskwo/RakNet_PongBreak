@@ -158,12 +158,38 @@ int main()
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
-			window.draw(playerBricks[i]);
+			if (mpClient->getFirstConnected())
+			{
+				if (mpClient->getGameInfo().lPlayer.bricks[i % 6][i / 6] == true)
+				{
+					window.draw(playerBricks[i]);
+				}
+			}
+			else
+			{
+				if (mpClient->getGameInfo().rPlayer.bricks[i % 6][i / 6] == true)
+				{
+					window.draw(playerBricks[i]);
+				}
+			}
 		}
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
-			window.draw(opponentBricks[i]);
+			if (mpClient->getFirstConnected())
+			{
+				if (mpClient->getGameInfo().rPlayer.bricks[i % 6][i / 6] == true)
+				{
+					window.draw(opponentBricks[i]);
+				}
+			}
+			else
+			{
+				if (mpClient->getGameInfo().lPlayer.bricks[i % 6][i / 6] == true)
+				{
+					window.draw(opponentBricks[i]);
+				}
+			}
 		}
 
 		window.draw(player);
