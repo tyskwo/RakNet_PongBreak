@@ -242,8 +242,8 @@ void Client::getPackets()
 			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
 
 			ObjectState ballState;
-			ballState.mX = gameInfo.ball.x;
-			ballState.mY = gameInfo.ball.y;
+			ballState.mX = gameInfo.ball.x + gameInfo.ball.xVel;
+			ballState.mY = gameInfo.ball.y + gameInfo.ball.yVel;
 
 			ObjectInfo ballInfo;
 			ballInfo.SetState(ballState);
