@@ -118,12 +118,6 @@ bool Server::doesCollide(const Rectangle& rect1, const Rectangle& rect2)
 	bool horizontalCollision = false;
 	bool verticalCollision = false;
 
-	/*if (rect1.leftX < rect2.leftX && rect2.leftX < rect1.rightX) horizontalCollision = true;
-	if (rect1.leftX < rect2.rightX && rect2.rightX < rect1.rightX) horizontalCollision = true;
-
-	if (rect1.topY < rect2.topY && rect2.topY < rect1.bottomY) verticalCollision = true;
-	if (rect1.topY < rect2.bottomY && rect2.bottomY < rect1.bottomY) verticalCollision = false;*/
-
 	if ((rect1.leftX < rect2.rightX && rect1.leftX > rect2.leftX) || (rect1.rightX < rect2.rightX && rect1.rightX > rect2.leftX))
 	{
 		horizontalCollision = true;
@@ -169,27 +163,38 @@ void Server::updateGames()
 
 			if (doesCollide(ballRect, p1PaddleRect))
 			{
-				std::cout << "COLLIDE" << std::endl;
 				mGameInfos[i].ball.xVel *= -1;
+				float direction = mGameInfos[i].ball.xVel;
 
 				float paddleMidY = mGameInfos[i].lPlayer.y + 100 / 2;
 				float ballMidY = mGameInfos[i].ball.y + 10;
 
 				float angle = static_cast<float>((PI / 2) * (abs(paddleMidY - ballMidY) / (100 / 2)));
-				mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0);
-				mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
+				mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
+				mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
+
+				if (direction < 0)
+				{
+					mGameInfos[i].ball.xVel *= -1;
+				}
 			}
 
 			if (doesCollide(ballRect, p2PaddleRect))
 			{
 				mGameInfos[i].ball.xVel *= -1;
+				float direction = mGameInfos[i].ball.xVel;
 
 				float paddleMidY = mGameInfos[i].rPlayer.y + 100 / 2;
 				float ballMidY = mGameInfos[i].ball.y + 10;
 
 				float angle = static_cast<float>((PI / 2) * (abs(paddleMidY - ballMidY) / (100 / 2)));
-				mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0);
-				mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
+				mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
+				mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
+
+				if (direction < 0)
+				{
+					mGameInfos[i].ball.xVel *= -1;
+				}
 			}
 
 			for (unsigned int j = 0; j < mGameInfos[i].lPlayer.brickLocs.size(); j++)
@@ -204,13 +209,47 @@ void Server::updateGames()
 				if (doesCollide(ballRect, brickRect))
 				{
 					mGameInfos[i].ball.xVel *= -1;
+					float direction = mGameInfos[i].ball.xVel;
 
 					float brickMidY = brickRect.topY + brickRect.height / 2;
 					float ballMidY = mGameInfos[i].ball.y + 10;
 
-					float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (100 / 2)));
-					mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0);
-					mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
+					float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (75 / 2)));
+					mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
+					mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
+
+					if (direction < 0)
+					{
+						mGameInfos[i].ball.xVel *= -1;
+					}
+				}
+			}
+
+			for (unsigned int j = 0; j < mGameInfos[i].rPlayer.brickLocs.size(); j++)
+			{
+				Rectangle brickRect;
+				brickRect.width = 20, brickRect.height = 75;
+				brickRect.leftX = mGameInfos[i].rPlayer.brickLocs[j].x;
+				brickRect.rightX = brickRect.leftX + brickRect.width;
+				brickRect.topY = mGameInfos[i].rPlayer.brickLocs[j].y;
+				brickRect.bottomY = brickRect.topY + brickRect.height;
+
+				if (doesCollide(ballRect, brickRect))
+				{
+					mGameInfos[i].ball.xVel *= -1;
+					float direction = mGameInfos[i].ball.xVel;
+
+					float brickMidY = brickRect.topY + brickRect.height / 2;
+					float ballMidY = mGameInfos[i].ball.y + 10;
+
+					float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (75 / 2)));
+					mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0f);
+					mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0f);
+
+					if (direction < 0)
+					{
+						mGameInfos[i].ball.xVel *= -1;
+					}
 				}
 			}
 
@@ -369,7 +408,7 @@ void Server::initializeGameInfos()
 
 		for (unsigned int k = 0; k < mGameInfos[j].lPlayer.brickLocs.size(); k++)
 		{
-			mGameInfos[j].lPlayer.brickLocs[k].x = 10.0f + 40.0f * (i / 6);
+			mGameInfos[j].lPlayer.brickLocs[k].x = 10.0f + 40.0f * (k / 6);
 			mGameInfos[j].lPlayer.brickLocs[k].y = (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (k % 6);
 		}
 
