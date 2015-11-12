@@ -54,11 +54,11 @@ int main()
 
 	for (unsigned int i = 0; i < hlines.size(); i++)
 	{
-		hlines[i] = sf::RectangleShape(sf::Vector2f(SCREEN_WIDTH, 1));
-		vlines[i] = sf::RectangleShape(sf::Vector2f(1, SCREEN_HEIGHT));
+		hlines[i] = sf::RectangleShape(sf::Vector2f(SCREEN_WIDTH, 2));
+		vlines[i] = sf::RectangleShape(sf::Vector2f(2, SCREEN_HEIGHT));
 
-		hlines[i].setFillColor(sf::Color(10, 10, 25));
-		vlines[i].setFillColor(sf::Color(10, 10, 25));
+		hlines[i].setFillColor(sf::Color(10, 10, 25, 40));
+		vlines[i].setFillColor(sf::Color(10, 10, 25, 40));
 	}
 
 	std::array<sf::RectangleShape, 18> playerBricks;
@@ -191,17 +191,17 @@ int main()
 		for (unsigned int i = 0; i < hlines.size(); i++)
 		{
 			float lineY = ball.getPosition().y - 100 * i;
-			float newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * i) + 2);
+			float newY = (hlines[i].getPosition().y - lineY) / (2 * (4 * i) + 2);
 			
 			if (i < 5)
 			{
 				lineY = (ball.getPosition().y + 10) - 100 * i;
-				newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * i) + 2);
+				newY = (hlines[i].getPosition().y - lineY) / (2 * (4 * i) + 2);
 			}
 			else
 			{
 				lineY = (ball.getPosition().y + 10) + 100 * (i - 5);
-				newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * (i - 5)) + 2);
+				newY = (hlines[i].getPosition().y - lineY) / (2 * (4 * (i - 5)) + 2);
 			}
 			
 			hlines[i].setPosition(hlines[i].getPosition().x, hlines[i].getPosition().y - newY);
@@ -210,17 +210,17 @@ int main()
 		for (unsigned int i = 0; i < vlines.size(); i++)
 		{
 			float lineX = (ball.getPosition().x + 10) - 100 * i;
-			float newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * i) + 2);
+			float newX = (vlines[i].getPosition().x - lineX) / (2 * (4 * i) + 2);
 
 			if (i < 5)
 			{
 				lineX = (ball.getPosition().x + 10) - 100 * i;
-				newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * i) + 2);
+				newX = (vlines[i].getPosition().x - lineX) / (2 * (4 * i) + 2);
 			}
 			else
 			{
 				lineX = (ball.getPosition().x + 10) + 100 * (i - 5);
-				newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * (i - 5)) + 2);
+				newX = (vlines[i].getPosition().x - lineX) / (2 * (4 * (i - 5)) + 2);
 			}
 
 			vlines[i].setPosition(vlines[i].getPosition().x - newX, vlines[i].getPosition().y);

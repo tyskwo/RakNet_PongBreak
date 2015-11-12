@@ -267,12 +267,12 @@ void Server::updateGames()
 			if (mGameInfos[i].ball.x < 0)
 			{
 				mGameInfos[i].ball.xVel *= -1;
-				mGameInfos[i].lPlayer.goalsScored++;
+				mGameInfos[i].rPlayer.goalsScored++;
 			}
 			if (mGameInfos[i].ball.x >= 1024 - 20)
 			{
 				mGameInfos[i].ball.xVel *= -1;
-				mGameInfos[i].rPlayer.goalsScored++;
+				mGameInfos[i].lPlayer.goalsScored++;
 			}
 			if (mGameInfos[i].ball.y < 0) mGameInfos[i].ball.yVel *= -1;
 			if (mGameInfos[i].ball.y >= 768 - 20) mGameInfos[i].ball.yVel *= -1;
@@ -422,7 +422,7 @@ void Server::initializeGameInfos()
 		mGameInfos[j].lPlayer.y = 0;
 
 		mGameInfos[j].rPlayer.goalsScored = 0;
-		mGameInfos[j].rPlayer.x = SCREEN_WIDTH - 220.0;
+		mGameInfos[j].rPlayer.x = SCREEN_WIDTH - 220.0f;
 		mGameInfos[j].rPlayer.y = 0;
 
 		for (unsigned int k = 0; k < mGameInfos[j].lPlayer.brickLocs.size(); k++)
