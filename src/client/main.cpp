@@ -66,13 +66,15 @@ int main()
 
 	sf::Text playerScore;
 	sf::Text opponentScore;
-	std::stringstream playerScoreStream;
-	std::stringstream opponentScoreStream;
 
 	sf::Font font;
-	font.loadFromFile("Debug/font.otf");
-	playerScore.setFont(font);
+	if (font.loadFromFile("Debug/font.otf"))
+	{
+		playerScore.setFont(font);
+		opponentScore.setFont(font);
+	}
 	playerScore.setColor(sf::Color(10, 10, 25));
+	opponentScore.setColor(sf::Color(10, 10, 25));
 
 	if (mpClient->getFirstConnected())
 	{
@@ -182,12 +184,12 @@ int main()
 			
 			if (i < 5)
 			{
-				lineY = ball.getPosition().y - 100 * i;
+				lineY = (ball.getPosition().y + 10) - 100 * i;
 				newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * i) + 2);
 			}
 			else
 			{
-				lineY = ball.getPosition().y + 100 * (i - 5);
+				lineY = (ball.getPosition().y + 10) + 100 * (i - 5);
 				newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * (i - 5)) + 2);
 			}
 			
@@ -196,17 +198,17 @@ int main()
 
 		for (unsigned int i = 0; i < vlines.size(); i++)
 		{
-			float lineX = ball.getPosition().x - 100 * i;
+			float lineX = (ball.getPosition().x + 10) - 100 * i;
 			float newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * i) + 2);
 
 			if (i < 5)
 			{
-				lineX = ball.getPosition().x - 100 * i;
+				lineX = (ball.getPosition().x + 10) - 100 * i;
 				newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * i) + 2);
 			}
 			else
 			{
-				lineX = ball.getPosition().x + 100 * (i - 5);
+				lineX = (ball.getPosition().x + 10) + 100 * (i - 5);
 				newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * (i - 5)) + 2);
 			}
 
@@ -216,19 +218,17 @@ int main()
 
 //##############################################UPDATE GOAL TEXT#####################################################
 		//std::cout << mpClient->getGameInfo().lPlayer.goalsScored << " " << mpClient->getGameInfo().rPlayer.goalsScored << std::endl;
+		
 		if (mpClient->getFirstConnected())
 		{
-			playerScoreStream << mpClient->getGameInfo().lPlayer.goalsScored;
-			opponentScoreStream << mpClient->getGameInfo().rPlayer.goalsScored;
+			playerScore.setString(std::to_string(mpClient->getGameInfo().lPlayer.goalsScored));
+			opponentScore.setString(std::to_string(mpClient->getGameInfo().rPlayer.goalsScored));
 		}
 		else
 		{
-			playerScoreStream << mpClient->getGameInfo().rPlayer.goalsScored;
-			opponentScoreStream << mpClient->getGameInfo().lPlayer.goalsScored;
-		}
-
-		playerScore.setString(playerScoreStream.str());
-		opponentScore.setString(opponentScoreStream.str());
+			playerScore.setString(std::to_string(mpClient->getGameInfo().rPlayer.goalsScored));
+			opponentScore.setString(std::to_string(mpClient->getGameInfo().lPlayer.goalsScored));
+		}		
 
 
 
