@@ -45,6 +45,9 @@ int main()
 	sf::RectangleShape opponent(sf::Vector2f(20, 100));
 	sf::RectangleShape ball(sf::Vector2f(20, 20));
 
+	std::array<sf::RectangleShape, 18> playerBricks;
+	std::array<sf::RectangleShape, 18> opponentBricks;
+
 	if (mpClient->getFirstConnected())
 	{
 		player.setFillColor(sf::Color(200, 10, 10));
@@ -52,6 +55,18 @@ int main()
 
 		opponent.setFillColor(sf::Color(10, 10, 200));
 		opponent.setPosition(sf::Vector2f(1024.0 - 200.0 - 20.0, 0.0));
+
+		for (unsigned int i = 0; i < playerBricks.size(); i++)
+		{
+			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
+			playerBricks[i].setPosition(10.0 + 40.0 * (i / 6), (768.0 / 2 - 100.0 * 3) + 100.0 * (i % 6));
+		}
+
+		for (unsigned int i = 0; i < opponentBricks.size(); i++)
+		{
+			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
+			opponentBricks[i].setPosition(1024.0 - 10.0 - 20.0 - 40.0 * (i / 6), (768.0 / 2 - 100.0 * 3) + 100.0 * (i % 6));
+		}
 	}
 	else
 	{
@@ -92,7 +107,7 @@ int main()
 		}
 
 //##############################################INTERPOLATE###########################################################
-		/*ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
+		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
 		if (mpClient->getFirstConnected())
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
@@ -100,7 +115,7 @@ int main()
 		else
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
-		}*/
+		}
 
 		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
 		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
@@ -124,6 +139,17 @@ int main()
 
 //################################################CLEAR AND DRAW######################################################
 		window.clear(sf::Color::Black);
+
+		for (unsigned int i = 0; i < playerBricks.size(); i++)
+		{
+			window.draw(playerBricks[i]);
+		}
+
+		for (unsigned int i = 0; i < opponentBricks.size(); i++)
+		{
+			window.draw(opponentBricks[i]);
+		}
+
 		window.draw(player);
 		window.draw(opponent);
 		window.draw(ball);

@@ -34,7 +34,7 @@ ObjectInfo ObjectInfoBuffer::GetNext(second aDeltaT) const
 		mCurrent     = mStarting;
 		mTargets.erase(mTargets.begin());
 
-		std::cout << mTargets.size() << std::endl;
+		//std::cout << mTargets.size() << std::endl;
 		return mCurrent;
 	}
 
