@@ -292,7 +292,7 @@ void Client::getPackets()
 			{
 				ObjectState opponentState;
 				opponentState.mX = gameInfo.rPlayer.x;
-				opponentState.mY = gameInfo.rPlayer.y;
+				opponentState.mY = gameInfo.rPlayer.y + gameInfo.rPlayer.velocity;
 				ObjectInfo opponentInfo;
 				opponentInfo.SetState(opponentState);
 
@@ -314,7 +314,7 @@ void Client::getPackets()
 			{
 				ObjectState opponentState;
 				opponentState.mX = gameInfo.lPlayer.x;
-				opponentState.mY = gameInfo.lPlayer.y;
+				opponentState.mY = gameInfo.lPlayer.y + gameInfo.lPlayer.velocity;
 				ObjectInfo opponentInfo;
 				opponentInfo.SetState(opponentState);
 
