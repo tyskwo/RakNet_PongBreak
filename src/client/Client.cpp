@@ -238,6 +238,9 @@ void Client::getPackets()
 			mGameInfo.lPlayer.bricks = gameInfo.lPlayer.bricks;
 			mGameInfo.rPlayer.bricks = gameInfo.rPlayer.bricks;
 
+			mGameInfo.lPlayer.goalsScored = gameInfo.lPlayer.goalsScored;
+			mGameInfo.rPlayer.goalsScored = gameInfo.rPlayer.goalsScored;
+
 			if (getFirstConnected())
 			{
 				ObjectState opponentState;

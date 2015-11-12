@@ -52,6 +52,13 @@ int main()
 	std::array<sf::RectangleShape, 18> playerBricks;
 	std::array<sf::RectangleShape, 18> opponentBricks;
 
+	sf::Text playerScore;
+	sf::Text opponentScore;
+	std::stringstream playerScoreStream;
+	std::stringstream opponentScoreStream;
+
+	//playerScore.setFont(sf::Font::)
+
 	if (mpClient->getFirstConnected())
 	{
 		player.setFillColor(sf::Color(200, 10, 10));
@@ -71,6 +78,11 @@ int main()
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3.0f) + 100.0f * (i % 6));
 		}
+
+		playerScore.setString("0");
+		playerScore.setPosition(50.0f, 25.0f);
+		opponentScore.setString("0");
+		opponentScore.setPosition(SCREEN_WIDTH - 50.0f, 25.0f);
 	}
 	else
 	{
@@ -91,6 +103,11 @@ int main()
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (i % 6));
 		}
+
+		playerScore.setString("0");
+		playerScore.setPosition(SCREEN_WIDTH - 50.0f, 25.0f);
+		opponentScore.setString("0");
+		opponentScore.setPosition(50.0f, 25.0f);
 	}
 
 	ball.setFillColor(sf::Color::Cyan);
@@ -138,6 +155,22 @@ int main()
 		//ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
 
 
+//##############################################UPDATE GOAL TEXT#####################################################
+		//std::cout << mpClient->getGameInfo().lPlayer.goalsScored << " " << mpClient->getGameInfo().rPlayer.goalsScored << std::endl;
+		if (mpClient->getFirstConnected())
+		{
+			playerScoreStream << mpClient->getGameInfo().lPlayer.goalsScored;
+			opponentScoreStream << mpClient->getGameInfo().rPlayer.goalsScored;
+		}
+		else
+		{
+			playerScoreStream << mpClient->getGameInfo().rPlayer.goalsScored;
+			opponentScoreStream << mpClient->getGameInfo().lPlayer.goalsScored;
+		}
+
+		playerScore.setString(playerScoreStream.str());
+		opponentScore.setString(opponentScoreStream.str());
+
 
 
 //###############################################WINDOW CLOSE#########################################################
@@ -173,7 +206,6 @@ int main()
 				}
 			}
 		}
-		std::cout << std::endl;
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
@@ -196,6 +228,8 @@ int main()
 		window.draw(player);
 		window.draw(opponent);
 		window.draw(ball);
+		window.draw(playerScore);
+		window.draw(opponentScore);
 
 		window.display();
 	}
