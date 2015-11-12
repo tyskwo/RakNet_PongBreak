@@ -241,6 +241,8 @@ void Client::getPackets()
 			mGameInfo.lPlayer.goalsScored = gameInfo.lPlayer.goalsScored;
 			mGameInfo.rPlayer.goalsScored = gameInfo.rPlayer.goalsScored;
 
+			mGameInfo.ball.collided = gameInfo.ball.collided;
+
 			if (getFirstConnected())
 			{
 				ObjectState opponentState;

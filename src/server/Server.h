@@ -47,6 +47,7 @@ struct Ball
 {
 	float x, y;
 	float xVel, yVel;
+	bool collided;
 };
 //#pragma pack(pop)
 

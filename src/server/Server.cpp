@@ -133,6 +133,16 @@ bool Server::doesCollide(const Rectangle& rect1, const Rectangle& rect2)
 
 void Server::updateGames()
 {
+	Rectangle ballRect;
+	ballRect.width = 20, ballRect.height = 20;
+	Rectangle p1PaddleRect;
+	p1PaddleRect.width = 20, p1PaddleRect.height = 100;
+	Rectangle p2PaddleRect;
+	p2PaddleRect.width = 20, p2PaddleRect.height = 100;
+
+	bool stillColliding = false;
+
+
 	for (unsigned int i = 0; i < mGameInfos.size(); i++)
 	{
 		if (mGameInfos[i].started)
@@ -140,78 +150,86 @@ void Server::updateGames()
 			mGameInfos[i].ball.x += mGameInfos[i].ball.xVel;
 			mGameInfos[i].ball.y += mGameInfos[i].ball.yVel;
 
-			Rectangle ballRect;
-			ballRect.width = 20, ballRect.height = 20;
-			ballRect.leftX = mGameInfos[i].ball.x;
-			ballRect.rightX = mGameInfos[i].ball.x + ballRect.width;
-			ballRect.topY = mGameInfos[i].ball.y;
+			
+			ballRect.leftX   = mGameInfos[i].ball.x;
+			ballRect.rightX  = mGameInfos[i].ball.x + ballRect.width;
+			ballRect.topY    = mGameInfos[i].ball.y;
 			ballRect.bottomY = mGameInfos[i].ball.y + ballRect.height;
 
-			Rectangle p1PaddleRect;
-			p1PaddleRect.width = 20, p1PaddleRect.height = 100;
-			p1PaddleRect.leftX = mGameInfos[i].lPlayer.x;
-			p1PaddleRect.rightX = mGameInfos[i].lPlayer.x + p1PaddleRect.width;
-			p1PaddleRect.topY = mGameInfos[i].lPlayer.y;
+			
+			p1PaddleRect.leftX   = mGameInfos[i].lPlayer.x;
+			p1PaddleRect.rightX  = mGameInfos[i].lPlayer.x + p1PaddleRect.width;
+			p1PaddleRect.topY    = mGameInfos[i].lPlayer.y;
 			p1PaddleRect.bottomY = mGameInfos[i].lPlayer.y + p1PaddleRect.height;
 
-			Rectangle p2PaddleRect;
-			p2PaddleRect.width = 20, p2PaddleRect.height = 100;
-			p2PaddleRect.leftX = mGameInfos[i].rPlayer.x;
-			p2PaddleRect.rightX = mGameInfos[i].rPlayer.x + p2PaddleRect.width;
-			p2PaddleRect.topY = mGameInfos[i].rPlayer.y;
+			
+			p2PaddleRect.leftX   = mGameInfos[i].rPlayer.x;
+			p2PaddleRect.rightX  = mGameInfos[i].rPlayer.x + p2PaddleRect.width;
+			p2PaddleRect.topY    = mGameInfos[i].rPlayer.y;
 			p2PaddleRect.bottomY = mGameInfos[i].rPlayer.y + p2PaddleRect.height;
+
+
+
 
 			if (doesCollide(ballRect, p1PaddleRect))
 			{
-				//mGameInfos[i].ball.xVel *= -1;
-				float direction = mGameInfos[i].ball.xVel;
-
-				float paddleMidY = mGameInfos[i].lPlayer.y + 100 / 2;
-				float ballMidY = mGameInfos[i].ball.y + 10;
-
-				float angle = static_cast<float>((5.0f * PI / 12.0f) * ((paddleMidY - ballMidY) / (75.0f / 2.0f)));
-				if (direction > 0)
+				if (mGameInfos[i].ball.collided)
 				{
-					mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
-					mGameInfos[i].ball.yVel = static_cast<float>(sin(angle) * 5.0f);
+					stillColliding = true;
 				}
 				else
 				{
-					mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-					mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
-				}
+					float direction = mGameInfos[i].ball.xVel;
 
-				/*if (direction < 0)
-				{
-					mGameInfos[i].ball.xVel *= -1;
-				}*/
+					float paddleMidY = mGameInfos[i].lPlayer.y + 100 / 2;
+					float ballMidY = mGameInfos[i].ball.y + 10;
+
+					float angle = static_cast<float>((3.0f * PI / 12.0f) * ((paddleMidY - ballMidY) / (75.0f / 2.0f)));
+					if (direction > 0)
+					{
+						mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+					}
+					else
+					{
+						mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+					}
+
+					mGameInfos[i].ball.collided = true;
+				}
 			}
 
 			if (doesCollide(ballRect, p2PaddleRect))
 			{
-				//mGameInfos[i].ball.xVel *= -1;
-				float direction = mGameInfos[i].ball.xVel;
-
-				float paddleMidY = mGameInfos[i].rPlayer.y + 100 / 2;
-				float ballMidY = mGameInfos[i].ball.y + 10;
-
-				float angle = static_cast<float>((5.0f * PI / 12.0f) * ((paddleMidY - ballMidY) / (75.0f / 2.0f)));
-				if (direction > 0)
+				if (mGameInfos[i].ball.collided)
 				{
-					mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
-					mGameInfos[i].ball.yVel = static_cast<float>(sin(angle) * 5.0f);
+					stillColliding = true;
 				}
 				else
 				{
-					mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-					mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
-				}
+					float direction = mGameInfos[i].ball.xVel;
 
-				/*if (direction < 0)
-				{
-					mGameInfos[i].ball.xVel *= -1;
-				}*/
+					float paddleMidY = mGameInfos[i].rPlayer.y + 100 / 2;
+					float ballMidY = mGameInfos[i].ball.y + 10;
+
+					float angle = static_cast<float>((3.0f * PI / 12.0f) * ((paddleMidY - ballMidY) / (75.0f / 2.0f)));
+					if (direction > 0)
+					{
+						mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+					}
+					else
+					{
+						mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+					}
+
+					mGameInfos[i].ball.collided = true;
+				}
 			}
+
+
 
 
 			for (unsigned int j = 0; j < mGameInfos[i].lPlayer.brickLocs.size(); j++)
@@ -227,35 +245,40 @@ void Server::updateGames()
 
 					if (doesCollide(ballRect, brickRect))
 					{
-						mGameInfos[i].rPlayer.goalsScored++;
-
-						mGameInfos[i].lPlayer.bricks[j % 6][j / 6] = false;
-
-						//mGameInfos[i].ball.xVel *= -1;
-						float direction = mGameInfos[i].ball.xVel;
-
-						float brickMidY = brickRect.topY + brickRect.height / 2;
-						float ballMidY = mGameInfos[i].ball.y + 10;
-
-						float angle = static_cast<float>((5.0f * PI / 12.0f) * ((brickMidY - ballMidY) / (75.0f / 2.0f)));
-						if (direction > 0)
+						if (mGameInfos[i].ball.collided)
 						{
-							mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
-							mGameInfos[i].ball.yVel = static_cast<float>(sin(angle) * 5.0f);
+							stillColliding = true;
 						}
 						else
 						{
-							mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-							mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
-						}
+							mGameInfos[i].rPlayer.goalsScored++;
+							mGameInfos[i].lPlayer.bricks[j % 6][j / 6] = false;
 
-						/*if (direction < 0)
-						{
-							mGameInfos[i].ball.xVel *= -1;
-						}*/
+							float direction = mGameInfos[i].ball.xVel;
+
+							float brickMidY = brickRect.topY + brickRect.height / 2;
+							float ballMidY = mGameInfos[i].ball.y + 10;
+
+							float angle = static_cast<float>((3.0f * PI / 12.0f) * ((brickMidY - ballMidY) / (75.0f / 2.0f)));
+							if (direction > 0)
+							{
+								mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
+								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+							}
+							else
+							{
+								mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
+								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+							}
+
+							mGameInfos[i].ball.collided = true;
+						}
 					}
 				}
 			}
+
+
+
 
 			for (unsigned int j = 0; j < mGameInfos[i].rPlayer.brickLocs.size(); j++)
 			{
@@ -270,48 +293,69 @@ void Server::updateGames()
 
 					if (doesCollide(ballRect, brickRect))
 					{
-						mGameInfos[i].lPlayer.goalsScored++;
-
-						mGameInfos[i].rPlayer.bricks[j % 6][j / 6] = false;
-
-						//mGameInfos[i].ball.xVel *= -1;
-						float direction = mGameInfos[i].ball.xVel;
-
-						float brickMidY = brickRect.topY + brickRect.height / 2;
-						float ballMidY = mGameInfos[i].ball.y + 10;
-
-						float angle = static_cast<float>((5.0f * PI / 12.0f) * ((brickMidY - ballMidY) / (75.0f / 2.0f)));
-						if (direction > 0)
+						if (mGameInfos[i].ball.collided)
 						{
-							mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
-							mGameInfos[i].ball.yVel = static_cast<float>(sin(angle) * 5.0f);
+							stillColliding = true;
 						}
 						else
 						{
-							mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-							mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
-						}
+							mGameInfos[i].lPlayer.goalsScored++;
+							mGameInfos[i].rPlayer.bricks[j % 6][j / 6] = false;
 
-						/*if (direction < 0)
-						{
-							mGameInfos[i].ball.xVel *= -1;
-						}*/
+							float direction = mGameInfos[i].ball.xVel;
+
+							float brickMidY = brickRect.topY + brickRect.height / 2;
+							float ballMidY = mGameInfos[i].ball.y + 10;
+
+							float angle = static_cast<float>((3.0f * PI / 12.0f) * ((brickMidY - ballMidY) / (75.0f / 2.0f)));
+							if (direction > 0)
+							{
+								mGameInfos[i].ball.xVel = -static_cast<float>(cos(angle) * 5.0f);
+								mGameInfos[i].ball.yVel = -static_cast<float>(-sin(angle) * 5.0f);
+							}
+							else
+							{
+								mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
+								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+							}
+
+							mGameInfos[i].ball.collided = true;
+						}
 					}
 				}
 			}
+
+
+
 
 			if (mGameInfos[i].ball.x < 0)
 			{
 				mGameInfos[i].ball.xVel *= -1;
 				mGameInfos[i].rPlayer.goalsScored += 3;
+				mGameInfos[i].ball.collided = true;
 			}
 			if (mGameInfos[i].ball.x >= 1024 - 20)
 			{
 				mGameInfos[i].ball.xVel *= -1;
 				mGameInfos[i].lPlayer.goalsScored += 3;
+				mGameInfos[i].ball.collided = true;
 			}
-			if (mGameInfos[i].ball.y < 0) mGameInfos[i].ball.yVel *= -1;
-			if (mGameInfos[i].ball.y >= 768 - 20) mGameInfos[i].ball.yVel *= -1;
+			if (mGameInfos[i].ball.y < 0)
+			{
+				mGameInfos[i].ball.yVel *= -1;
+				mGameInfos[i].ball.collided = true;
+			}
+			if (mGameInfos[i].ball.y >= 768 - 20)
+			{
+				mGameInfos[i].ball.yVel *= -1;
+				mGameInfos[i].ball.collided = true;
+			}
+
+
+			if (!stillColliding)
+			{
+				mGameInfos[i].ball.collided = false;
+			}
 		}
 	}
 }
@@ -452,6 +496,7 @@ void Server::initializeGameInfos()
 		mGameInfos[j].ball.y = HALF_SCREEN_HEIGHT - 10;
 		mGameInfos[j].ball.xVel = 7;
 		mGameInfos[j].ball.yVel = 0;
+		mGameInfos[j].ball.collided = false;
 
 		mGameInfos[j].lPlayer.goalsScored = 0;
 		mGameInfos[j].lPlayer.x = 0;
