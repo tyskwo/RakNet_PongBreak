@@ -8,7 +8,7 @@ ObjectInfo::ObjectInfo(ObjectState state)
 {}
 
 ObjectInfoBuffer::ObjectInfoBuffer()
-	: mTotalTimeToInterpolate(1000.0 / 5.0)
+	: mTotalTimeToInterpolate(1000.0 / 10.0)
 , mCurrentTime(0)
 {}
 

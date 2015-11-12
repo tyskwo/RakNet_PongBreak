@@ -183,16 +183,12 @@ int main()
 		{
 			mpClient->setBallPosition(ball.getPosition().x + mpClient->getGameInfo().ball.xVel, ball.getPosition().y + mpClient->getGameInfo().ball.yVel);
 			ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
-
-			std::cout << "DEAD" << std::endl;
 		}
 		else if (mpClient->getGameInfo().started)
 		{
-
 			ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
 			ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
-
-			std::cout << "INTERPOLATE" << std::endl;
+			mpClient->setBallPosition(binfo.GetState().mX, binfo.GetState().mY);
 		}
 
 		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());

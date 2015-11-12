@@ -249,8 +249,8 @@ void Client::getPackets()
 			ballInfo.SetState(ballState);
 
 			ObjectState ballStartState;
-			ballStartState.mX = mGameInfo.ball.x + mGameInfo.ball.xVel;
-			ballStartState.mY = mGameInfo.ball.y + mGameInfo.ball.yVel;
+			ballStartState.mX = mGameInfo.ball.x;
+			ballStartState.mY = mGameInfo.ball.y;
 
 			ObjectInfo ballStartInfo;
 			ballStartInfo.SetState(ballStartState);
