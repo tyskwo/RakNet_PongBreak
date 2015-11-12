@@ -98,6 +98,8 @@ public:
 
 	const int& getNumBallTargets() { return mBallInterpolation.GetNumTargets(); };
 
+	void setBallPosition(float x, float y);
+
 private:
 	//pointer to client object
 	RakNet::RakPeerInterface* mpClient;

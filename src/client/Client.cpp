@@ -227,16 +227,19 @@ void Client::getPackets()
 		{
 			GameInfo gameInfo = *reinterpret_cast<GameInfo*>(mpPacket->data);
 
-			mGameInfo.ball.x = gameInfo.ball.x;
-			mGameInfo.ball.y = gameInfo.ball.y;
-
 			ObjectState ballState;
 			ballState.mX = gameInfo.ball.x;
 			ballState.mY = gameInfo.ball.y;
 
 			ObjectInfo ballInfo;
 			ballInfo.SetState(ballState);
-			mBallInterpolation.AddTarget(ballInfo);
+
+			if (mGameInfo.ball.x != gameInfo.ball.x && mGameInfo.ball.y != gameInfo.ball.y)
+			{
+				mBallInterpolation.AddTarget(ballInfo);
+			}
+			mGameInfo.ball.xVel = gameInfo.ball.xVel;
+			mGameInfo.ball.yVel = gameInfo.ball.yVel;
 
 			mGameInfo.lPlayer.bricks = gameInfo.lPlayer.bricks;
 			mGameInfo.rPlayer.bricks = gameInfo.rPlayer.bricks;
@@ -245,6 +248,8 @@ void Client::getPackets()
 			mGameInfo.rPlayer.goalsScored = gameInfo.rPlayer.goalsScored;
 
 			mGameInfo.ball.collided = gameInfo.ball.collided;
+
+			mGameInfo.started = gameInfo.started;
 
 			if (getFirstConnected())
 			{
@@ -295,4 +300,11 @@ void Client::sendGameStart()
 {
 	int mID = ID_START_GAME;
 	mpClient->Send((const char*)&mID, sizeof(mID), HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+
+void Client::setBallPosition(float x, float y)
+{
+	mGameInfo.ball.x = x;
+	mGameInfo.ball.y = y;
 }

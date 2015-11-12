@@ -70,14 +70,6 @@ int main()
 
 	sf::Text playerScore;
 	sf::Text opponentScore;
-
-	sf::Vector2f ballVel;
-	sf::Vector2f prevBallPos;
-	sf::Vector2f currBallPos;
-	currBallPos.x = mpClient->getGameInfo().ball.x;
-	currBallPos.y = mpClient->getGameInfo().ball.y;
-	prevBallPos.x = currBallPos.x;
-	prevBallPos.y = currBallPos.y;
 	
 
 	sf::Font font;
@@ -93,10 +85,10 @@ int main()
 	if (mpClient->getFirstConnected())
 	{
 		player.setFillColor(sf::Color(200, 10, 10));
-		player.setPosition(sf::Vector2f(200.0, 0.0));
+		player.setPosition(sf::Vector2f(200.0, HALF_SCREEN_HEIGHT - 50.0f));
 
 		opponent.setFillColor(sf::Color(10, 10, 200));
-		opponent.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0f - 20.0f, 0.0f));
+		opponent.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0f - 20.0f, HALF_SCREEN_HEIGHT - 50.0f));
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
@@ -125,10 +117,10 @@ int main()
 	else
 	{
 		player.setFillColor(sf::Color(10, 10, 200));
-		player.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0f - 20.0f, 0.0f));
+		player.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0f - 20.0f, HALF_SCREEN_HEIGHT - 50.0f));
 
 		opponent.setFillColor(sf::Color(200, 10, 10));
-		opponent.setPosition(sf::Vector2f(200.0, 0.0));
+		opponent.setPosition(sf::Vector2f(200.0, HALF_SCREEN_HEIGHT - 50.0f));
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
@@ -158,7 +150,7 @@ int main()
 	ball.setFillColor(sf::Color(10, 10, 25));
 	ball.setPosition(HALF_SCREEN_WIDTH - 10, HALF_SCREEN_HEIGHT - 10);
 
-	float yPos = 0.0;
+	float yPos = HALF_SCREEN_HEIGHT - 50.0f;
 
 
 
@@ -187,7 +179,19 @@ int main()
 		}
 
 //##############################################INTERPOLATE###########################################################
-		/*ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
+		if (mpClient->getNumBallTargets() < 1 && mpClient->getGameInfo().started)
+		{
+			mpClient->setBallPosition(ball.getPosition().x + mpClient->getGameInfo().ball.xVel, ball.getPosition().y + mpClient->getGameInfo().ball.yVel);
+			ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
+		}
+		else if (mpClient->getGameInfo().started)
+		{
+
+			ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
+			ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
+		}
+
+		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
 		if (mpClient->getFirstConnected())
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
@@ -195,36 +199,6 @@ int main()
 		else
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
-		}
-
-		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
-		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);*/
-		//ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
-		prevBallPos.x = currBallPos.x;
-		prevBallPos.y = currBallPos.y;
-		currBallPos.x = mpClient->getGameInfo().ball.x;
-		currBallPos.y = mpClient->getGameInfo().ball.y;
-		
-		if (mpClient->getNumBallTargets() < 1)
-		{
-			ballVel.x = currBallPos.x - prevBallPos.x;
-			ballVel.y = currBallPos.y - prevBallPos.y;
-			ball.setPosition(ball.getPosition().x + ballVel.x, ball.getPosition().y + ballVel.y);
-		}
-		else
-		{
-			ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
-			if (mpClient->getFirstConnected())
-			{
-				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
-			}
-			else
-			{
-				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
-			}
-
-			ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
-			//ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
 		}
 		
 			
