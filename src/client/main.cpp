@@ -88,25 +88,25 @@ int main()
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			playerBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			playerBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT + 25.0f - 125.0f * 3.0f) + 125.0f * (i % 6));
 			playerBricks[i].setFillColor(sf::Color(200, 10, 10, 100));
 		}
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT + 25.0f - 125.0f * 3.0f) + 125.0f * (i % 6));
 			opponentBricks[i].setFillColor(sf::Color(10, 10, 200, 100));
 		}
 
 		playerScore.setString("0");
 		playerScore.setOrigin(playerScore.getLocalBounds().width / 2.0f, playerScore.getLocalBounds().height / 2.0f);
-		playerScore.setPosition(SCREEN_WIDTH / 4, HALF_SCREEN_HEIGHT);
+		playerScore.setPosition(SCREEN_WIDTH / 4, HALF_SCREEN_HEIGHT + HALF_SCREEN_HEIGHT / 4);
 		playerScore.setColor(sf::Color(200, 10, 10, 50));
 
 		opponentScore.setString("0");
 		opponentScore.setOrigin(opponentScore.getLocalBounds().width / 2.0f, opponentScore.getLocalBounds().height / 2.0f);
-		opponentScore.setPosition(SCREEN_WIDTH / 4 * 3, HALF_SCREEN_HEIGHT);
+		opponentScore.setPosition(SCREEN_WIDTH / 4 * 3, HALF_SCREEN_HEIGHT + HALF_SCREEN_HEIGHT / 4);
 		opponentScore.setColor(sf::Color(10, 10, 200, 50));
 	}
 	else
@@ -120,25 +120,25 @@ int main()
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			opponentBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			opponentBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT + 25.0f - 125.0f * 3.0f) + 125.0f * (i % 6));
 			opponentBricks[i].setFillColor(sf::Color(200, 10, 10, 100));
 		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT + 25.0f - 125.0f * 3.0f) + 125.0f * (i % 6));
 			playerBricks[i].setFillColor(sf::Color(10, 10, 200, 100));
 		}
 
 		playerScore.setString("0");
 		playerScore.setOrigin(playerScore.getLocalBounds().width / 2.0f, playerScore.getLocalBounds().height / 2.0f);
-		playerScore.setPosition(SCREEN_WIDTH / 4 * 3, HALF_SCREEN_HEIGHT);
+		playerScore.setPosition(SCREEN_WIDTH / 4 * 3, HALF_SCREEN_HEIGHT + HALF_SCREEN_HEIGHT / 4);
 		playerScore.setColor(sf::Color(10, 10, 200, 50));
 
 		opponentScore.setString("0");
 		opponentScore.setOrigin(opponentScore.getLocalBounds().width / 2.0f, opponentScore.getLocalBounds().height / 2.0f);
-		opponentScore.setPosition(SCREEN_WIDTH / 4, HALF_SCREEN_HEIGHT);
+		opponentScore.setPosition(SCREEN_WIDTH / 4, HALF_SCREEN_HEIGHT + HALF_SCREEN_HEIGHT / 4);
 		opponentScore.setColor(sf::Color(200, 10, 10, 50));
 	}
 
