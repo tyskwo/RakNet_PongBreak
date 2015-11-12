@@ -19,6 +19,10 @@ add_custom_command(TARGET Server PRE_BUILD
  COMMAND ${CMAKE_COMMAND} -E copy_directory
  ${CMAKE_SOURCE_DIR}/3rdParty/bin $<TARGET_FILE_DIR:Server>)
 
+add_custom_command(TARGET Client PRE_BUILD
+ COMMAND ${CMAKE_COMMAND} -E copy_directory
+ ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:Client>)
+
 set(DEP_LIBS
 	sfml-system
 	sfml-graphics

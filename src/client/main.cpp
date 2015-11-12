@@ -70,8 +70,9 @@ int main()
 	std::stringstream opponentScoreStream;
 
 	sf::Font font;
-	font.loadFromFile("assets/font.otf");
+	font.loadFromFile("Debug/font.otf");
 	playerScore.setFont(font);
+	playerScore.setColor(sf::Color(10, 10, 25));
 
 	if (mpClient->getFirstConnected())
 	{
