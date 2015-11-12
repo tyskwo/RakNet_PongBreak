@@ -49,6 +49,15 @@ int main()
 	sf::RectangleShape opponent(sf::Vector2f(20, 100));
 	sf::RectangleShape ball(sf::Vector2f(20, 20));
 
+	std::array<sf::RectangleShape, 10> hlines;
+	std::array<sf::RectangleShape, 10> vlines;
+
+	for (unsigned int i = 0; i < hlines.size(); i++)
+	{
+		hlines[i] = sf::RectangleShape(sf::Vector2f(SCREEN_WIDTH, 1));
+		vlines[i] = sf::RectangleShape(sf::Vector2f(1, SCREEN_HEIGHT));
+	}
+
 	std::array<sf::RectangleShape, 18> playerBricks;
 	std::array<sf::RectangleShape, 18> opponentBricks;
 
@@ -156,6 +165,44 @@ int main()
 		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
 		//ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
 
+		for (unsigned int i = 0; i < hlines.size(); i++)
+		{
+			float lineY = ball.getPosition().y - 100 * i;
+			float newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * i) + 2);
+			
+			if (i < 5)
+			{
+				lineY = ball.getPosition().y - 100 * i;
+				newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * i) + 2);
+			}
+			else
+			{
+				lineY = ball.getPosition().y + 100 * (i - 5);
+				newY = (hlines[i].getPosition().y - lineY) / (2 * (2 * (i - 5)) + 2);
+			}
+			
+			hlines[i].setPosition(hlines[i].getPosition().x, hlines[i].getPosition().y - newY);
+		}
+
+		for (unsigned int i = 0; i < vlines.size(); i++)
+		{
+			float lineX = ball.getPosition().x - 100 * i;
+			float newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * i) + 2);
+
+			if (i < 5)
+			{
+				lineX = ball.getPosition().x - 100 * i;
+				newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * i) + 2);
+			}
+			else
+			{
+				lineX = ball.getPosition().x + 100 * (i - 5);
+				newX = (vlines[i].getPosition().x - lineX) / (2 * (2 * (i - 5)) + 2);
+			}
+
+			vlines[i].setPosition(vlines[i].getPosition().x - newX, vlines[i].getPosition().y);
+		}
+
 
 //##############################################UPDATE GOAL TEXT#####################################################
 		//std::cout << mpClient->getGameInfo().lPlayer.goalsScored << " " << mpClient->getGameInfo().rPlayer.goalsScored << std::endl;
@@ -190,6 +237,12 @@ int main()
 
 //################################################CLEAR AND DRAW######################################################
 		window.clear(sf::Color::Black);
+
+		for (unsigned int i = 0; i < vlines.size(); i++)
+		{
+			window.draw(hlines[i]);
+			window.draw(vlines[i]);
+		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
