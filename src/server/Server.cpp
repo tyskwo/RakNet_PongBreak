@@ -428,13 +428,13 @@ void Server::initializeGameInfos()
 		for (unsigned int k = 0; k < mGameInfos[j].lPlayer.brickLocs.size(); k++)
 		{
 			mGameInfos[j].lPlayer.brickLocs[k].x = 10.0f + 40.0f * (k / 6);
-			mGameInfos[j].lPlayer.brickLocs[k].y = (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (k % 6);
+			mGameInfos[j].lPlayer.brickLocs[k].y = (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (k % 6);
 		}
 
 		for (unsigned int l = 0; l < mGameInfos[j].rPlayer.brickLocs.size(); l++)
 		{
 			mGameInfos[j].rPlayer.brickLocs[l].x = SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (l / 6);
-			mGameInfos[j].rPlayer.brickLocs[l].y = (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (l % 6);
+			mGameInfos[j].rPlayer.brickLocs[l].y = (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (l % 6);
 		}
 
 		for (unsigned int l = 0; l < mGameInfos[j].lPlayer.brickLocs.size(); l++)

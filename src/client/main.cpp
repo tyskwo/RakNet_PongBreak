@@ -70,13 +70,13 @@ int main()
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			playerBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3.0f) + 100.0f * (i % 6));
+			playerBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
 		}
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3.0f) + 100.0f * (i % 6));
+			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
 		}
 
 		playerScore.setString("0");
@@ -95,13 +95,13 @@ int main()
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			opponentBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3.0f) + 100.0f * (i % 6));
+			opponentBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
 		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (i % 6));
+			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
 		}
 
 		playerScore.setString("0");
@@ -126,10 +126,12 @@ int main()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
 			yPos -= 5.0;
+			if (yPos <= 0) yPos = 0;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
 			yPos += 5.0;
+			if (yPos >= SCREEN_HEIGHT - player.getSize().y) yPos = SCREEN_HEIGHT - player.getSize().y;
 		}
 		player.setPosition(player.getPosition().x, yPos);
 		mpClient->setPaddleLoc(player.getPosition().x, yPos);
