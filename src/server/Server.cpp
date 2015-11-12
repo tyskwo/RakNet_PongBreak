@@ -33,6 +33,8 @@ Server::~Server()
 
 void Server::init(const char* serverPort)
 {
+	
+
 	mpServer = RakNet::RakPeerInterface::GetInstance();
 
 	mpServer->SetTimeoutTime(30000, RakNet::UNASSIGNED_SYSTEM_ADDRESS);
@@ -73,12 +75,6 @@ void Server::init(const char* serverPort)
 	mNumGames = 0;
 
 	mpTimer = new Timer();
-	
-	for (unsigned int i = 0; i < mGameInfos.size(); i++)
-	{
-		mGameInfos[i].ball.x = 400, mGameInfos[i].ball.y = 400;
-		mGameInfos[i].ball.xVel = -30, mGameInfos[i].ball.yVel = 0;
-	}
 }
 
 
@@ -122,11 +118,21 @@ bool Server::doesCollide(const Rectangle& rect1, const Rectangle& rect2)
 	bool horizontalCollision = false;
 	bool verticalCollision = false;
 
-	if (rect1.leftX < rect2.leftX && rect2.leftX < rect1.rightX) horizontalCollision = true;
+	/*if (rect1.leftX < rect2.leftX && rect2.leftX < rect1.rightX) horizontalCollision = true;
 	if (rect1.leftX < rect2.rightX && rect2.rightX < rect1.rightX) horizontalCollision = true;
 
 	if (rect1.topY < rect2.topY && rect2.topY < rect1.bottomY) verticalCollision = true;
-	if (rect1.topY < rect2.bottomY && rect2.bottomY < rect1.bottomY) verticalCollision = true;
+	if (rect1.topY < rect2.bottomY && rect2.bottomY < rect1.bottomY) verticalCollision = false;*/
+
+	if ((rect1.leftX < rect2.rightX && rect1.leftX > rect2.leftX) || (rect1.rightX < rect2.rightX && rect1.rightX > rect2.leftX))
+	{
+		horizontalCollision = true;
+	}
+
+	if ((rect1.bottomY > rect2.topY && rect1.bottomY < rect2.bottomY) || (rect1.topY > rect2.bottomY && rect1.topY < rect2.topY))
+	{
+		verticalCollision = true;
+	}
 
 	return horizontalCollision && verticalCollision;
 }
@@ -163,6 +169,7 @@ void Server::updateGames()
 
 			if (doesCollide(ballRect, p1PaddleRect))
 			{
+				std::cout << "COLLIDE" << std::endl;
 				mGameInfos[i].ball.xVel *= -1;
 
 				float paddleMidY = mGameInfos[i].lPlayer.y + 100 / 2;
@@ -183,6 +190,28 @@ void Server::updateGames()
 				float angle = static_cast<float>((PI / 2) * (abs(paddleMidY - ballMidY) / (100 / 2)));
 				mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0);
 				mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
+			}
+
+			for (unsigned int j = 0; j < mGameInfos[i].lPlayer.brickLocs.size(); j++)
+			{
+				Rectangle brickRect;
+				brickRect.width = 20, brickRect.height = 75;
+				brickRect.leftX = mGameInfos[i].lPlayer.brickLocs[j].x;
+				brickRect.rightX = brickRect.leftX + brickRect.width;
+				brickRect.topY = mGameInfos[i].lPlayer.brickLocs[j].y;
+				brickRect.bottomY = brickRect.topY + brickRect.height;
+
+				if (doesCollide(ballRect, brickRect))
+				{
+					mGameInfos[i].ball.xVel *= -1;
+
+					float brickMidY = brickRect.topY + brickRect.height / 2;
+					float ballMidY = mGameInfos[i].ball.y + 10;
+
+					float angle = static_cast<float>((PI / 2) * (abs(brickMidY - ballMidY) / (100 / 2)));
+					mGameInfos[i].ball.xVel = static_cast<float>(sin(angle) + 5.0);
+					mGameInfos[i].ball.yVel = static_cast<float>(cos(angle) + 5.0);
+				}
 			}
 
 			if (mGameInfos[i].ball.x < 0) mGameInfos[i].ball.xVel *= -1;
@@ -327,7 +356,7 @@ void Server::initializeGameInfos()
 		
 		mGameInfos[j].ball.x = 400;
 		mGameInfos[j].ball.y = 400;
-		mGameInfos[j].ball.xVel = 1;
+		mGameInfos[j].ball.xVel = 7;
 		mGameInfos[j].ball.yVel = 0;
 
 		mGameInfos[j].lPlayer.goalsScored = 0;
@@ -337,6 +366,18 @@ void Server::initializeGameInfos()
 		mGameInfos[j].rPlayer.goalsScored = 0;
 		mGameInfos[j].rPlayer.x = 1024.0 - 220.0;
 		mGameInfos[j].rPlayer.y = 0;
+
+		for (unsigned int k = 0; k < mGameInfos[j].lPlayer.brickLocs.size(); k++)
+		{
+			mGameInfos[j].lPlayer.brickLocs[k].x = 10.0f + 40.0f * (i / 6);
+			mGameInfos[j].lPlayer.brickLocs[k].y = (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (k % 6);
+		}
+
+		for (unsigned int l = 0; l < mGameInfos[j].rPlayer.brickLocs.size(); l++)
+		{
+			mGameInfos[j].rPlayer.brickLocs[l].x = SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (l / 6);
+			mGameInfos[j].rPlayer.brickLocs[l].y = (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (l % 6);
+		}
 
 		if (i % 2 == 1) j++;
 	}

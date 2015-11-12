@@ -106,8 +106,13 @@ private:
 
 	//timer
 	Timer* mpTimer;
-
+	
+	//consts
 	const double PI = std::atan(1.0) * 4;
+	const float SCREEN_WIDTH = 1024.0;
+	const float SCREEN_HEIGHT = 768.0;
+	const float HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2;
+	const float HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2;
 };
 
 #endif

@@ -135,7 +135,7 @@ int main()
 
 		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
 		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
-
+		//ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
 
 
 

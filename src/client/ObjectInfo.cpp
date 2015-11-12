@@ -57,8 +57,7 @@ ObjectInfo ObjectInfoBuffer::GetNext(second aDeltaT) const
 
 void ObjectInfoBuffer::AddTarget(object_info aTarget)
 {
-	mTargets.push_back(aTarget);
-	
+	if (mTargets.size() < 1) mTargets.push_back(aTarget);
 }
 
 void ObjectInfoBuffer::SetStartingInfo(const object_info& info)
