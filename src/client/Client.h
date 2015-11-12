@@ -15,12 +15,18 @@ struct Position
 };
 #pragma pack(pop)
 
+struct Point
+{
+	float x, y;
+};
+
 //#pragma pack(push, 1)
 //struct for player values
 struct Player
 {
 	float x, y;
 	std::array<std::array<bool, 3>, 6> bricks;
+	std::array<Point, 18> brickLocs;
 
 	int goalsScored;
 };

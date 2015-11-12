@@ -24,7 +24,7 @@ int main()
 
 //##############################################################INIT CLIENT############################################
 	//connect to a random port
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 	int randPortNumber = rand() % (301 - 201 + 1) + 201;
 	std::stringstream converter;
 	converter << randPortNumber;
@@ -58,24 +58,24 @@ int main()
 		player.setPosition(sf::Vector2f(200.0, 0.0));
 
 		opponent.setFillColor(sf::Color(10, 10, 200));
-		opponent.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0 - 20.0, 0.0));
+		opponent.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0f - 20.0f, 0.0f));
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			playerBricks[i].setPosition(10.0 + 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
+			playerBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3.0f) + 100.0f * (i % 6));
 		}
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0 - 20.0 - 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
+			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3.0f) + 100.0f * (i % 6));
 		}
 	}
 	else
 	{
 		player.setFillColor(sf::Color(10, 10, 200));
-		player.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0 - 20.0, 0.0));
+		player.setPosition(sf::Vector2f(SCREEN_WIDTH - 200.0f - 20.0f, 0.0f));
 
 		opponent.setFillColor(sf::Color(200, 10, 10));
 		opponent.setPosition(sf::Vector2f(200.0, 0.0));
@@ -83,13 +83,13 @@ int main()
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			opponentBricks[i].setPosition(10.0 + 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
+			opponentBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3.0f) + 100.0f * (i % 6));
 		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
-			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0 - 20.0 - 40.0 * (i / 6), (HALF_SCREEN_HEIGHT - 100.0 * 3) + 100.0 * (i % 6));
+			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 100.0f * 3) + 100.0f * (i % 6));
 		}
 	}
 
