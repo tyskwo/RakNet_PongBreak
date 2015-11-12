@@ -56,6 +56,9 @@ int main()
 	{
 		hlines[i] = sf::RectangleShape(sf::Vector2f(SCREEN_WIDTH, 1));
 		vlines[i] = sf::RectangleShape(sf::Vector2f(1, SCREEN_HEIGHT));
+
+		hlines[i].setFillColor(sf::Color(10, 10, 25));
+		vlines[i].setFillColor(sf::Color(10, 10, 25));
 	}
 
 	std::array<sf::RectangleShape, 18> playerBricks;
@@ -80,12 +83,14 @@ int main()
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			playerBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			playerBricks[i].setFillColor(sf::Color(10, 10, 25));
 		}
 
 		for (unsigned int i = 0; i < opponentBricks.size(); i++)
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			opponentBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			opponentBricks[i].setFillColor(sf::Color(10, 10, 25));
 		}
 
 		playerScore.setString("0");
@@ -105,12 +110,14 @@ int main()
 		{
 			opponentBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			opponentBricks[i].setPosition(10.0f + 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			opponentBricks[i].setFillColor(sf::Color(10, 10, 25));
 		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
 		{
 			playerBricks[i] = sf::RectangleShape(sf::Vector2f(20, 75));
 			playerBricks[i].setPosition(SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (i / 6), (HALF_SCREEN_HEIGHT - 120.0f * 3.0f) + 120.0f * (i % 6));
+			playerBricks[i].setFillColor(sf::Color(10, 10, 25));
 		}
 
 		playerScore.setString("0");
@@ -119,7 +126,7 @@ int main()
 		opponentScore.setPosition(50.0f, 25.0f);
 	}
 
-	ball.setFillColor(sf::Color::Cyan);
+	ball.setFillColor(sf::Color(10, 10, 25));
 	ball.setPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
 
 	float yPos = 0.0;
@@ -236,7 +243,7 @@ int main()
 
 
 //################################################CLEAR AND DRAW######################################################
-		window.clear(sf::Color::Black);
+		window.clear(sf::Color::White);
 
 		for (unsigned int i = 0; i < vlines.size(); i++)
 		{

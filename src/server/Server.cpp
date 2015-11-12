@@ -412,8 +412,8 @@ void Server::initializeGameInfos()
 	{
 		mGameInfos[j].mID = ID_RECIEVE_GAME_INFO;
 		
-		mGameInfos[j].ball.x = 400;
-		mGameInfos[j].ball.y = 400;
+		mGameInfos[j].ball.x = HALF_SCREEN_WIDTH;
+		mGameInfos[j].ball.y = HALF_SCREEN_HEIGHT;
 		mGameInfos[j].ball.xVel = 7;
 		mGameInfos[j].ball.yVel = 0;
 
@@ -422,7 +422,7 @@ void Server::initializeGameInfos()
 		mGameInfos[j].lPlayer.y = 0;
 
 		mGameInfos[j].rPlayer.goalsScored = 0;
-		mGameInfos[j].rPlayer.x = 1024.0 - 220.0;
+		mGameInfos[j].rPlayer.x = SCREEN_WIDTH - 220.0;
 		mGameInfos[j].rPlayer.y = 0;
 
 		for (unsigned int k = 0; k < mGameInfos[j].lPlayer.brickLocs.size(); k++)
