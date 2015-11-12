@@ -8,6 +8,8 @@
 #include "Client.h"
 #include "ObjectInfo.h"
 
+
+
 int main()
 {
 	// create the window
@@ -48,6 +50,8 @@ int main()
 	sf::RectangleShape player(sf::Vector2f(20, 100));
 	sf::RectangleShape opponent(sf::Vector2f(20, 100));
 	sf::RectangleShape ball(sf::Vector2f(20, 20));
+	ball.setPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
+	
 
 	std::array<sf::RectangleShape, 10> hlines;
 	std::array<sf::RectangleShape, 10> vlines;
@@ -66,6 +70,15 @@ int main()
 
 	sf::Text playerScore;
 	sf::Text opponentScore;
+
+	sf::Vector2f ballVel;
+	sf::Vector2f prevBallPos;
+	sf::Vector2f currBallPos;
+	currBallPos.x = mpClient->getGameInfo().ball.x;
+	currBallPos.y = mpClient->getGameInfo().ball.y;
+	prevBallPos.x = currBallPos.x;
+	prevBallPos.y = currBallPos.y;
+	
 
 	sf::Font font;
 	if (font.loadFromFile("Debug/font.otf"))
@@ -174,7 +187,7 @@ int main()
 		}
 
 //##############################################INTERPOLATE###########################################################
-		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
+		/*ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
 		if (mpClient->getFirstConnected())
 		{
 			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
@@ -185,9 +198,19 @@ int main()
 		}
 
 		ObjectInfo binfo = mpClient->getBallInterpolation().GetNext(mpClient->getElapsedT());
-		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);
+		ball.setPosition(binfo.GetState().mX, binfo.GetState().mY);*/
 		//ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
+		prevBallPos.x = currBallPos.x;
+		prevBallPos.y = currBallPos.y;
+		currBallPos.x = mpClient->getGameInfo().ball.x;
+		currBallPos.y = mpClient->getGameInfo().ball.y;
+		ballVel.x = currBallPos.x - prevBallPos.x;
+		ballVel.y = currBallPos.y - prevBallPos.y;
+		ball.setPosition(ball.getPosition().x + ballVel.x, ball.getPosition().y + ballVel.y);
+			
 
+
+//##############################################DRAW GRID###########################################################
 		for (unsigned int i = 0; i < hlines.size(); i++)
 		{
 			float lineY = ball.getPosition().y - 100 * i;
