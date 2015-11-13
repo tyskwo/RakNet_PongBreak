@@ -99,6 +99,7 @@ private:
 	//arrays for the games, and info for said games
 	std::array<std::array<RakNet::SystemAddress, 2>, 8> mClientPairs;
 	std::array<GameInfo, 4>								mGameInfos;
+	std::array<float, 4>								mVelocityMultipliers;
 	int mNumGames;
 
 	void initializeGameInfos();
@@ -106,8 +107,6 @@ private:
 	void resetGame(int index);
 
 	bool doesCollide(const Rectangle& rect1, const Rectangle& rect2);
-
-	float mVelocityMultiplier;
 
 	//timer
 	Timer* mpTimer;
