@@ -372,6 +372,40 @@ void Server::updateGames()
 			{
 				mGameInfos[i].ball.collided = false;
 			}
+
+
+
+
+
+
+			if (mGameInfos[i].lPlayer.goalsScored >= 50 || mGameInfos[i].lPlayer.goalsScored >= 50)
+			{
+				resetGame(i);
+			}
+
+			bool allBricksGone = true;
+			for (int m = 0; i < mGameInfos[i].lPlayer.bricks.size(); m++)
+			{
+				if (mGameInfos[i].lPlayer.bricks)
+				{
+					allBricksGone = false;
+				}
+			}
+			if (allBricksGone)
+			{
+				resetGame(i);
+			}
+			for (int n = 0; i < mGameInfos[i].lPlayer.bricks.size(); n++)
+			{
+				if (mGameInfos[i].lPlayer.bricks)
+				{
+					allBricksGone = false;
+				}
+			}
+			if (allBricksGone)
+			{
+				resetGame(i);
+			}
 		}
 	}
 }
@@ -547,5 +581,50 @@ void Server::initializeGameInfos()
 		}
 
 		if (i % 2 == 1) j++;
+	}
+}
+
+void Server::resetGame(int index)
+{
+	mGameInfos[index].mID = ID_RECIEVE_GAME_INFO;
+
+	mGameInfos[index].started = false;
+
+	mGameInfos[index].ball.x = HALF_SCREEN_WIDTH - 10;
+	mGameInfos[index].ball.y = HALF_SCREEN_HEIGHT - 10;
+	mGameInfos[index].ball.xVel = 7;
+	mGameInfos[index].ball.yVel = 0;
+	mGameInfos[index].ball.collided = false;
+
+	mGameInfos[index].lPlayer.goalsScored = 0;
+	mGameInfos[index].lPlayer.x = 200.0f;
+	mGameInfos[index].lPlayer.y = HALF_SCREEN_HEIGHT - 50.0f;
+	mGameInfos[index].lPlayer.velocity = 0.0f;
+
+	mGameInfos[index].rPlayer.goalsScored = 0;
+	mGameInfos[index].rPlayer.x = SCREEN_WIDTH - 220.0f;
+	mGameInfos[index].rPlayer.y = HALF_SCREEN_HEIGHT - 50.0f;
+	mGameInfos[index].rPlayer.velocity = 0.0f;
+
+	for (unsigned int k = 0; k < mGameInfos[index].lPlayer.brickLocs.size(); k++)
+	{
+		mGameInfos[index].lPlayer.brickLocs[k].x = 10.0f + 40.0f * (k / 6);
+		mGameInfos[index].lPlayer.brickLocs[k].y = (HALF_SCREEN_HEIGHT + 25.0f - 125.0f * 3.0f) + 125.0f * (k % 6);
+	}
+
+	for (unsigned int l = 0; l < mGameInfos[index].rPlayer.brickLocs.size(); l++)
+	{
+		mGameInfos[index].rPlayer.brickLocs[l].x = SCREEN_WIDTH - 10.0f - 20.0f - 40.0f * (l / 6);
+		mGameInfos[index].rPlayer.brickLocs[l].y = (HALF_SCREEN_HEIGHT + 25.0f - 125.0f * 3.0f) + 125.0f * (l % 6);
+	}
+
+	for (unsigned int l = 0; l < mGameInfos[index].lPlayer.brickLocs.size(); l++)
+	{
+		mGameInfos[index].lPlayer.bricks[l % 6][l / 6] = true;
+	}
+
+	for (unsigned int l = 0; l < mGameInfos[index].rPlayer.brickLocs.size(); l++)
+	{
+		mGameInfos[index].rPlayer.bricks[l % 6][l / 6] = true;
 	}
 }

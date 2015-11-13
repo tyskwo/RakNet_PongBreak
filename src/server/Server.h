@@ -103,6 +103,7 @@ private:
 
 	void initializeGameInfos();
 	void updateGames();
+	void resetGame(int index);
 
 	bool doesCollide(const Rectangle& rect1, const Rectangle& rect2);
 
