@@ -5,8 +5,10 @@ David Hartman and Ty Wood
 Repository URL: https://tyskwo@bitbucket.org/tyskwo/egp405_a2_02_hartman_wood.git
 
 ## Combining elements of Pong and Breakout. 
-## The goal scoring of Pong with the brick breaking of Breakout. 
-## Use the grid to better estimate where the ball is going to be! ##
+The goal scoring of Pong with the brick breaking of Breakout. 
+Use the grid to better estimate where the ball is going to be!
+
+
 
 
 ### Controls: 
