@@ -199,16 +199,35 @@ int main()
 			mpClient->setBallPosition(binfo.GetState().mX, binfo.GetState().mY);
 		}
 
-
-		ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
-		if (mpClient->getFirstConnected())
+		if (mpClient->getNumPaddleTargets() < 1)
 		{
-			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
+			mpClient->setBallPosition(ball.getPosition().x + mpClient->getGameInfo().ball.xVel, ball.getPosition().y + mpClient->getGameInfo().ball.yVel);
+			ball.setPosition(mpClient->getGameInfo().ball.x, mpClient->getGameInfo().ball.y);
+
+			if (mpClient->getFirstConnected())
+			{
+				mpClient->setPaddleLoc(opponent.getPosition().x, opponent.getPosition().y + mpClient->getGameInfo().rPlayer.velocity);
+				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, mpClient->getGameInfo().rPlayer.y));
+			}
+			else
+			{
+				mpClient->setPaddleLoc(opponent.getPosition().x, opponent.getPosition().y + mpClient->getGameInfo().lPlayer.velocity);
+				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, mpClient->getGameInfo().lPlayer.y));
+			}
 		}
 		else
 		{
-			opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
+			ObjectInfo info = mpClient->getOpponentInterpolation().GetNext(mpClient->getElapsedT());
+			if (mpClient->getFirstConnected())
+			{
+				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().rPlayer.x, info.GetState().mY));
+			}
+			else
+			{
+				opponent.setPosition(sf::Vector2f(mpClient->getGameInfo().lPlayer.x, info.GetState().mY));
+			}
 		}
+		
 		
 			
 

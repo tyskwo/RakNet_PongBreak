@@ -359,6 +359,12 @@ void Client::setPaddleLoc(const float& x, const float& y)
 	else mGameInfo.rPlayer.x = x, mGameInfo.rPlayer.y = y;
 }
 
+void Client::setOpponentLoc(const float& x, const float& y)
+{
+	if (mWasFirstConnected) mGameInfo.rPlayer.x = x, mGameInfo.rPlayer.y = y;
+	else mGameInfo.lPlayer.x = x, mGameInfo.lPlayer.y = y;
+}
+
 void Client::sendGameStart()
 {
 	int mID = ID_START_GAME;

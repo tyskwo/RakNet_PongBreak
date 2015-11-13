@@ -96,8 +96,10 @@ public:
 	const double& getElapsedT() { return mpTimer->getElapsedT(); };
 
 	void setPaddleLoc(const float& x, const float& y);
+	void setOpponentLoc(const float& x, const float& y);
 
-	const int& getNumBallTargets() { return mBallInterpolation.GetNumTargets(); };
+	const int getNumBallTargets() { return mBallInterpolation.GetNumTargets(); };
+	const int getNumPaddleTargets() { return mOpponentInterpolation.GetNumTargets(); };
 
 	void setBallPosition(const float& x, const float& y);
 	void setPaddleVelocity(const float& velocity);

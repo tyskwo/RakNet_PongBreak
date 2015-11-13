@@ -37,7 +37,7 @@ public:
 	ObjectInfoBuffer(object_info aStarting);
 
 	object_info   GetNext(second aDeltaT) const;
-	const int&	  GetNumTargets() { return mTargets.size(); }
+	const int	  GetNumTargets() { return mTargets.size(); }
 	void          AddTarget(object_info aTarget);
 
 private:
