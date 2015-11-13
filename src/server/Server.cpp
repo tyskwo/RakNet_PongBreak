@@ -321,8 +321,8 @@ void Server::updateGames()
 							float angle = static_cast<float>((3.0f * PI / 12.0f) * ((brickMidY - ballMidY) / (75.0f / 2.0f)));
 							if (direction > 0)
 							{
-								mGameInfos[i].ball.xVel = -static_cast<float>(-cos(angle) * mVelocityMultiplier);
-								mGameInfos[i].ball.yVel = -static_cast<float>(-sin(angle) * mVelocityMultiplier);
+								mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * mVelocityMultiplier);
+								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 							}
 							else
 							{

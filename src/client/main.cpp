@@ -61,8 +61,16 @@ int main()
 		hlines[i] = sf::RectangleShape(sf::Vector2f(SCREEN_WIDTH, 2));
 		vlines[i] = sf::RectangleShape(sf::Vector2f(2, SCREEN_HEIGHT));
 
-		hlines[i].setFillColor(sf::Color(10, 10, 25, 40));
-		vlines[i].setFillColor(sf::Color(10, 10, 25, 40));
+		if (i == 0 || i == 5)
+		{
+			hlines[i].setFillColor(sf::Color(10, 10, 25, 100));
+			vlines[i].setFillColor(sf::Color(10, 10, 25, 100));
+		}
+		else
+		{
+			hlines[i].setFillColor(sf::Color(10, 10, 25, 40));
+			vlines[i].setFillColor(sf::Color(10, 10, 25, 40));
+		}
 	}
 
 	std::array<sf::RectangleShape, 18> playerBricks;
