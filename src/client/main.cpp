@@ -83,7 +83,7 @@ int main()
 	sf::Text beginText;
 	beginText.setString("WAITING...\nPLAYER 2\nPRESS SPACE");
 	beginText.setOrigin(beginText.getLocalBounds().width / 2.0f, beginText.getLocalBounds().height / 2.0f);
-	beginText.setPosition(10.0f, HALF_SCREEN_HEIGHT);
+	beginText.setPosition(10.0f, 10.0f);
 	beginText.setColor(sf::Color(10, 10, 25, 100));
 	beginText.setCharacterSize(95);
 

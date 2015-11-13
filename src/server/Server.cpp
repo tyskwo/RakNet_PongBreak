@@ -396,7 +396,8 @@ void Server::updateGames()
 			}
 			if (allBricksGone || mGameInfos[i].lPlayer.goalsScored >= 50 || mGameInfos[i].lPlayer.goalsScored >= 50)
 			{
-				resetGame(i);
+				mGameInfos[i].finished = true;
+				mGameInfos[i].started = false;
 			}
 		}
 	}
@@ -498,7 +499,7 @@ void Server::getPackets()
 			{
 				if (mClientPairs[i][0] == p->systemAddress || mClientPairs[i][1] == p->systemAddress)
 				{
-					mGameInfos[j].started = true;
+					resetGame(j);
 				}
 				if (i % 2 == 1) j++;
 			}
@@ -539,6 +540,7 @@ void Server::initializeGameInfos()
 		mGameInfos[j].ball.xVel = 7;
 		mGameInfos[j].ball.yVel = 0;
 		mGameInfos[j].ball.collided = false;
+		mVelocityMultiplier = 5.0f;
 
 		mGameInfos[j].lPlayer.goalsScored = 0;
 		mGameInfos[j].lPlayer.x = 200.0f;
@@ -580,7 +582,8 @@ void Server::resetGame(int index)
 {
 	mGameInfos[index].mID = ID_RECIEVE_GAME_INFO;
 
-	mGameInfos[index].started = false;
+	mGameInfos[index].started = true;
+	mGameInfos[index].finished = false;
 
 	mGameInfos[index].ball.x = HALF_SCREEN_WIDTH - 10;
 	mGameInfos[index].ball.y = HALF_SCREEN_HEIGHT - 10;
