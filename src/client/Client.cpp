@@ -287,6 +287,7 @@ void Client::getPackets()
 			mGameInfo.ball.collided = gameInfo.ball.collided;
 
 			mGameInfo.started = gameInfo.started;
+			mGameInfo.finished = gameInfo.finished;
 
 			if (getFirstConnected())
 			{

@@ -50,7 +50,7 @@ int main()
 	sf::RectangleShape player(sf::Vector2f(20, 100));
 	sf::RectangleShape opponent(sf::Vector2f(20, 100));
 	sf::RectangleShape ball(sf::Vector2f(20, 20));
-	ball.setPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
+	ball.setPosition(HALF_SCREEN_WIDTH - 10, HALF_SCREEN_HEIGHT - 10);
 	
 
 	std::array<sf::RectangleShape, 10> hlines;
@@ -346,6 +346,16 @@ int main()
 		if (!mpClient->getGameInfo().started)
 		{
 			window.draw(beginText);
+
+			if (mpClient->getGameInfo().finished)
+			{
+				if (mpClient->getGameInfo().lPlayer.goalsScored > mpClient->getGameInfo().rPlayer.goalsScored) beginText.setString("P1 WINS...\nPLAYER 2\nPRESS SPACE");
+				else beginText.setString("P2 WINS...\nPLAYER 2\nPRESS SPACE");
+			}
+			else
+			{
+				beginText.setString("WAITING...\nPLAYER 2\nPRESS SPACE");
+			}
 		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)

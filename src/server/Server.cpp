@@ -382,7 +382,7 @@ void Server::updateGames()
 
 
 			bool allBricksGone = true;
-			for (int m = 0; m < mGameInfos[i].lPlayer.bricks.size(); m++)
+			for (unsigned int m = 0; m < mGameInfos[i].lPlayer.bricks.size(); m++)
 			{
 				if (mGameInfos[i].lPlayer.bricks[m % 6][m / 6])
 				{
@@ -390,14 +390,14 @@ void Server::updateGames()
 				}
 			}
 
-			for (int n = 0; n < mGameInfos[i].lPlayer.bricks.size(); n++)
+			for (unsigned int n = 0; n < mGameInfos[i].lPlayer.bricks.size(); n++)
 			{
 				if (mGameInfos[i].lPlayer.bricks[n % 6][n / 6])
 				{
 					allBricksGone = false;
 				}
 			}
-			if (allBricksGone || mGameInfos[i].lPlayer.goalsScored >= 50 || mGameInfos[i].lPlayer.goalsScored >= 50)
+			if (allBricksGone || mGameInfos[i].lPlayer.goalsScored >= 50 || mGameInfos[i].rPlayer.goalsScored >= 50)
 			{
 				mGameInfos[i].finished = true;
 				mGameInfos[i].started = false;
@@ -543,7 +543,7 @@ void Server::initializeGameInfos()
 		mGameInfos[j].ball.xVel = 7;
 		mGameInfos[j].ball.yVel = 0;
 		mGameInfos[j].ball.collided = false;
-		mVelocityMultiplier = 5.0f;
+		mVelocityMultipliers[j] = 5.0f;
 
 		mGameInfos[j].lPlayer.goalsScored = 0;
 		mGameInfos[j].lPlayer.x = 200.0f;
