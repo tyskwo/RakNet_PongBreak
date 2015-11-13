@@ -33,7 +33,7 @@ Server::~Server()
 
 void Server::init(const char* serverPort)
 {
-	
+	mVelocityMultiplier = 5.0f;
 
 	mpServer = RakNet::RakPeerInterface::GetInstance();
 
@@ -145,6 +145,9 @@ void Server::updateGames()
 
 	for (unsigned int i = 0; i < mGameInfos.size(); i++)
 	{
+		float xVel = mGameInfos[i].ball.xVel;
+		float yVel = mGameInfos[i].ball.yVel;
+
 		if (mGameInfos[i].started)
 		{
 			mGameInfos[i].ball.x += mGameInfos[i].ball.xVel;
@@ -173,6 +176,8 @@ void Server::updateGames()
 
 			if (doesCollide(ballRect, p1PaddleRect))
 			{
+				mVelocityMultiplier += 0.2f;
+
 				if (mGameInfos[i].ball.collided)
 				{
 					stillColliding = true;
@@ -187,13 +192,13 @@ void Server::updateGames()
 					float angle = static_cast<float>((3.0f * PI / 12.0f) * ((paddleMidY - ballMidY) / (75.0f / 2.0f)));
 					if (direction > 0)
 					{
-						mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
-						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+						mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * mVelocityMultiplier);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 					}
 					else
 					{
-						mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+						mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * mVelocityMultiplier);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 					}
 
 					mGameInfos[i].ball.collided = true;
@@ -202,6 +207,8 @@ void Server::updateGames()
 
 			if (doesCollide(ballRect, p2PaddleRect))
 			{
+				mVelocityMultiplier += 0.2f;
+
 				if (mGameInfos[i].ball.collided)
 				{
 					stillColliding = true;
@@ -216,13 +223,13 @@ void Server::updateGames()
 					float angle = static_cast<float>((3.0f * PI / 12.0f) * ((paddleMidY - ballMidY) / (75.0f / 2.0f)));
 					if (direction > 0)
 					{
-						mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
-						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+						mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * mVelocityMultiplier);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 					}
 					else
 					{
-						mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+						mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * mVelocityMultiplier);
+						mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 					}
 
 					mGameInfos[i].ball.collided = true;
@@ -245,6 +252,8 @@ void Server::updateGames()
 
 					if (doesCollide(ballRect, brickRect))
 					{
+						mVelocityMultiplier += 0.2f;
+
 						if (mGameInfos[i].ball.collided)
 						{
 							stillColliding = true;
@@ -262,13 +271,13 @@ void Server::updateGames()
 							float angle = static_cast<float>((3.0f * PI / 12.0f) * ((brickMidY - ballMidY) / (75.0f / 2.0f)));
 							if (direction > 0)
 							{
-								mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * 5.0f);
-								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+								mGameInfos[i].ball.xVel = static_cast<float>(-cos(angle) * mVelocityMultiplier);
+								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 							}
 							else
 							{
-								mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+								mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * mVelocityMultiplier);
+								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 							}
 
 							mGameInfos[i].ball.collided = true;
@@ -293,6 +302,8 @@ void Server::updateGames()
 
 					if (doesCollide(ballRect, brickRect))
 					{
+						mVelocityMultiplier += 0.2f;
+
 						if (mGameInfos[i].ball.collided)
 						{
 							stillColliding = true;
@@ -310,13 +321,13 @@ void Server::updateGames()
 							float angle = static_cast<float>((3.0f * PI / 12.0f) * ((brickMidY - ballMidY) / (75.0f / 2.0f)));
 							if (direction > 0)
 							{
-								mGameInfos[i].ball.xVel = -static_cast<float>(cos(angle) * 5.0f);
-								mGameInfos[i].ball.yVel = -static_cast<float>(-sin(angle) * 5.0f);
+								mGameInfos[i].ball.xVel = -static_cast<float>(-cos(angle) * mVelocityMultiplier);
+								mGameInfos[i].ball.yVel = -static_cast<float>(-sin(angle) * mVelocityMultiplier);
 							}
 							else
 							{
-								mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * 5.0f);
-								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * 5.0f);
+								mGameInfos[i].ball.xVel = static_cast<float>(cos(angle) * mVelocityMultiplier);
+								mGameInfos[i].ball.yVel = static_cast<float>(-sin(angle) * mVelocityMultiplier);
 							}
 
 							mGameInfos[i].ball.collided = true;
@@ -330,27 +341,32 @@ void Server::updateGames()
 
 			if (mGameInfos[i].ball.x < 0)
 			{
+				mVelocityMultiplier += 0.05f;
 				mGameInfos[i].ball.xVel *= -1;
 				mGameInfos[i].rPlayer.goalsScored += 3;
 				mGameInfos[i].ball.collided = true;
 			}
 			if (mGameInfos[i].ball.x >= 1024 - 20)
 			{
+				mVelocityMultiplier += 0.05f;
 				mGameInfos[i].ball.xVel *= -1;
 				mGameInfos[i].lPlayer.goalsScored += 3;
 				mGameInfos[i].ball.collided = true;
 			}
 			if (mGameInfos[i].ball.y < 0)
 			{
+				mVelocityMultiplier += 0.05f;
 				mGameInfos[i].ball.yVel *= -1;
 				mGameInfos[i].ball.collided = true;
 			}
 			if (mGameInfos[i].ball.y >= 768 - 20)
 			{
+				mVelocityMultiplier += 0.05f;
 				mGameInfos[i].ball.yVel *= -1;
 				mGameInfos[i].ball.collided = true;
 			}
 
+			if (mVelocityMultiplier >= 16.0f) mVelocityMultiplier = 20.0f;
 
 			if (!stillColliding)
 			{

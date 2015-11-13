@@ -106,6 +106,8 @@ private:
 
 	bool doesCollide(const Rectangle& rect1, const Rectangle& rect2);
 
+	float mVelocityMultiplier;
+
 	//timer
 	Timer* mpTimer;
 	
