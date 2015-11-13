@@ -501,10 +501,12 @@ void Server::initializeGameInfos()
 		mGameInfos[j].lPlayer.goalsScored = 0;
 		mGameInfos[j].lPlayer.x = 200.0f;
 		mGameInfos[j].lPlayer.y = HALF_SCREEN_HEIGHT - 50.0f;
+		mGameInfos[j].lPlayer.velocity = 0.0f;
 
 		mGameInfos[j].rPlayer.goalsScored = 0;
 		mGameInfos[j].rPlayer.x = SCREEN_WIDTH - 220.0f;
 		mGameInfos[j].rPlayer.y = HALF_SCREEN_HEIGHT - 50.0f;
+		mGameInfos[j].rPlayer.velocity = 0.0f;
 
 		for (unsigned int k = 0; k < mGameInfos[j].lPlayer.brickLocs.size(); k++)
 		{

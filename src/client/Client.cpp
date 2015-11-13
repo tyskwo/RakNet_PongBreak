@@ -332,6 +332,9 @@ void Client::getPackets()
 					mOpponentInterpolation.AddTarget(opponentInfo);
 				}
 			}
+			mGameInfo.lPlayer.velocity = gameInfo.lPlayer.velocity;
+			mGameInfo.rPlayer.velocity = gameInfo.rPlayer.velocity;
+
 
 			break;
 		}
