@@ -89,6 +89,22 @@ int main()
 		playerScore.setCharacterSize(400);
 		opponentScore.setCharacterSize(400);
 	}
+	else if (font.loadFromFile("Release/font.otf"))
+	{
+		playerScore.setFont(font);
+		opponentScore.setFont(font);
+
+		playerScore.setCharacterSize(400);
+		opponentScore.setCharacterSize(400);
+	}
+	else if (font.loadFromFile("font.otf"))
+	{
+		playerScore.setFont(font);
+		opponentScore.setFont(font);
+
+		playerScore.setCharacterSize(400);
+		opponentScore.setCharacterSize(400);
+	}
 
 	if (mpClient->getFirstConnected())
 	{
