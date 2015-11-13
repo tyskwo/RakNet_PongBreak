@@ -56,6 +56,7 @@ int main()
 	std::array<sf::RectangleShape, 10> hlines;
 	std::array<sf::RectangleShape, 10> vlines;
 
+	sf::View view1(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 
 	for (unsigned int i = 0; i < hlines.size(); i++)
 	{
@@ -336,6 +337,9 @@ int main()
 
 //################################################CLEAR AND DRAW######################################################
 		window.clear(sf::Color::White);
+
+		view1.setRotation((ball.getPosition().x - HALF_SCREEN_WIDTH) / 100.0f);
+		window.setView(view1);
 
 		for (unsigned int i = 0; i < vlines.size(); i++)
 		{
