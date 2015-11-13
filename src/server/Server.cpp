@@ -378,31 +378,23 @@ void Server::updateGames()
 
 
 
-			if (mGameInfos[i].lPlayer.goalsScored >= 50 || mGameInfos[i].lPlayer.goalsScored >= 50)
+			bool allBricksGone = true;
+			for (int m = 0; m < mGameInfos[i].lPlayer.bricks.size(); m++)
 			{
-				resetGame(i);
+				if (mGameInfos[i].lPlayer.bricks[m % 6][m / 6])
+				{
+					allBricksGone = false;
+				}
 			}
 
-			bool allBricksGone = true;
-			for (int m = 0; i < mGameInfos[i].lPlayer.bricks.size(); m++)
+			for (int n = 0; n < mGameInfos[i].lPlayer.bricks.size(); n++)
 			{
-				if (mGameInfos[i].lPlayer.bricks)
+				if (mGameInfos[i].lPlayer.bricks[n % 6][n / 6])
 				{
 					allBricksGone = false;
 				}
 			}
-			if (allBricksGone)
-			{
-				resetGame(i);
-			}
-			for (int n = 0; i < mGameInfos[i].lPlayer.bricks.size(); n++)
-			{
-				if (mGameInfos[i].lPlayer.bricks)
-				{
-					allBricksGone = false;
-				}
-			}
-			if (allBricksGone)
+			if (allBricksGone || mGameInfos[i].lPlayer.goalsScored >= 50 || mGameInfos[i].lPlayer.goalsScored >= 50)
 			{
 				resetGame(i);
 			}

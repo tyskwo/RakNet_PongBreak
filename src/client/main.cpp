@@ -56,6 +56,7 @@ int main()
 	std::array<sf::RectangleShape, 10> hlines;
 	std::array<sf::RectangleShape, 10> vlines;
 
+
 	for (unsigned int i = 0; i < hlines.size(); i++)
 	{
 		hlines[i] = sf::RectangleShape(sf::Vector2f(SCREEN_WIDTH, 2));
@@ -79,12 +80,17 @@ int main()
 	sf::Text playerScore;
 	sf::Text opponentScore;
 	
+	sf::Text beginText;
+	beginText.setString("WAITING - PLAYER 2 PRESS SPACE");
+	beginText.setPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
+	beginText.setColor(sf::Color(10, 10, 25, 100));
 
 	sf::Font font;
 	if (font.loadFromFile("Debug/font.otf"))
 	{
 		playerScore.setFont(font);
 		opponentScore.setFont(font);
+		beginText.setFont(font);
 
 		playerScore.setCharacterSize(400);
 		opponentScore.setCharacterSize(400);
@@ -331,6 +337,11 @@ int main()
 		{
 			window.draw(hlines[i]);
 			window.draw(vlines[i]);
+		}
+
+		if (!mpClient->getGameInfo().started)
+		{
+			window.draw(beginText);
 		}
 
 		for (unsigned int i = 0; i < playerBricks.size(); i++)
