@@ -338,7 +338,7 @@ int main()
 //################################################CLEAR AND DRAW######################################################
 		window.clear(sf::Color::White);
 
-		view1.setRotation((ball.getPosition().x - HALF_SCREEN_WIDTH) / 100.0f);
+		view1.setRotation((ball.getPosition().x - HALF_SCREEN_WIDTH) / 125.0f);
 		window.setView(view1);
 
 		for (unsigned int i = 0; i < vlines.size(); i++)
