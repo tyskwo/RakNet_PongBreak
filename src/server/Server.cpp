@@ -66,8 +66,8 @@ void Server::init(const char* serverPort)
 
 	for (unsigned int i = 0; i < mClientPairs.size(); i++)
 	{
-		mClientPairs[i][0] = "";
-		mClientPairs[i][1] = "";
+		mClientPairs[i][0] = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
+		mClientPairs[i][1] = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
 	}
 
 	initializeGameInfos();
@@ -414,7 +414,7 @@ void Server::getPackets()
 			printf("New connection from %s\n", p->systemAddress.ToString(true));
 
 			//if its the first client in a pair
-			if (mClientPairs[mNumGames][0] == "" && mClientPairs[mNumGames][1] == "")
+			if (mClientPairs[mNumGames][0] == RakNet::UNASSIGNED_SYSTEM_ADDRESS && mClientPairs[mNumGames][1] == RakNet::UNASSIGNED_SYSTEM_ADDRESS)
 			{
 				mClientPairs[mNumGames][0] = p->systemAddress;
 
