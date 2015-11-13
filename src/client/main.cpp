@@ -81,9 +81,11 @@ int main()
 	sf::Text opponentScore;
 	
 	sf::Text beginText;
-	beginText.setString("WAITING - PLAYER 2 PRESS SPACE");
-	beginText.setPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT);
+	beginText.setString("WAITING...\nPLAYER 2\nPRESS SPACE");
+	beginText.setOrigin(beginText.getLocalBounds().width / 2.0f, beginText.getLocalBounds().height / 2.0f);
+	beginText.setPosition(10.0f, HALF_SCREEN_HEIGHT);
 	beginText.setColor(sf::Color(10, 10, 25, 100));
+	beginText.setCharacterSize(95);
 
 	sf::Font font;
 	if (font.loadFromFile("Debug/font.otf"))
@@ -99,6 +101,7 @@ int main()
 	{
 		playerScore.setFont(font);
 		opponentScore.setFont(font);
+		beginText.setFont(font);
 
 		playerScore.setCharacterSize(400);
 		opponentScore.setCharacterSize(400);
@@ -107,6 +110,7 @@ int main()
 	{
 		playerScore.setFont(font);
 		opponentScore.setFont(font);
+		beginText.setFont(font);
 
 		playerScore.setCharacterSize(400);
 		opponentScore.setCharacterSize(400);
