@@ -366,7 +366,7 @@ void Server::updateGames()
 				mGameInfos[i].ball.collided = true;
 			}
 
-			if (mVelocityMultiplier >= 16.0f) mVelocityMultiplier = 20.0f;
+			if (mVelocityMultiplier >= 12.0f) mVelocityMultiplier = 12.0f;
 
 			if (!stillColliding)
 			{
