@@ -223,6 +223,8 @@ void Client::getPackets()
 			otherInfo.SetState(otherState);
 			mOpponentInterpolation.SetStartingInfo(otherInfo);
 
+			std::cout << "FIRST" << std::endl;
+
 			break;
 		}
 		case ID_SECOND_CONNECTION:
@@ -247,6 +249,8 @@ void Client::getPackets()
 			ObjectInfo otherInfo;
 			otherInfo.SetState(otherState);
 			mOpponentInterpolation.SetStartingInfo(otherInfo);
+
+			std::cout << "SECOND" << std::endl;
 
 			break;
 		}

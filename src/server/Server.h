@@ -99,6 +99,7 @@ private:
 
 	//arrays for the games, and info for said games
 	std::array<std::array<RakNet::SystemAddress, 2>, 8> mClientPairs;
+	std::array<std::array<RakNet::RakNetGUID, 2>, 8> mGuidPairs;
 	std::array<GameInfo, 4>								mGameInfos;
 	std::array<float, 4>								mVelocityMultipliers;
 	int mNumGames;

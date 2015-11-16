@@ -73,6 +73,12 @@ void Server::init(const char* serverPort)
 		mClientPairs[i][1] = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
 	}
 
+	for (unsigned int i = 0; i < mGuidPairs.size(); i++)
+	{
+		mGuidPairs[i][0] = RakNet::UNASSIGNED_RAKNET_GUID;
+		mGuidPairs[i][1] = RakNet::UNASSIGNED_RAKNET_GUID;
+	}
+
 	initializeGameInfos();
 
 	mNumGames = 0;
@@ -447,20 +453,22 @@ void Server::getPackets()
 			if (mClientPairs[mNumGames][0] == RakNet::UNASSIGNED_SYSTEM_ADDRESS && mClientPairs[mNumGames][1] == RakNet::UNASSIGNED_SYSTEM_ADDRESS)
 			{
 				mClientPairs[mNumGames][0] = p->systemAddress;
+				mGuidPairs[mNumGames][0] = p->guid;
 
 				GameInfo info = mGameInfos[mNumGames];
 				info.mID = ID_FIRST_CONNECTION;
-				mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+				mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->guid, false);
 			}
 
 			//if its the second client in a pair
 			else
 			{
 				mClientPairs[mNumGames][1] = p->systemAddress;
+				mGuidPairs[mNumGames][1] = p->guid;
 
 				GameInfo info = mGameInfos[mNumGames];
 				info.mID = ID_SECOND_CONNECTION;
-				mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+				mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->guid, false);
 
 				//increase number of games
 				mNumGames++;
@@ -478,12 +486,12 @@ void Server::getPackets()
 			int j = 0;
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
-				if (mClientPairs[i][0] == p->systemAddress)
+				if (mGuidPairs[i][0] == p->guid)
 				{
 					mGameInfos[j].lPlayer.x = paddle.x;
 					mGameInfos[j].lPlayer.y = paddle.y;
 				}
-				else if (mClientPairs[i][1] == p->systemAddress)
+				else if (mGuidPairs[i][1] == p->guid)
 				{
 					mGameInfos[j].rPlayer.x = paddle.x;
 					mGameInfos[j].rPlayer.y = paddle.y;
@@ -500,7 +508,7 @@ void Server::getPackets()
 			int j = 0;
 			for (unsigned int i = 0; i < mClientPairs.size(); i++)
 			{
-				if (mClientPairs[i][0] == p->systemAddress || mClientPairs[i][1] == p->systemAddress)
+				if (mGuidPairs[i][0] == p->guid || mGuidPairs[i][1] == p->guid)
 				{
 					resetGame(j);
 				}
@@ -523,12 +531,16 @@ void Server::broadcastGameInfo()
 	int j = 0;
 	for (unsigned int i = 0; i < mClientPairs.size(); i++)
 	{
+		std::cout << mGuidPairs[i][0].ToString() << " " << mGuidPairs[i][1].ToString() << std::endl;
+
 		GameInfo info = mGameInfos[j];
 		info.mID = ID_RECIEVE_GAME_INFO;
-		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][0], false);
-		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mClientPairs[i][1], false);
+		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mGuidPairs[i][0], false);
+		mpServer->Send((const char*)&info, sizeof(info), HIGH_PRIORITY, RELIABLE_ORDERED, 0, mGuidPairs[i][1], false);
 		if (i % 2 == 1) j++;
 	}
+
+	std::cout << std::endl;
 }
 
 void Server::initializeGameInfos()
