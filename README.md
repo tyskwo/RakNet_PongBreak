@@ -2,7 +2,8 @@
 ##### If Pong and BrickBreak had a baby. AN ACTION-PACKED BABY! #####
 
 [David Hartman](https://twitter.com/wednesdayscones) and [Ty Wood](http://tyskwo.com)
-Repository URL: https://tyskwo@bitbucket.org/tyskwo/egp405_a2_02_hartman_wood.git
+
+[Repository URL](https://tyskwo@bitbucket.org/tyskwo/pongbreak_hartman_wood.git)
 
 * * * 
 
